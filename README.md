@@ -1,6 +1,6 @@
 # INFT-DB
 
-Fronted remote repository for the INFT Project: a decentralized, multi-chain, extensible and flexible digital asset manager.
+Fronted repository for the INFT Project: a decentralized, multi-chain, extensible and flexible digital asset manager.
 
 ## Installation
 
