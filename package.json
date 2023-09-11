@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/crypto-infinity/inft_gui#readme",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "express": "^4.18.2"
   }
 }
