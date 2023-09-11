@@ -8,6 +8,7 @@ const port = 5000;
 
 //webserver listener and registrations
 app.listen(port, () => { console.log(`Now listening on port ${port}`); }); //webserver listener
+app.set('view engine', 'ejs');
 
 app.use(express.static(__dirname));
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -25,5 +26,5 @@ app.post("/", (req, res) => {
 
 app.post("/register", (req, res) => {
     console.log(req.body);
-    res.sendFile('register.html', {root: __dirname});
+    res.render('register', {name: req.body.name, email: req.body.email, subject: req.body.subject, message: req.body.message});
 });
