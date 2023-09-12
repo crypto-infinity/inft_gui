@@ -21,7 +21,8 @@ app.get('/', (req, res) => {        //get requests to the root ("/") will route 
 
 app.post("/", (req, res) => {
     console.log(req.body);
-    res.sendFile('index.html', {root: __dirname}); 
+    //res.sendFile('index.html', {root: __dirname}); 
+    res.render('index');
 });
 
 app.post("/register", (req, res) => {
