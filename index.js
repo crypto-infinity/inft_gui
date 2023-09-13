@@ -92,3 +92,6 @@ app.post("/register", (req, res) => {
 app.get('/register', (req, res) => {
     res.render('register', {name: "notset", email: "notset", subject: "notset", message: "notset"});     
 });
+app.get('/register', (req, res) => {
+    res.render('register', {name: "notset", email: "notset", subject: "notset", message: "notset"});     
+});
