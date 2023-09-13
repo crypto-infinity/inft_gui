@@ -4,37 +4,22 @@ const bodyParser = require("body-parser");
 const sql = require("mssql");
 var count = 0;
 
-// config for your database
-var config = {
+// sqlconfig for your database
+var sqlconfig = {
     server: 'htc-demo.database.windows.net', 
     database: 'htc-demo',
     authentication: {
-        type: 'azure-active-directory-default'
+        type: 'azure-active-directory-default'//DA RIVEDERE
     },
     trustServerCertificate: false //self-signed cert error
 };
 
 // connect to your database
-sql.connect(config, function (err) {
-    
+sql.connect(sqlconfig, function (err) {
     if (err){
         throw err;
     } 
-    console.log(`Connected to DB: ${config.server}`);
-    console.log(`ID Count for table: ${count}`);
-
-    // create Request object
-    //var request = new sql.Request();
-       
-    // query to the database and get the records
-    // request.query('select * from Student', function (err, recordset) {
-        
-    //     if (err) console.log(err)
-
-    //     // send records as a response
-    //     res.send(recordset);
-        
-    // });
+    console.log(`Connected to DB: ${sqlconfig.server}`);
 });
 
 //webserver initialization
@@ -70,9 +55,8 @@ app.post("/register", (req, res) => {
         var message = req.body.message;
 
         //var query = 'SELECT * FROM SalesLT.Address'; //DB Query - NON FUNGE
-        var query = `INSERT INTO dbo.test VALUES (${count}, ${name}, ${email}, ${subject}, ${message})`;
-
-        request.query(query, function (err, recordset) { //COME PUBBLICARE QUERY?
+        var query = `INSERT INTO [dbo].test VALUES ('${count}', '${name}', '${email}', '${subject}', '${message}')`;
+        request.query(query, function (err, recordset) { 
             if (err){
                 console.log("Error: " + err)
                 res.render('./index');
@@ -80,12 +64,25 @@ app.post("/register", (req, res) => {
             } 
             count++;
             // send records as a response, if any
-            console.log(recordset)
+            console.log(recordset);
             res.render('register', {name: name, email: email, subject: subject, message: message}); //generate register page with form-passed data
         });
     }
     catch(error){}
 });
+
+app.post("/requests", (req, res) =>{
+    var request = new sql.Request();
+    var query = `SELECT * FROM [dbo].test`;
+    request.query(query, (err, recordset) => {
+        if (err){
+            console.log("Error: " + err)
+            res.render('./index');
+            throw err;
+        }
+        console.log(recordset.recordset.length);
+    })
+})
 
 //TEST DEV REFERENCE
 
