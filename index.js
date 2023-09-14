@@ -2,14 +2,16 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const sql = require("mssql");
-var count = 0;
 
 // sqlconfig for your database
 var sqlconfig = {
     server: 'htc-demo.database.windows.net', 
     database: 'htc-demo',
     authentication: {
-        type: 'azure-active-directory-default'//DA RIVEDERE
+        type: 'azure-active-directory-default',//DA RIVEDERE
+        options: {
+            clientId: "ef7021e1-407c-43b6-a72d-d7d5181fa504"
+        }
     },
     trustServerCertificate: false //self-signed cert error
 };
@@ -24,7 +26,7 @@ sql.connect(sqlconfig, function (err) {
 
 //webserver initialization
 const app = express();              
-const port = 5000;
+const port = 443;
 
 //webserver listener and registrations
 app.listen(port, () => { console.log(`Now listening on port ${port}`); }); //webserver listener
@@ -55,30 +57,29 @@ app.post("/register", (req, res) => {
         var message = req.body.message;
 
         //var query = 'SELECT * FROM SalesLT.Address'; //DB Query - NON FUNGE
-        var query = `INSERT INTO [dbo].test VALUES ('${count}', '${name}', '${email}', '${subject}', '${message}')`;
+        var query = `INSERT INTO [SalesLT].Contact (name,email,subject,message) VALUES ('${name}', '${email}', '${subject}', '${message}')`;
         request.query(query, function (err, recordset) { 
             if (err){
                 console.log("Error: " + err)
-                res.render('./index');
-                throw err;
+                res.render('error', {error: err});
             } 
-            count++;
             // send records as a response, if any
             console.log(recordset);
             res.render('register', {name: name, email: email, subject: subject, message: message}); //generate register page with form-passed data
         });
     }
-    catch(error){}
+    catch(err){
+        res.render('error', {error: err})
+    }
 });
 
 app.post("/requests", (req, res) =>{
     var request = new sql.Request();
-    var query = `SELECT * FROM [dbo].test`;
+    var query = `SELECT * FROM [SalesLT].Contact`;
     request.query(query, (err, recordset) => {
         if (err){
             console.log("Error: " + err)
-            res.render('./index');
-            throw err;
+            res.render('error', {error: err});
         }
         console.log(recordset.recordset.length);
     })
