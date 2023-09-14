@@ -26,7 +26,7 @@ sql.connect(sqlconfig, function (err) {
 
 //webserver initialization
 const app = express();              
-const port = 443;
+const port = 80;
 
 //webserver listener and registrations
 app.listen(port, () => { console.log(`Now listening on port ${port}`); }); //webserver listener
@@ -81,8 +81,16 @@ app.post("/requests", (req, res) =>{
             console.log("Error: " + err)
             res.render('error', {error: err});
         }
-        console.log(recordset.recordset.length);
+        var json = JSON.stringify(recordset.recordset);//Pulire JSON dai caratteri escape
+        console.log("Stringified server-side: " + json);
+        res.render('requests', {_records: json});
     })
+})
+
+app.get("/requests",(req, res) =>{
+
+    console.log(html);
+    res.send(html);
 })
 
 //TEST DEV REFERENCE
