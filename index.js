@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const sql = require("mssql");
 
-// sqlconfig for your database
+// sqlconfig for your database - Come separare questa cosa?
 var sqlconfig = {
     server: 'htc-demo.database.windows.net', 
     database: 'htc-demo',
