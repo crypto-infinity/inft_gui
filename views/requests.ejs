@@ -22,13 +22,15 @@
             <p>Here are all past requests:</p>
             <div class="section-content wow fadeInUp">
                 <script>
-                    records = JSON.parse(`<%- _records %>`);
+                    var output = <%- JSON.stringify(_records) %>;
+                    var records = JSON.parse(output);
+
                     if(Object.keys(records).length > 0){
                         for(var i=0; i < Object.keys(records).length; i++){
                             document.write(
                             `                            
                             <div class="section-content text-center">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <h4>${records[i].name}</h4>
                                     <p>Email: ${records[i].email}</p>
                                     <p>Subject: ${records[i].subject}</p>
@@ -51,7 +53,7 @@
                     
                 </script>
                 <form action="/" method="get">
-                    <button class="w-25 about-btn" name="button">Back to main Page</button> 
+                    <button class="w-25 about-btn section-padding" name="button">Back to main Page</button> 
                 </form>
                 
             </div>

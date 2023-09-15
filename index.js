@@ -3,6 +3,10 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const sql = require("mssql");
 
+function passValue(value) {
+    return 'JSON.parse(Base64.decode("' + new Buffer(JSON.stringify(value)).toString('base64') + '"))'
+  }
+
 // sqlconfig for your database - Come separare questa cosa?
 var sqlconfig = {
     server: 'htc-demo.database.windows.net', 
@@ -56,8 +60,10 @@ app.post("/register", (req, res) => {
         var subject = req.body.subject;
         var message = req.body.message;
 
-        //var query = 'SELECT * FROM SalesLT.Address'; //DB Query - NON FUNGE
-        var query = `INSERT INTO [SalesLT].Contact (name,email,subject,message) VALUES ('${name}', '${email}', '${subject}', '${message}')`;
+        var query = `
+        INSERT INTO [SalesLT].Contact (name,email,subject,message) VALUES ('${name}', '${email}', '${subject}', '${message}'); 
+        `; //Problema della pulizia degli input -> QUERY PARAMETRICHE
+
         request.query(query, function (err, recordset) { 
             if (err){
                 console.log("Error: " + err)
@@ -81,9 +87,7 @@ app.post("/requests", (req, res) =>{
             console.log("Error: " + err)
             res.render('error', {error: err});
         }
-        var json = JSON.stringify(recordset.recordset);//Pulire JSON dai caratteri escape
-        console.log("Stringified server-side: " + json);
-        res.render('requests', {_records: json});
+        res.render('requests', {_records: JSON.stringify(recordset.recordset)});
     })
 })
 
@@ -93,7 +97,7 @@ app.get("/requests",(req, res) =>{
     res.send(html);
 })
 
-//TEST DEV REFERENCE
+//TEST DEV REFERENCE `
 
 app.get('/register', (req, res) => {
     res.render('register', {name: "notset", email: "notset", subject: "notset", message: "notset"});     
