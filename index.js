@@ -60,9 +60,12 @@ app.post("/register", (req, res) => {
         var subject = req.body.subject;
         var message = req.body.message;
 
-        var query = `
-        INSERT INTO [SalesLT].Contact (name,email,subject,message) VALUES ('${name}', '${email}', '${subject}', '${message}'); 
-        `; //Problema della pulizia degli input -> QUERY PARAMETRICHE
+        request.input('name', sql.VarChar, name);
+        request.input('email', sql.VarChar, email);
+        request.input('subject', sql.VarChar, subject);
+        request.input('message', sql.VarChar, message);
+
+        var query = "INSERT INTO [SalesLT].Contact (name,email,subject,message) VALUES (@name,@email,@subject,@message)";
 
         request.query(query, function (err, recordset) { 
             if (err){
