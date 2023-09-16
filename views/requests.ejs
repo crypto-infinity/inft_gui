@@ -20,7 +20,7 @@
             <h3>Past Requests</h3>
             <span class="line"></span>
             <p>Here are all past requests:</p>
-            <div class="section-content wow fadeInUp">
+            <div class="section-content text-center wow fadeInUp">
                 <script>
                     var output = <%- JSON.stringify(_records) %>;
                     var records = JSON.parse(output);
@@ -30,7 +30,7 @@
                             document.write(
                             `                            
                             <div class="section-content text-center">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <h4>${records[i].name}</h4>
                                     <p>Email: ${records[i].email}</p>
                                     <p>Subject: ${records[i].subject}</p>

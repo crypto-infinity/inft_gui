@@ -134,3 +134,5 @@ templates
 .deployment
 settings.json
 template.zip
+package-lock.json
+package.json
