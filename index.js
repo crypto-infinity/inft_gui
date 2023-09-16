@@ -1,6 +1,5 @@
 //dependencies initialization
-const sql = require("./sql");
-const app = require("./webserver");
+const {app,sql} = require("./initializer")
 
 //WebServer GET & POST Methods
 app.get('/', (req, res) => {
