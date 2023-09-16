@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 
 //webserver initialization
 const app = express();              
-const port = 80; //WebServer Port
+const port = 443; //WebServer Port
 
 try {
     //webserver listener and registrations
