@@ -26,16 +26,18 @@ try {
 const sql = require("mssql");
 
 require('dotenv').config(); //Import .env 
-const { SQL_DB_SERVER, SQL_DB_NAME, SQL_CLIENT_ID } = process.env;
+const { SQL_DB_SERVER, SQL_DB_NAME, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID } = process.env;
 
 // sqlconfig
 var sql_config = {
     server: SQL_DB_SERVER, 
     database: SQL_DB_NAME,
     authentication: {
-        type: 'azure-active-directory-default',
+        type: 'azure-active-directory-service-principal-secret',
         options: {
-            clientId: SQL_CLIENT_ID
+            clientId: AZURE_CLIENT_ID,
+            clientSecret: AZURE_CLIENT_SECRET,
+            tenantId: AZURE_TENANT_ID
         }
     },
     trustServerCertificate: false //self-signed cert error

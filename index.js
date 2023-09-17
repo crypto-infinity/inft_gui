@@ -1,5 +1,5 @@
 //dependencies initialization
-const {app,sql} = require("./initializer")
+const {app,sql,authProvider} = require("./initializer")
 
 //WebServer GET & POST Methods
 app.get('/', (req, res) => {
@@ -50,6 +50,26 @@ app.post("/requests", (req, res) =>{
         res.render('requests', {_records: JSON.stringify(recordset.recordset)});
     })
 })
+
+// app.get('/signin', authProvider.login({
+//     scopes: [],
+//     redirectUri: authProvider.msalConfig.REDIRECT_URI,
+//     successRedirect: '/'
+// }));
+
+// app.get('/acquireToken', authProvider.acquireToken({
+//     scopes: ['User.Read'],
+//     redirectUri: authProvider.msalConfig.REDIRECT_URI,
+//     successRedirect: '/users/profile'
+// }));
+
+// app.post('/redirect', authProvider.handleRedirect());
+
+// app.get('/signout', authProvider.logout({
+//     postLogoutRedirectUri: authProvider.msalConfig.postLogoutRedirectUri
+// }));
+
+
 
 // //TEST DEV REFERENCE `'"
 
