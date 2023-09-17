@@ -44,7 +44,7 @@ var sql_config = {
 
 sql.connect(sql_config, function (err) {
     if(err) { console.log(err); }
-    console.log(`Connected to DB: ${sql_config.server}`);
+    else { console.log(`Connected to DB: ${sql_config.server}`); }
 });
 
 module.exports = {

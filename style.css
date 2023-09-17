@@ -149,7 +149,10 @@ h6 {
 	position:relative
 }
 .section-padding {
-	padding:80px 0px;
+	padding:60px 0px;
+}
+.header-slider-padding {
+	padding-bottom: 30px;
 }
 .sectioner-header {
 	width:69%;
@@ -341,12 +344,16 @@ h6 {
 	background: url(images/arrow-left.png) no-repeat !important;
 	background-size: auto auto !important;
 	background-size: 100% 100% !important;
+	color: #000000;
+	filter: brightness(0%);
 }
 .bx-next {
 	right: -90px !important;
 	background: url(images/arrow-right.png) no-repeat !important;
 	background-size: auto auto !important;
 	background-size: 100% 100% !important;
+	color: #000000;
+	filter: brightness(0%);
 }
 .bx-wrapper {
 	border: none !important;
