@@ -51,6 +51,18 @@ app.post("/requests", (req, res) =>{
     })
 })
 
+app.get("/requests", (req, res) =>{
+    var request = new sql.Request();
+    var query = "SELECT * FROM [SalesLT].Contact";
+    request.query(query, (err, recordset) => {
+        if (err){
+            console.log("Error: " + err)
+            res.render('error', {error: err});
+        }
+        res.render('requests', {_records: JSON.stringify(recordset.recordset)});
+    })
+})
+
 // app.get('/signin', authProvider.login({
 //     scopes: [],
 //     redirectUri: authProvider.msalConfig.REDIRECT_URI,
