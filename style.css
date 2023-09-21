@@ -1,7 +1,7 @@
 /*Global Variables Declaration*/
 :root {
 	--main-bg-color: #b30659;
-	--main-bg-gradient-color: linear-gradient(to right, #E8F9FD, #F5FCFF);
+	--main-bg-gradient-color: linear-gradient(to right, #fff, #a0c9eba0);
 	/*#e2aeaee3, #ec8670e3*/
 	/*#EE9CA7 → #FFDDE1*/
 	--secondary-bg-color: #7d0161;
@@ -175,7 +175,7 @@ h6 {
 	right: 0px;
 	bottom: 0px;
 	left: 0px;
-	opacity: 0.5;
+	opacity: 0.05;
 }
 
 .banner {
@@ -675,14 +675,17 @@ input {
 @media all and (max-width:991px) {
 	.navbar .navbar-collapse {
 		overflow: auto;
-		background: rgb(213, 198, 221);
+		background: #ffffff;
 		color: var(--secondary-bg-color) !important;
 		text-align: center;
 		padding: 10px 0;
 	}
 
 	.nav-scroll .navbar-collapse {
-		background: rgb(213, 198, 221) !important;
+		background: #ffffff !important;
+		-webkit-transition: background 1000ms linear;
+		-ms-transition: background 1000ms linear;
+		transition: background 1000ms linear;
 	}
 
 	#contact_form {
