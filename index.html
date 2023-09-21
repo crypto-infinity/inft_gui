@@ -22,7 +22,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand navbar-logo" href="/"> <img src="images/logo.png" alt="logo" class="logo-1"> </a>
+      <a class="navbar-brand navbar-logo mobile-hidden" href="/"> <img src="images/logo.png" alt="logo" class="logo-1"> </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span
           class="fas fa-bars"></span> </button>
@@ -369,7 +369,7 @@
                   </div>
                   <input type="text" id="subject" class="form-input w-100" name="subject" placeholder="Subject">
                   <textarea class="form-input w-100" id="message" placeholder="Message" name="message"></textarea>
-                  <button class="btn-grad w-100 text-uppercase" type="submit" name="button">submit</button>
+                  <button class="about-btn-solid w-100 text-uppercase" type="submit" name="button">submit</button>
                 </form>
               </div>
               <div class="col-sm-12 col-md-12 col-lg-4">
@@ -486,14 +486,17 @@
 
       var bodyScroll = $(window).scrollTop(),
         navbar = $(".navbar");
+        navbar_logo = $(".navbar-logo");
 
       if (bodyScroll > 50) {
         $('.navbar-logo img').attr('src', 'images/logo-black.png');
         navbar.addClass("nav-scroll");
+        navbar_logo.removeClass("mobile-hidden");
 
       } else {
         $('.navbar-logo img').attr('src', 'images/logo.png');
         navbar.removeClass("nav-scroll");
+        navbar_logo.addClass("mobile-hidden");
       }
 
     });
@@ -512,7 +515,7 @@
       $.scrollIt({
 
         easing: 'swing',      // the easing function for animation
-        scrollTime: 900,       // how long (in ms) the animation takes
+        scrollTime: 1000,       // how long (in ms) the animation takes
         activeClass: 'active', // class given to the active nav element
         onPageChange: null,    // function(pageIndex) that is called when page is changed
         topOffset: -63

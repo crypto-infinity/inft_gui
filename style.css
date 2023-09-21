@@ -509,7 +509,7 @@ h6 {
 }
 
 .slider .test-img img {
-	border: 12px solid var(--secondary-bg-color);
+	/* border: 12px solid var(--secondary-bg-color); */
 	border-radius: 50%;
 	width: 100%;
 	height: auto;
@@ -696,14 +696,13 @@ input {
 @media all and (max-width:768px) {
 
 	.mobile-hidden {
-		display: none;
+		visibility: hidden;
 	}
 
 	.nav-scroll .navbar-brand img,
 	.navbar-brand img {
 		transform: scale(0.75) !important;
 		-webkit-transform: scale(0.75) !important;
-		display: none;
 	}
 
 	.header-padding-image {
