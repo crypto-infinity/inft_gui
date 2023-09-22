@@ -139,7 +139,7 @@ h6 {
     right: 0px;
     bottom: 0px;
     left: 0px;
-    opacity: 0.1;
+    opacity: 0.05;
 }
 .banner {
 	background: var(--main-bg-color);
@@ -190,12 +190,12 @@ h6 {
 	padding:60px 0px;
 }
 .header-padding {
-	padding:100px 0px;
+	padding:50px 0px;
 }
 .header-padding-image {
 	position: relative;
 	padding:30px 0px;
-	width: 30em;
+	width: 50vh;
 }
 .header-slider-padding {
 	padding-bottom: 30px;
@@ -228,7 +228,7 @@ h6 {
 	margin-top: 80px;
 }
 .icon-box {
-	margin-bottom:50px;
+	margin-bottom:30px;
 }
 .icon-box i {
 	display: block;
@@ -262,6 +262,20 @@ h6 {
 }
 .about-btn:hover {
 	background: var(--secondary-bg-gradient-color);
+	color:#ffffff;
+	text-decoration:none;
+}
+.about-btn-solid {
+	background: var(--secondary-bg-gradient-color);
+	color: #ffffff;
+	padding: 10px 40px;
+	border: 2px solid var(--main-bg-color);
+	border-radius: 7px;
+	margin-top: 30px;
+	display: inline-block;
+	font-size: 18px;
+}
+.about-btn-solid:hover {
 	color:#ffffff;
 	text-decoration:none;
 }
@@ -543,6 +557,9 @@ input {
 .footer-copy p {
 	margin-bottom:0px;
 }
+
+/*MOBILE RESPONSIVE CSS (< 1000px) */
+
 @media all and (max-width:991px) {
 .navbar .navbar-collapse {
 	overflow: auto;
@@ -559,23 +576,39 @@ input {
 }
 }
 @media all and (max-width:768px) {
+
+.mobile-hidden {
+	display: none;
+}
 .nav-scroll .navbar-brand img, .navbar-brand img {
 	transform: scale(0.75) !important;
 	-webkit-transform: scale(0.75) !important;
+	display: none;
 }
 .header-padding-image {
-	transform: scale(0.75) !important;
-	-webkit-transform: scale(0.75) !important;
+	transform: scale(0.65) !important;
+	-webkit-transform: scale(0.65) !important;
+}
+.header-padding {
+	padding: 0;
 }
 .banner-text {
 	padding-right: 0px;
 	margin: 10px 0px 0px;
+}
+.icon-box {
+	transform: scale(0.65) !important;
+	-webkit-transform: scale(0.65) !important
 }
 h2 {
 	font-size: 25px;
 }
 h3 {
 	font-size: 23px;
+}
+h4 {
+	transform: scale(0.65) !important;
+	-webkit-transform: scale(0.65) !important
 }
 .section-padding {
 	padding: 40px 0px;
