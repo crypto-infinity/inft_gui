@@ -53,6 +53,10 @@ h6 {
 	font-weight: 500;
 }
 
+.centered ::placeholder {
+	text-align: center;
+}
+
 .white {
 	color: #ffffff !important;
 }
@@ -242,10 +246,18 @@ h6 {
 	padding: 50px 0px;
 }
 
+.normal-padding {
+	padding: 20px;
+}
+
 .header-padding-image {
 	position: relative;
 	padding: 30px 0px;
 	width: 50vh;
+}
+
+.column {
+	flex-direction: column;
 }
 
 .header-slider-padding {
@@ -313,6 +325,7 @@ h6 {
 }
 
 .about-btn {
+	position: relative;
 	color: var(--main-bg-color);
 	padding: 10px 40px;
 	border: 2px solid var(--main-bg-color);
@@ -329,6 +342,7 @@ h6 {
 }
 
 .about-btn-solid {
+	position: relative;
 	background: var(--secondary-bg-gradient-color);
 	color: #ffffff;
 	padding: 10px 40px;
@@ -341,6 +355,7 @@ h6 {
 
 .about-btn-solid:hover {
 	color: #ffffff;
+	cursor:pointer;
 	text-decoration: none;
 }
 
@@ -561,6 +576,7 @@ h6 {
 }
 
 #contact_form .form-input {
+	position: relative;
 	border: 1px solid #e4e4e4;
 }
 

@@ -21,43 +21,8 @@
     </script>
     <section class="main-banner" data-scroll-index='1'>
         <div class="sectioner-header text-center">
-            <h3>Past Requests</h3>
+            <h3>Welcome to the app!</h3>
             <span class="line"></span>
-            <p>Here are all past requests:</p>
-            <div class="section-content text-center wow fadeInUp">
-                <script>
-                    var output = <%- JSON.stringify(_records) %>;
-                    var records = JSON.parse(output);
-
-                    if (Object.keys(records).length > 0) {
-
-                        document.write('<div class="slider">');
-                        for (var i = 0; i < Object.keys(records).length; i++) {
-                            document.write(`
-                                <div class="slider-item">
-                                    <div class="text-center">
-                                        <h6>Number ${i}</h6>
-                                        <h4 class="header-slider-padding">${records[i].name}</h4>
-                                        <h6>Email: </h6><p>${records[i].email}</p>
-                                        <h6>Subject: </h6><p>${records[i].subject}</p>
-                                        <h6>Message: </h6><p>${records[i].message}</p>
-                                    </div>
-                                </div>
-                                `);
-                        }
-                        document.write('<\div>');
-                    }
-                    else {
-                        document.write(
-                            `                            
-                            <div class="section-content text-center">
-                                <h4>No Records found!</h4>
-                            </div>
-                            `
-                        );
-                    }
-                </script>
-            </div>
         </div>
         <div class="text-center wow fadeInUp">
             <button class="w-25 about-btn section-padding" name="button" onclick="location.href='/';" type="button">Back to main Page</button>

@@ -3,18 +3,29 @@
 */
 const express = require('express');
 const bodyParser = require("body-parser");
+const sessions = require('express-session');
 
 //webserver initialization
 const app = express();              
-const port = 443; //WebServer Port
+const port = 80; //WebServer Port
+
+const oneDay = 1000 * 60 * 60 * 24;
 
 try {
     //webserver listener and registrations
     app.listen(port, () => { console.log(`Now listening on port ${port}`); });
     
+    
+    app.set('views', './views');
     app.set('view engine', 'ejs');
     app.use(express.static(__dirname));
     app.use(bodyParser.urlencoded({ extended: true }))
+    app.use(sessions({
+        secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+        saveUninitialized:true,
+        cookie: { maxAge: oneDay },
+        resave: false
+    }));
 } catch (err) {
     throw err;
 }
@@ -24,6 +35,7 @@ try {
 * and on DefaultAzureCredential login stack
 */
 const sql = require("mssql");
+const session = require('express-session');
 
 require('dotenv').config(); //Import .env 
 const { SQL_DB_SERVER, SQL_DB_NAME, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID } = process.env;

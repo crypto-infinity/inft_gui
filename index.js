@@ -1,10 +1,28 @@
 //dependencies initialization
-const {app,sql,authProvider} = require("./initializer")
+const {app,sql} = require("./initializer")
+const authProvider = require('./auth/authProvider');
+const { REDIRECT_URI, POST_LOGOUT_REDIRECT_URI } = require('./auth/authConfig');
+const async = require("hbs/lib/async");
+
+function isAuthenticated(req, res, next) {
+    if (!req.session.isAuthenticated) {
+        return res.redirect('/auth/signin'); // redirect to sign-in route
+    }
+
+    next();
+};
 
 //WebServer GET & POST Methods
 app.get('/', (req, res) => {
     res.render('index');      
 });
+
+/**
+ * , {
+        isAuthenticated: req.session.isAuthenticated,
+        username: req.session.account?.username
+    }
+ */
 
 app.post("/register", (req, res) => {
     try
@@ -63,24 +81,32 @@ app.get("/requests", (req, res) =>{
     })
 })
 
-// app.get('/signin', authProvider.login({
-//     scopes: [],
-//     redirectUri: authProvider.msalConfig.REDIRECT_URI,
-//     successRedirect: '/'
-// }));
+/**
+ * MS Authentication Methods
+ */
 
-// app.get('/acquireToken', authProvider.acquireToken({
-//     scopes: ['User.Read'],
-//     redirectUri: authProvider.msalConfig.REDIRECT_URI,
-//     successRedirect: '/users/profile'
-// }));
+app.get('/login-form', (req, res) => {
+    res.render('login-form');
+});
 
-// app.post('/redirect', authProvider.handleRedirect());
+app.post('/signin/legacy', (req, res) => {
+    var username = req.body.name;
+    var password = req.body.password;
 
-// app.get('/signout', authProvider.logout({
-//     postLogoutRedirectUri: authProvider.msalConfig.postLogoutRedirectUri
-// }));
+    console.log(username, password);
+    res.render('index');
+    //TO DO
+});
 
+app.get('/signout', async () => {
+    authProvider.logout({
+        postLogoutRedirectUri: authProvider.postLogoutRedirectUri
+    })
+});
+
+app.post('/redirect', async () => {
+    authProvider.handleRedirect()
+});
 
 
 // //TEST DEV REFERENCE `'"
