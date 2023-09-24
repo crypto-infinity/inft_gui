@@ -35,6 +35,7 @@
     "express-session": "^1.17.3",
     "hbs": "^4.2.0",
     "http-errors": "^2.0.0",
+    "jquery": "^3.7.1",
     "knex": "^2.5.1",
     "linkedin-private-api": "^1.1.2",
     "morgan": "^1.10.0",

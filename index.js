@@ -2,7 +2,7 @@
 const {app,sql} = require("./initializer")
 const authProvider = require('./auth/authProvider');
 const { REDIRECT_URI, POST_LOGOUT_REDIRECT_URI } = require('./auth/authConfig');
-const { createHash, crypto } = require("crypto");
+const crypto = require('crypto');
 
 //WebServer GET & POST Methods
 app.get('/', (req, res) => {
@@ -10,7 +10,16 @@ app.get('/', (req, res) => {
         res.render('index', { isAuthenticated: false });
     }
     else{
-        res.render('index', { isAuthenticated: true });
+        res.redirect('app');
+    }   
+});
+
+app.get('/app', (req, res) => {
+    if(!req.session.isAuthenticated){
+        res.redirect('login-form');
+    }
+    else{
+        res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
     }   
 });
 
@@ -77,9 +86,9 @@ app.get("/requests", (req, res) =>{
 
 app.get('/login-form', (req, res) => {
     if(!req.session.isAuthenticated){
-        res.render('login-form');
+        res.render('login-form', { isAuthenticated: false, error: false });
     }else{
-        res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
+        res.redirect('app');
     }
 });
 
@@ -88,6 +97,7 @@ app.post('/signin/legacy', (req, res) => {
         var request = new sql.Request();
 
         var username = req.body.username;
+        var password = req.body.password;
 
         request.input('username',sql.VarChar, username);
         var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
@@ -102,26 +112,27 @@ app.post('/signin/legacy', (req, res) => {
             if(recordset.recordset.length > 0){ //does a user called 'username' exist? if yes, let's compare hashes
                 var db_salt = recordset.recordset[0].salt;
 
-                var local_hash = createHash("sha256").update(req.body.password+db_salt).digest('base64');
-    
+                var local_hash = crypto.createHash("sha256").update(password+db_salt).digest('base64');
+                console.log(local_hash);
+                console.log(recordset.recordset[0].pwd_hash);
                 if(local_hash == recordset.recordset[0].pwd_hash ){ //are hashes correct?
                     console.log("Username : " + username + " is authenticated!");
                     req.session.isAuthenticated = true; //create session here
                     req.session.username = username;
-                    res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
+                    res.redirect('../app');
                 }
                 else{ //no, wrong password! moving you out (session.destroy should not be needed, but has been inserted as a security measure)
                     console.log("Operation illegal for : " + username + ". Logging out for security.");
                     req.session.destroy();
-                    res.render('login-form', { isAuthenticated: req.session.isAuthenticated, error: true });
+                    res.render('login-form', { isAuthenticated: false, error: true });
                 }
             }else //user does not exist in the database, let's create and insert it into SQL!
             {
                 console.log(username + " never inserted into database. Doing it now.");
                 var salt = crypto.randomBytes(16).toString('base64'); //-ERROR
-                var hash = createHash("sha256").update(req.body.password+salt).digest('base64');
+                var hash = crypto.createHash("sha256").update(password+salt).digest('base64');
 
-                request.input('username',sql.VarChar,username);
+                //request.input('username',sql.VarChar,username); -> already declared above
                 request.input('pwdhash',sql.VarChar,hash);
                 request.input('salt',sql.VarChar,salt);
 
@@ -134,7 +145,7 @@ app.post('/signin/legacy', (req, res) => {
                     //user now exist, no hash to confront. let's directly authenticate it.
                     req.session.isAuthenticated = true; //create session here
                     req.session.username = username;
-                    res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
+                    res.render('app', { isAuthenticated: true, username: username, error: false });
                 });
             }
         });
@@ -143,16 +154,14 @@ app.post('/signin/legacy', (req, res) => {
     else{ //user is already authenticated, just render the app page with session data
         res.render('app', { isAuthenticated: req.session.isAuthenticated, username: username, error: false });
     }
-
-    console.log(username, password);
-    res.redirect('/');
-    //TO DO
 });
 
-app.get('/signout', async () => {
-    authProvider.logout({
-        postLogoutRedirectUri: authProvider.postLogoutRedirectUri
-    })
+app.get('/signout', async (req,res) => {
+    req.session.destroy();
+    res.redirect('/');
+    // authProvider.logout({
+    //     postLogoutRedirectUri: authProvider.postLogoutRedirectUri
+    // })
 });
 
 app.post('/redirect', async () => {

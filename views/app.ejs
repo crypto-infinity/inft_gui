@@ -17,15 +17,18 @@
 </head>
 
 <body>
-    <script>
-    </script>
-    <section class="main-banner" data-scroll-index='1'>
-        <div class="sectioner-header text-center">
-            <h3>Hi, <%- username %>, welcome to the app!</h3>
-            <span class="line"></span>
-        </div>
-        <div class="text-center wow fadeInUp">
-            <button class="w-25 about-btn section-padding" name="button" onclick="location.href='/';" type="button">Back to main Page</button>
+    <section class="main-banner">
+        <div>
+            <div class="container centered-section">
+                <div class="text-center">
+                    <img src="images/logo-highres.png" class="wow fadeInUp header-padding-image"
+                        data-wow-delay="0.4s" />
+                    <h4>Hi <%- username %>, welcome to the app!</h4>
+                    <div class="row">
+                        <div class="col-md-12"><a href="/signout" class="about-btn-solid">Logout</a></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </body>
