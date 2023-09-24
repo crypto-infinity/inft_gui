@@ -34,7 +34,19 @@
           <li class="nav-item"> <a class="nav-link" href="#" data-scroll-nav="3">Team</a> </li>
           <li class="nav-item"> <a class="nav-link" href="#" data-scroll-nav="4">Testimonials</a> </li>
           <li class="nav-item"> <a class="nav-link" href="#" data-scroll-nav="5">Faq</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="/login-form">Signin</a> </li>
+          <script>
+             var authenticated = <%- isAuthenticated %>;
+             if(authenticated){
+              document.write(`
+                <li class="nav-item"> <a class="nav-link" href="/signout">Sign-out</a> </li>
+              `);
+             }else{
+              document.write(`
+                <li class="nav-item"> <a class="nav-link" href="/login-form">Signin</a> </li>
+              `);
+             }
+          </script>
+          <!-- <li class="nav-item"> <a class="nav-link" href="/login-form">Signin</a> </li> -->
         </ul>
       </div>
     </div>

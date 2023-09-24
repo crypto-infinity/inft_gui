@@ -32,7 +32,6 @@ try {
 
 /**
 * MS SQL Server Connection initialization, based on mssql and tedious
-* and on DefaultAzureCredential login stack
 */
 const sql = require("mssql");
 const session = require('express-session');
@@ -52,7 +51,10 @@ var sql_config = {
             tenantId: AZURE_TENANT_ID
         }
     },
-    trustServerCertificate: false //self-signed cert error
+    trustServerCertificate: false, //self-signed cert error
+    options: {
+        connectTimeout: 35000
+    }
 };
 
 

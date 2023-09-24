@@ -53,6 +53,11 @@ h6 {
 	font-weight: 500;
 }
 
+input[type="checkbox"] {
+	display: inline-block;
+	vertical-align: top;
+ }
+
 .centered ::placeholder {
 	text-align: center;
 }
@@ -253,7 +258,13 @@ h6 {
 .header-padding-image {
 	position: relative;
 	padding: 30px 0px;
-	width: 50vh;
+	width: 40vh;
+}
+
+.header-relative-padding-image {
+	position: relative;
+	padding: 40px 0px;
+	width: 30vh;
 }
 
 .column {
@@ -724,6 +735,17 @@ input {
 	.header-padding-image {
 		transform: scale(0.65) !important;
 		-webkit-transform: scale(0.65) !important;
+	}
+
+	.about-btn-solid {
+		transform: scale(0.75) !important;
+		-webkit-transform: scale(0.75) !important;
+		padding: 10px;
+	}
+
+	.form-input {
+		transform: scale(0.75) !important;
+		-webkit-transform: scale(0.75) !important;
 	}
 
 	.header-padding {
