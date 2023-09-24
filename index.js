@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 
 app.get('/app', (req, res) => {
     if(!req.session.isAuthenticated){
-        res.redirect('login-form');
+        res.redirect('login');
     }
     else{
         res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
@@ -84,9 +84,9 @@ app.get("/requests", (req, res) =>{
  * Authentication Methods
  */
 
-app.get('/login-form', (req, res) => {
+app.get('/login', (req, res) => {
     if(!req.session.isAuthenticated){
-        res.render('login-form', { isAuthenticated: false, error: false });
+        res.render('login', { isAuthenticated: false, error: false });
     }else{
         res.redirect('app');
     }
@@ -124,7 +124,7 @@ app.post('/signin/legacy', (req, res) => {
                 else{ //no, wrong password! moving you out (session.destroy should not be needed, but has been inserted as a security measure)
                     console.log("Operation illegal for : " + username + ". Logging out for security.");
                     req.session.destroy();
-                    res.render('login-form', { isAuthenticated: false, error: true });
+                    res.render('login', { isAuthenticated: false, error: true });
                 }
             }else //user does not exist in the database, let's create and insert it into SQL!
             {
