@@ -57,6 +57,9 @@ input[type="checkbox"] {
 	display: inline-block;
 	vertical-align: top;
  }
+.hidden {
+	display: none;
+}
 
 .centered ::placeholder {
 	text-align: center;

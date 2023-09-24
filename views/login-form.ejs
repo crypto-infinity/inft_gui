@@ -33,7 +33,7 @@
             </form>
             <h3 class="normal-padding wow fadeInUp" data-wow-delay="0.4s" id="othersigninmethods">Or sign in with..</h3>
             <span class="line"></span>
-            <div id="signinmethods">
+            <div class="" id="signinmethods">
                 <div class="container normal-padding">
                     <a href="/"><img src="../images/ms_login.png" class="wow fadeInUp prelative" data-wow-delay="0.6s"/></a>
                 </div>
@@ -55,15 +55,7 @@
     <!-- scrollIt js --> 
     <script src="js/scrollIt.min.js"></script> 
     <script src="js/wow.min.js"></script>
-
     <script>
-        $("#othersigninmethods").click(function(){
-            $("#signinmethods").slideDown();
-        });
-    </script>
-    <script>
-
-        
         function checkAuthError(){
             var authError = <%- error %>;
             if(authError){
@@ -90,6 +82,9 @@
         wow = new WOW();
         wow.init();
         $(document).ready(function(e) {
+            $("#othersigninmethods").click(function(){
+                $("#signinmethods").slideDown();
+            });
             
             $('#video-icon').on('click',function(e){
                 e.preventDefault();
