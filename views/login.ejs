@@ -25,13 +25,13 @@
             <p>If user doesn't exist, we'll create one.</p>
             <span class="line"></span>
             -->
-            <form class="centered prelative normal-padding" id="signin_form" action="/signin/legacy" onsubmit="return checkData();" method="post">
+            <form class="centered prelative normal-padding" id="signin_form" action="/signin/legacy" method="post">
                 <input type="text" id="username" class="form-input w-100" name="username" placeholder="User Name or Email" required>
                 <input type="password" id="password" class="form-input w-100" name="password" placeholder="Password" required>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="login">Login</button>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="register">Register</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login" formaction="/signin/legacy">Login</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="register" id="register" formaction="/register">Register</button>
             </form>
-            <h3 class="normal-padding wow fadeInUp" data-wow-delay="0.4s" id="othersigninmethods">Or sign in with..</h3>
+            <h3 class="normal-padding wow fadeInUp prelative" data-wow-delay="0.4s" id="othersigninmethods">Or sign in with..</h3>
             <span class="line"></span>
             <div class="" id="signinmethods">
                 <div class="container normal-padding">
@@ -47,7 +47,7 @@
   
 </html>
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script> 
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script> 
 
@@ -82,9 +82,30 @@
         wow = new WOW();
         wow.init();
         $(document).ready(function(e) {
-            $("#othersigninmethods").click(function(){
-                $("#signinmethods").slideDown();
+            /*
+            $('#login').on('click', function(){
+                alert("test");
             });
+            */ 
+
+            // $('form#signin_form').on('submit', function(e){
+            //     $.ajax({
+            //         url: "/signin/legacy",
+            //         type: "POST",
+            //         data: {
+            //             username: document.getElementById('username').value,
+            //             password: document.getElementById('password').value
+            //         },
+            //         success: function(returned) {
+            //             console.log(returned); // here can get the return of route
+            //             e.preventDefault();
+            //         },
+            //         error: function() {
+
+            //         }
+            //     });                
+            //     e.preventDefault();
+            // })
             
             $('#video-icon').on('click',function(e){
                 e.preventDefault();
