@@ -20,16 +20,11 @@
     <section class="main-banner">
         <div class="text-center">
             <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png" data-wow-delay="0.2s"></a>
-            <!--
-                            <h2 class="wow fadeInUp" data-wow-delay="0.2s">Login / Signup</h2>
-            <p>If user doesn't exist, we'll create one.</p>
-            <span class="line"></span>
-            -->
-            <form class="centered prelative normal-padding" id="signin_form" action="/signin/legacy" method="post">
+            <form class="centered prelative normal-padding" id="signin_form" method="post">
                 <input type="text" id="username" class="form-input w-100" name="username" placeholder="User Name or Email" required>
                 <input type="password" id="password" class="form-input w-100" name="password" placeholder="Password" required>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login" formaction="/signin/legacy">Login</button>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="register" id="register" formaction="/register">Register</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login" formaction="/signin/legacy" onclick="this.form.submitted=this.value;">Login</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="register" id="register" formaction="/register" onclick="this.form.submitted=this.value;">Register</button>
             </form>
             <h3 class="normal-padding wow fadeInUp prelative" data-wow-delay="0.4s" id="othersigninmethods">Or sign in with..</h3>
             <span class="line"></span>
@@ -82,30 +77,26 @@
         wow = new WOW();
         wow.init();
         $(document).ready(function(e) {
-            /*
-            $('#login').on('click', function(){
-                alert("test");
-            });
-            */ 
-
-            // $('form#signin_form').on('submit', function(e){
-            //     $.ajax({
-            //         url: "/signin/legacy",
-            //         type: "POST",
-            //         data: {
-            //             username: document.getElementById('username').value,
-            //             password: document.getElementById('password').value
-            //         },
-            //         success: function(returned) {
-            //             console.log(returned); // here can get the return of route
-            //             e.preventDefault();
-            //         },
-            //         error: function() {
-
-            //         }
-            //     });                
-            //     e.preventDefault();
-            // })
+            $('form#signin_form').on('submit', function(e){
+                console.log(this.submitted);
+                $.ajax({
+                    url: "/signin/legacy",
+                    type: "POST",
+                    data: {
+                        username: document.getElementById('username').value,
+                        password: document.getElementById('password').value
+                    },
+                    success: function(returned) {
+                        if(returned == 'ERR_USER_NOT_EXISTENT'){
+                            alert("Attention, the user " + document.getElementById('username').value + " does not exist! Please register it.");
+                        }
+                        
+                    },
+                    error: function() {
+                        alert("Some error has occured, please refresh the page!");
+                    }
+                });             
+            })
             
             $('#video-icon').on('click',function(e){
                 e.preventDefault();

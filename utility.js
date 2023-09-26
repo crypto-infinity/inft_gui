@@ -18,6 +18,9 @@ const INFT_Library = {
             if(recordset.recordset.length > 0){ return recordset; }
             else{ return false; }
         });
+    },
+    errors: {
+        ERR_USER_NOT_EXISTENT: "ERR_USER_NOT_EXISTENT"
     }
 }
 
