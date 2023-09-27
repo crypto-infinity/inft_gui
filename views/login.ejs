@@ -20,11 +20,11 @@
     <section class="main-banner">
         <div class="text-center">
             <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png" data-wow-delay="0.2s"></a>
-            <form class="centered prelative normal-padding" id="signin_form" method="post">
+            <form class="centered prelative normal-padding" id="signin_form" action="/signin/legacy" method="post">
                 <input type="text" id="username" class="form-input w-100" name="username" placeholder="User Name or Email" required>
                 <input type="password" id="password" class="form-input w-100" name="password" placeholder="Password" required>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login" formaction="/signin/legacy" onclick="this.form.submitted=this.value;">Login</button>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="register" id="register" formaction="/register" onclick="this.form.submitted=this.value;">Register</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login" formaction="/signin/legacy">Login</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="register" id="register" formaction="/register">Register</button>
             </form>
             <h3 class="normal-padding wow fadeInUp prelative" data-wow-delay="0.4s" id="othersigninmethods">Or sign in with..</h3>
             <span class="line"></span>
@@ -51,52 +51,35 @@
     <script src="js/scrollIt.min.js"></script> 
     <script src="js/wow.min.js"></script>
     <script>
-        function checkAuthError(){
-            var authError = <%- error %>;
-            if(authError){
-                alert("Authentication Error");
-            }
-        }
-        checkAuthError();
-
-        function checkData(){
-            const form = document.querySelector('form');
-            const data = new FormData(form);
-            const dataObject = {};
-
-            for (const [key, value] of data.entries()) {
-                dataObject[key] = value;
-            }
-
-            console.log(JSON.stringify(dataObject));
-            console.log(dataObject);
-            return true;
-        }
-    </script>
-    <script>
         wow = new WOW();
         wow.init();
         $(document).ready(function(e) {
             $('form#signin_form').on('submit', function(e){
-                console.log(this.submitted);
-                $.ajax({
-                    url: "/signin/legacy",
-                    type: "POST",
-                    data: {
-                        username: document.getElementById('username').value,
-                        password: document.getElementById('password').value
-                    },
-                    success: function(returned) {
-                        if(returned == 'ERR_USER_NOT_EXISTENT'){
-                            alert("Attention, the user " + document.getElementById('username').value + " does not exist! Please register it.");
+                console.log();
+                if(document.activeElement.id == "login"){
+                    $.ajax({
+                        url: "/signin/legacy",
+                        type: "POST",
+                        data: {
+                            username: document.getElementById('username').value,
+                            password: document.getElementById('password').value
+                        },
+                        success: function(returned, textStatus, xhr) {
+                            if(xhr.status == "204"){
+                                e.preventDefault();
+                                alert("User not existent! Please register first.");
+                                return;
+                            }
+                        },
+                        error: function() {
+                            alert("Some error has occured, please refresh the page!");
                         }
-                        
-                    },
-                    error: function() {
-                        alert("Some error has occured, please refresh the page!");
-                    }
-                });             
-            })
+                    });
+                }else{
+                    alert("register was pressed");
+                    $('#signin_form').submit(); // TO DO 
+                }
+            });
             
             $('#video-icon').on('click',function(e){
                 e.preventDefault();

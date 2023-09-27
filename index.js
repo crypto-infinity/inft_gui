@@ -36,33 +36,12 @@ app.get('/login', (req, res) => {
     }
 });
 
-app.post('/signin/legacy', async (req, res) => {
+app.post('/signin/legacy', (req, res) => {
     if(!req.session.isAuthenticated){ //user is not authenticated already
+        var request = new sql.Request();
         var username = req.body.username;
         var password = req.body.password;
 
-        var db_users = await userExistinDB(username);
-        console.log("Records in post method"+db_users);
-        if(db_users != false){
-            var db_salt = db_users.recordset[0].salt;
-            var local_hash = crypto.createHash("sha256").update(password+db_salt).digest('base64');
-
-            if(local_hash == db_users.recordset[0].pwd_hash ){ //are hashes correct?
-                console.log("Username : " + username + " is authenticated!");
-                req.session.isAuthenticated = true; //create session here
-                req.session.username = username;
-                res.redirect('../app');
-            }else{
-                console.log("Login failed for : " + username + ". Logging out for security.");
-                req.session.destroy();
-                res.render('login', { isAuthenticated: false, error: true });
-            }            
-        }else{
-            console.log("Username " + username + " does not exist!");
-            return "ciao";
-        }
-
-        /*
         request.input('username',sql.VarChar, username);
         var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
 
@@ -73,58 +52,36 @@ app.post('/signin/legacy', async (req, res) => {
                 res.render('error', {error: err});
             }
             console.log(recordset);
-            if(recordset.recordset.length > 0){ //does a user called 'username' exist? if yes, let's compare hashes
+            if(recordset.recordset.length > 0){
                 var db_salt = recordset.recordset[0].salt;
-
                 var local_hash = crypto.createHash("sha256").update(password+db_salt).digest('base64');
-                console.log(local_hash);
-                console.log(recordset.recordset[0].pwd_hash);
+    
                 if(local_hash == recordset.recordset[0].pwd_hash ){ //are hashes correct?
                     console.log("Username : " + username + " is authenticated!");
                     req.session.isAuthenticated = true; //create session here
                     req.session.username = username;
-                    res.redirect('../app');
-                }
-                else{ //no, wrong password! moving you out (session.destroy should not be needed, but has been inserted as a security measure)
-                    console.log("Operation illegal for : " + username + ". Logging out for security.");
+                    res.redirect('/app');
+                }else{
+                    console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
-                    res.render('login', { isAuthenticated: false, error: true });
-                }
-            }else //user does not exist in the database, let's create and insert it into SQL!
-            {
-                console.log(username + " never inserted into database. Doing it now.");
-                var salt = crypto.randomBytes(16).toString('base64'); //-ERROR
-                var hash = crypto.createHash("sha256").update(password+salt).digest('base64');
-
-                //request.input('username',sql.VarChar,username); -> already declared above
-                request.input('pwdhash',sql.VarChar,hash);
-                request.input('salt',sql.VarChar,salt);
-
-                var query = "INSERT INTO [SalesLT].Login (username,pwd_hash,salt) values (@username,@pwdhash,@salt)";
-                request.query(query, function(err, recordset){
-                    if (err){
-                        console.log("Error: " + err);
-                        res.render('error', {error: err});
-                    }
-                    //user now exist, no hash to confront. let's directly authenticate it.
-                    req.session.isAuthenticated = true; //create session here
-                    req.session.username = username;
-                    res.render('app', { isAuthenticated: true, username: username, error: false });
+                    res.redirect('/login');
+                }            
+            }else{
+                console.log("Username " + username + " does not exist!");
+                res.status(204).send({
+                    error: "ERR_USER_NOT_EXISTENT"
                 });
             }
-        });*/
-
+        });
     }
     else{ //user is already authenticated, just render the app page with session data
-        res.render('app', { isAuthenticated: req.session.isAuthenticated, username: username, error: false });
+        res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
     }
 });
 
 app.get('/register', (req, res) => {
     if(!req.session.isAuthenticated){
-        if(INFT_Library.userExistinDB(sql,req.body.username)){
-
-        }
+        //TO DO
 
     }else{
         res.redirect('app');
@@ -217,20 +174,54 @@ app.post('/redirect', async () => {
 //     })
 // })
 
-async function userExistinDB(username){
-    var request = new sql.Request();
+        /*
+        request.input('username',sql.VarChar, username);
+        var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
 
-    request.input('username',sql.VarChar, username);
-    var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
+        request.query(query, function (err, recordset) {
+            if (err){ //handling DB errors
+                console.log("Error: " + err)
+                req.session.destroy();
+                res.render('error', {error: err});
+            }
+            console.log(recordset);
+            if(recordset.recordset.length > 0){ //does a user called 'username' exist? if yes, let's compare hashes
+                var db_salt = recordset.recordset[0].salt;
 
-    request.query(query, function (err, recordset) {
-        if (err){ //handling DB errors
-            console.log("Error: " + err)
-            req.session.destroy();
-            res.render('error', {error: err});
-        }
-        console.log("Records in function:" + recordset);
-        if(recordset.recordset.length > 0){ return recordset; }
-        else{ return false; }
-    });
-}
+                var local_hash = crypto.createHash("sha256").update(password+db_salt).digest('base64');
+                console.log(local_hash);
+                console.log(recordset.recordset[0].pwd_hash);
+                if(local_hash == recordset.recordset[0].pwd_hash ){ //are hashes correct?
+                    console.log("Username : " + username + " is authenticated!");
+                    req.session.isAuthenticated = true; //create session here
+                    req.session.username = username;
+                    res.redirect('../app');
+                }
+                else{ //no, wrong password! moving you out (session.destroy should not be needed, but has been inserted as a security measure)
+                    console.log("Operation illegal for : " + username + ". Logging out for security.");
+                    req.session.destroy();
+                    res.render('login', { isAuthenticated: false, error: true });
+                }
+            }else //user does not exist in the database, let's create and insert it into SQL!
+            {
+                console.log(username + " never inserted into database. Doing it now.");
+                var salt = crypto.randomBytes(16).toString('base64'); //-ERROR
+                var hash = crypto.createHash("sha256").update(password+salt).digest('base64');
+
+                //request.input('username',sql.VarChar,username); -> already declared above
+                request.input('pwdhash',sql.VarChar,hash);
+                request.input('salt',sql.VarChar,salt);
+
+                var query = "INSERT INTO [SalesLT].Login (username,pwd_hash,salt) values (@username,@pwdhash,@salt)";
+                request.query(query, function(err, recordset){
+                    if (err){
+                        console.log("Error: " + err);
+                        res.render('error', {error: err});
+                    }
+                    //user now exist, no hash to confront. let's directly authenticate it.
+                    req.session.isAuthenticated = true; //create session here
+                    req.session.username = username;
+                    res.render('app', { isAuthenticated: true, username: username, error: false });
+                });
+            }
+        });*/
