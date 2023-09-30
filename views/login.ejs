@@ -17,7 +17,9 @@
 </head>
   
 <body>
-    <div id="cover-spin"></div>
+    <div class="spin-background" id="spin">
+        <img class="spin" src="../images/icon.png">
+    </div>
     <section class="main-banner">
         <div class="text-center">
             <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png" data-wow-delay="0.2s"></a>
@@ -30,11 +32,11 @@
             <h3 class="normal-padding wow fadeInUp prelative" data-wow-delay="0.4s" id="othersigninmethods">Or sign in with..</h3>
             <span class="line"></span>
             <div class="" id="signinmethods">
-                <div class="container normal-padding">
-                    <a href="/"><img src="../images/ms_login.png" class="wow fadeInUp prelative" data-wow-delay="0.6s"/></a>
+                <div class="container normal-padding prelative">
+                    <a id="ms" href="#"><img src="../images/ms_login.png" class="wow fadeInUp prelative" data-wow-delay="0.6s"/></a>
                 </div>
-                <div class="container normal-padding">
-                    <a href="/"><img src="../images/metamask_login.png" class="wow fadeInUp prelative" data-wow-delay="0.8s"/></a>
+                <div class="container normal-padding prelative">
+                    <a id="mm" href="#"><img src="../images/metamask_login.png" class="wow fadeInUp prelative" data-wow-delay="0.8s"/></a>
                 </div>
             </div>
         </div>
@@ -54,20 +56,25 @@
     <script>
         wow = new WOW();
         wow.init();
-
+        // $('#ms').on('click',function(e){
+        //     $('#spin').show(0);
+        //     $('#spin').hide(0);
+        // });
         $(document).ready(function(e) {
-            $('form#signin_form').on('submit', function(e){
-                $('#cover-spin').show(0);
+            $('form#signin_form').on('submit', function(e){ //Form submit custom handler
+                $('#spin').show(0);
                 var form = this;
                 e.preventDefault();
 
-                //check for password lenght over REGEX
-                var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-                if(!regularExpression.test(document.getElementById('password').value) || document.getElementById('password').value.lenght < 8){
-                    $('#cover-spin').hide(0);
-                    alert("Password should contain at least 1 number and 1 special character, and must be over 8 chars!");
-                    return; //let's block the form submit
-                }
+                // //check for password lenght over REGEX
+                // var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+                // var password = document.getElementById('password').value;
+                // console.log(password)
+                // if(!regularExpression.test(document.getElementById('password').value)){
+                //     $('#spin').hide(0);
+                //     alert("Password should contain at least 1 number and 1 special character, and must be over 8 chars!");
+                //     return; //let's block the form submit
+                // }
 
                 if(document.activeElement.id == "login"){
                     $.ajax({
@@ -78,17 +85,36 @@
                         },
                         success: function(data, textStatus, xhr) {
                             if(xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_NOT_EXISTENT"){ //IF status message shows the user does not exist..
-                                $('#cover-spin').hide(0);
+                                $('#spin').hide(0);
                                 alert("User not existent! Please register first.");
                                 return; //let's block the form submit
                             }
-                            $('#cover-spin').hide(0);
+                            $.ajax({
+                                url: "/signin/legacy",
+                                type: "POST",
+                                data: {
+                                    username: document.getElementById('username').value,
+                                    password: document.getElementById('password').value
+                                },
+                                success: function(data, textStatus, xhr) {
+                                    if(xhr.getResponseHeader("INFT_ERROR_MESSAGE") == "ERR_WRONG_PASSWORD"){
+                                        $('#spin').hide(0);
+                                        alert("Wrong password for user " + username);
+                                        return; //let's block the form submit
+                                    }
+                                    $('#spin').hide(0);
+                                },
+                                error: function() {
+
+                                }                                    
+                            });
+                            $('#spin').hide(0);
                             $('#signin_form').attr('action', '/signin/legacy');//setting /signin/legacy as Express.js route server-side
                             form.submit();
                         },
                         error: function() {
                             alert("Some error has occured during login, please refresh the page!");
-                            $('#cover-spin').hide(0);
+                            $('#spin').hide(0);
                         }
                     });
                 }else if(document.activeElement.id == "register"){ //If register button was pressed
@@ -100,22 +126,22 @@
                         },
                         success: function(data, textStatus, xhr) {
                             if(xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_ALREADY_REGISTERED"){ //IF status message shows the user already registered..
-                                $('#cover-spin').hide(0);
+                                $('#spin').hide(0);
                                 alert("User already registered!"); 
                                 return; //let's block the form submit
                             }
-                            $('#cover-spin').hide(0);
+                            $('#spin').hide(0);
                             $('#signin_form').attr('action', '/register');//setting /register as Express.js route server-side
                             form.submit();
                         },
                         error: function() {
                             alert("Some error has occured during registration, please refresh the page!");
-                            $('#cover-spin').hide(0);
+                            $('#spin').hide(0);
                         }
                     });
                 }else{
                     alert("Some general error has occured, please refresh the page!");
-                    $('#cover-spin').hide(0);
+                    $('#spin').hide(0);
                 }
             });
             

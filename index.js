@@ -64,7 +64,8 @@ app.post('/signin/legacy', (req, res) => {
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
-                    res.redirect('/login');
+                    res.setHeader("INFT_ERROR_MESSAGE","ERR_WRONG_PASSWORD");
+                    res.status(204).send();
                 }            
             }else{
                 console.log("Username " + username + " does not exist!");
