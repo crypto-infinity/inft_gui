@@ -20,7 +20,7 @@
     <div class="spin-background" id="spin">
         <img class="spin" src="../images/icon.png">
     </div>
-    <section class="main-banner">
+    <section class="main-banner-login">
         <div class="text-center">
             <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png" data-wow-delay="0.2s"></a>
             <form class="centered prelative normal-padding" id="signin_form" method="post">
@@ -33,7 +33,7 @@
             <span class="line"></span>
             <div class="" id="signinmethods">
                 <div class="container normal-padding prelative">
-                    <a id="ms" href="#"><img src="../images/ms_login.png" class="wow fadeInUp prelative" data-wow-delay="0.6s"/></a>
+                    <a id="ms" href="/signin/microsoft"><img src="../images/ms_login.png" class="wow fadeInUp prelative" data-wow-delay="0.6s"/></a>
                 </div>
                 <div class="container normal-padding prelative">
                     <a id="mm" href="#"><img src="../images/metamask_login.png" class="wow fadeInUp prelative" data-wow-delay="0.8s"/></a>
@@ -65,16 +65,6 @@
                 $('#spin').show(0);
                 var form = this;
                 e.preventDefault();
-
-                // //check for password lenght over REGEX
-                // var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-                // var password = document.getElementById('password').value;
-                // console.log(password)
-                // if(!regularExpression.test(document.getElementById('password').value)){
-                //     $('#spin').hide(0);
-                //     alert("Password should contain at least 1 number and 1 special character, and must be over 8 chars!");
-                //     return; //let's block the form submit
-                // }
 
                 if(document.activeElement.id == "login"){
                     $.ajax({
@@ -118,6 +108,17 @@
                         }
                     });
                 }else if(document.activeElement.id == "register"){ //If register button was pressed
+
+                    //check for password lenght over REGEX
+                    var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+                    var password = document.getElementById('password').value;
+                    console.log(password)
+                    if(!regularExpression.test(document.getElementById('password').value)){
+                        $('#spin').hide(0);
+                        alert("Password should contain at least 1 number and 1 special character, and must be over 8 chars!");
+                        return; //let's block the form submit
+                    }
+
                     $.ajax({
                         url: "/checkUser",//API to check Users
                         type: "POST",

@@ -79,6 +79,34 @@ app.post('/signin/legacy', (req, res) => {
     }
 });
 
+app.get('/signin/microsoft', (req,res) => {
+    if(!req.session.isAuthenticated){
+        authProvider.login();
+    }else{
+        res.redirect('app');
+    }
+});
+
+app.post('/auth/redirect', (req,res) => {
+    if(!req.session.isAuthenticated){
+        res.redirect('../login');
+    }else{
+        res.redirect('../app');
+    }
+});
+
+/**
+ * Dev purposes
+ */
+
+app.get('/auth/redirect', (req,res) => {
+    if(!req.session.isAuthenticated){
+        res.redirect('../login');
+    }else{
+        res.redirect('../app');
+    }
+});
+
 app.post('/register', (req, res) => {
     if(!req.session.isAuthenticated){
         var request = new sql.Request();

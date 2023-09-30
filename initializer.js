@@ -7,7 +7,7 @@ const sessions = require('express-session');
 
 //webserver initialization
 const app = express();              
-const port = 80; //WebServer Port
+const port = 443; //WebServer Port
 
 const oneDay = 1000 * 60 * 60 * 24;
 

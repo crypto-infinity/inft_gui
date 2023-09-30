@@ -13,7 +13,7 @@ require('dotenv').config({ path: '../.env' });
 const msalConfig = {
     auth: {
         clientId: process.env.AZURE_CLIENT_ID, // 'Application (client) ID' of app registration in Azure portal - this value is a GUID
-        authority: "https://datago.ciamlogin.com/", // Full directory URL, in the form of https://login.microsoftonline.com/<tenant>+ process.env.AZURE_TENANT_ID
+        authority: "https://login.microsoftonline.com/" + "datago.onmicrosoft.com", // Full directory URL, in the form of https://login.microsoftonline.com/<tenant>+ process.env.AZURE_TENANT_ID
         clientSecret: process.env.AZURE_CLIENT_SECRET // Client secret generated from the app registration in Azure portal
     },
     system: {
