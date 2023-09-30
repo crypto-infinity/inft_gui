@@ -17,14 +17,15 @@
 </head>
   
 <body>
+    <div id="cover-spin"></div>
     <section class="main-banner">
         <div class="text-center">
             <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png" data-wow-delay="0.2s"></a>
-            <form class="centered prelative normal-padding" id="signin_form" action="/signin/legacy" method="post">
+            <form class="centered prelative normal-padding" id="signin_form" method="post">
                 <input type="text" id="username" class="form-input w-100" name="username" placeholder="User Name or Email" required>
                 <input type="password" id="password" class="form-input w-100" name="password" placeholder="Password" required>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login" formaction="/signin/legacy">Login</button>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="register" id="register" formaction="/register">Register</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login">Login</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="register" id="register">Register</button>
             </form>
             <h3 class="normal-padding wow fadeInUp prelative" data-wow-delay="0.4s" id="othersigninmethods">Or sign in with..</h3>
             <span class="line"></span>
@@ -53,31 +54,68 @@
     <script>
         wow = new WOW();
         wow.init();
+
         $(document).ready(function(e) {
             $('form#signin_form').on('submit', function(e){
-                console.log();
+                $('#cover-spin').show(0);
+                var form = this;
+                e.preventDefault();
+
+                //check for password lenght over REGEX
+                var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+                if(!regularExpression.test(document.getElementById('password').value) || document.getElementById('password').value.lenght < 8){
+                    $('#cover-spin').hide(0);
+                    alert("Password should contain at least 1 number and 1 special character, and must be over 8 chars!");
+                    return; //let's block the form submit
+                }
+
                 if(document.activeElement.id == "login"){
                     $.ajax({
-                        url: "/signin/legacy",
+                        url: "/checkUser",//API to check Users
                         type: "POST",
                         data: {
-                            username: document.getElementById('username').value,
-                            password: document.getElementById('password').value
+                            username: document.getElementById('username').value
                         },
-                        success: function(returned, textStatus, xhr) {
-                            if(xhr.status == "204"){
-                                e.preventDefault();
+                        success: function(data, textStatus, xhr) {
+                            if(xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_NOT_EXISTENT"){ //IF status message shows the user does not exist..
+                                $('#cover-spin').hide(0);
                                 alert("User not existent! Please register first.");
-                                return;
+                                return; //let's block the form submit
                             }
+                            $('#cover-spin').hide(0);
+                            $('#signin_form').attr('action', '/signin/legacy');//setting /signin/legacy as Express.js route server-side
+                            form.submit();
                         },
                         error: function() {
-                            alert("Some error has occured, please refresh the page!");
+                            alert("Some error has occured during login, please refresh the page!");
+                            $('#cover-spin').hide(0);
+                        }
+                    });
+                }else if(document.activeElement.id == "register"){ //If register button was pressed
+                    $.ajax({
+                        url: "/checkUser",//API to check Users
+                        type: "POST",
+                        data: {
+                            username: document.getElementById('username').value
+                        },
+                        success: function(data, textStatus, xhr) {
+                            if(xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_ALREADY_REGISTERED"){ //IF status message shows the user already registered..
+                                $('#cover-spin').hide(0);
+                                alert("User already registered!"); 
+                                return; //let's block the form submit
+                            }
+                            $('#cover-spin').hide(0);
+                            $('#signin_form').attr('action', '/register');//setting /register as Express.js route server-side
+                            form.submit();
+                        },
+                        error: function() {
+                            alert("Some error has occured during registration, please refresh the page!");
+                            $('#cover-spin').hide(0);
                         }
                     });
                 }else{
-                    alert("register was pressed");
-                    $('#signin_form').submit(); // TO DO 
+                    alert("Some general error has occured, please refresh the page!");
+                    $('#cover-spin').hide(0);
                 }
             });
             

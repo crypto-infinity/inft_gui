@@ -2,15 +2,15 @@
 :root {
 	--main-bg-color: #b30659;
 	--main-bg-gradient-color: linear-gradient(to right, #fff, #a0c9eba0);
-	/*#e2aeaee3, #ec8670e3*/
-	/*#EE9CA7 → #FFDDE1*/
 	--secondary-bg-color: #7d0161;
 	--secondary-bg-gradient-color: linear-gradient(to bottom right, #7d0160, #f00b51);
-	/*#7d0161, #f00b51*/
-	/*#D8B5FF → #1EAE98*/
 	--header-text-color: black;
 	--body-text-color: #4d4949;
 }
+
+/*
+ 	Body General Classes
+*/
 
 * {
 	padding: 0;
@@ -61,6 +61,53 @@ input[type="checkbox"] {
 	display: inline-block;
 	vertical-align: top;
  }
+
+ /*
+ 	End Body General Classes
+*/
+
+/*
+ 	Loading Wheel Class
+*/
+
+#cover-spin {
+    position:fixed;
+    width:100%;
+    left:0;right:0;top:0;bottom:0;
+    background-color: rgba(255,255,255,0.7);
+    z-index:9999;
+    display:none;
+}
+
+@-webkit-keyframes spin {
+	from {-webkit-transform:rotate(0deg);}
+	to {-webkit-transform:rotate(360deg);}
+}
+
+@keyframes spin {
+	from {transform:rotate(0deg);}
+	to {transform:rotate(360deg);}
+}
+
+#cover-spin::after {
+    content:'';
+    display:block;
+    position:absolute;
+    left:48%;top:40%;
+    width:40px;height:40px;
+    border-style:solid;
+    border-color:black;
+    border-top-color:transparent;
+    border-width: 4px;
+    border-radius:50%;
+    -webkit-animation: spin .8s linear infinite;
+    animation: spin .8s linear infinite;
+}
+
+/*
+ 	End Loading Wheel
+*/
+
 .hidden {
 	display: none;
 }

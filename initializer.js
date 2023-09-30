@@ -53,7 +53,7 @@ var sql_config = {
     },
     trustServerCertificate: false, //self-signed cert error
     options: {
-        connectTimeout: 35000
+        connectTimeout: 40000
     }
 };
 

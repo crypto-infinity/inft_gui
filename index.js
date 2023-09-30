@@ -68,20 +68,66 @@ app.post('/signin/legacy', (req, res) => {
                 }            
             }else{
                 console.log("Username " + username + " does not exist!");
-                res.status(204).send({
-                    error: "ERR_USER_NOT_EXISTENT"
-                });
+                res.setHeader("INFT_ERROR_MESSAGE","ERR_USER_NOT_EXISTENT");
+                res.status(204).send();
             }
         });
     }
     else{ //user is already authenticated, just render the app page with session data
-        res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
+        res.redirect('app');
     }
 });
 
-app.get('/register', (req, res) => {
+app.post('/register', (req, res) => {
     if(!req.session.isAuthenticated){
-        //TO DO
+        var request = new sql.Request();
+        var username = req.body.username;
+        var password = req.body.password;
+
+        request.input('username',sql.VarChar, username);
+        var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
+
+        request.query(query, function (err, recordset) {
+            if (err){ //handling DB errors
+                console.log("Error: " + err)
+                req.session.destroy();
+                res.render('error', {error: err});
+            }
+            if(recordset.recordset.length == 0){//user does not exist, query result empty
+                console.log(username + " never inserted into database. Doing it now.");
+                var salt = crypto.randomBytes(16).toString('base64'); 
+                var hash = crypto.createHash("sha256").update(password+salt).digest('base64');
+
+                request.input('pwdhash',sql.VarChar,hash);
+                request.input('salt',sql.VarChar,salt);
+
+                var query = "INSERT INTO [SalesLT].Login (username,pwd_hash,salt) values (@username,@pwdhash,@salt)";
+                request.query(query, function(err, recordset){
+                    if (err){ //handling DB errors
+                        console.log("Error: " + err)
+                        req.session.destroy();
+                        res.render('error', {error: err});
+                    }
+                    //user now exist, no hash to confront. let's directly authenticate it.
+                    console.log("User " + username + " is created and authenticated!");
+                    req.session.isAuthenticated = true; //create session here
+                    req.session.username = username;
+                    res.redirect('/app');
+                });
+            }else{
+                if(recordset.recordset.length != 0){
+                    console.log("Username " + username + " already registered!");
+                    res.setHeader("INFT_ERROR_MESSAGE","ERR_USER_ALREADY_REGISTERED");
+                    res.status(204).send();
+                    //response.writeHead(200, {'Content-Type': 'application/json'}); Both at the same time
+                };
+            }
+            if(recordset.recordset.length == undefined){
+                console.log("Error!")
+                req.session.destroy();
+                res.render('error', {error: "Bad query result."});
+            }
+        });
 
     }else{
         res.redirect('app');
@@ -98,6 +144,39 @@ app.get('/signout', async (req,res) => {
 
 app.post('/redirect', async () => {
     authProvider.handleRedirect()
+});
+
+app.post('/checkUser', async (req, res) => {
+    if(!req.session.isAuthenticated){
+        var request = new sql.Request();
+        var username = req.body.username;
+
+        request.input('username',sql.VarChar, username);
+        var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
+
+        request.query(query, function (err, recordset) {
+            if (err){ //handling DB errors
+                console.log("Error: " + err)
+                req.session.destroy();
+                res.render('error', {error: err});
+            }
+            if(recordset.recordset.length == 0){
+                console.log("Username " + username + " does not exist!");
+                res.setHeader("INFT_STATUS_MESSAGE","STATUS_USER_NOT_EXISTENT");
+                res.status(204).send();
+            }else if(recordset.recordset.length != 0){
+                console.log("Username " + username + " already registered!");
+                res.setHeader("INFT_STATUS_MESSAGE","STATUS_USER_ALREADY_REGISTERED");
+                res.status(204).send();
+            }else{
+                console.log("Error!")
+                req.session.destroy();
+                res.render('error', {error: "Bad query result."});
+            }
+        });
+    }else{
+        res.redirect('app');
+    }
 });
 
 
