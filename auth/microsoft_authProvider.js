@@ -1,6 +1,6 @@
 const msal = require('@azure/msal-node');
 const axios = require('axios');
-const { msalConfig, TENANT_SUBDOMAIN, REDIRECT_URI, POST_LOGOUT_REDIRECT_URI } = require('./authConfig');
+const { msalConfig, TENANT_SUBDOMAIN, REDIRECT_URI, POST_LOGOUT_REDIRECT_URI } = require('./microsoft_authConfig');
 
 class AuthProvider {
     config;

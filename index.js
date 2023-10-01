@@ -1,9 +1,8 @@
 //dependencies initialization
-const {app,sql} = require("./initializer")
-const authProvider = require('./auth/authProvider');
-const { REDIRECT_URI, POST_LOGOUT_REDIRECT_URI } = require('./auth/authConfig');
-const crypto = require('crypto');
-const INFT = require("./utility.js");
+const {app,sql} = require("./initializer"); //Initializer JS Module
+const authProvider = require('./auth/microsoft_authProvider'); //MS Authentication Provider
+const crypto = require('crypto'); //Cryptographic check of has/salts for legacy auth
+const INFT = require("./js/utility.js"); //INFT Utility Class Module
 
 //WebServer GET & POST Methods
 app.get('/', (req, res) => {
@@ -36,7 +35,7 @@ app.get('/app', (req, res) => {
 });
 
 /**
- * Authentication Methods
+ * Login form route
  */
 
 app.get('/login', (req, res) => {
@@ -46,6 +45,14 @@ app.get('/login', (req, res) => {
         res.redirect('app');
     }
 });
+
+/**
+ * End Login form route
+ */
+
+/**
+ * Legacy sign-in & register
+ */
 
 app.post('/signin/legacy', (req, res) => {
     if(!req.session.isAuthenticated){ //user is not authenticated already
@@ -90,45 +97,6 @@ app.post('/signin/legacy', (req, res) => {
         res.redirect('app');
     }
 });
-
-app.get('/signin/microsoft', (req,res) => {
-    if(!req.session.isAuthenticated){
-        authProvider.login(req,res);
-    }else{
-        res.redirect('app');
-    }
-});
-
-app.post('/redirect', (req,res) => {
-    if(!req.session.isAuthenticated){
-        res.redirect('../login');
-    }else{
-        res.redirect('../app');
-    }
-});
-
-app.post('/auth/redirect', (req,res) => {
-    if(!req.session.isAuthenticated){
-        authProvider.handleRedirect(req,res);
-    }else{
-        res.redirect('../app');
-    }
-});
-
-
-
-// /**
-//  * Dev purposes
-//  */
-
-// app.get('/redirect', (req,res) => {
-//     authProvider.handleRedirect()
-//     // if(!req.session.isAuthenticated){
-//     //     res.redirect('../login');
-//     // }else{
-//     //     res.redirect('../app');
-//     // }
-// });
 
 app.post('/register', (req, res) => {
     if(!req.session.isAuthenticated){
@@ -187,6 +155,30 @@ app.post('/register', (req, res) => {
     }
 });
 
+/**
+ * End Legacy sign-in & register
+ */
+
+/**
+ * Microsoft Entra ID Provider sign-in
+ */
+
+app.get('/signin/microsoft', (req,res) => {
+    if(!req.session.isAuthenticated){
+        authProvider.login(req,res);
+    }else{
+        res.redirect('app');
+    }
+});
+
+app.post('/auth/redirect', (req,res) => {
+    if(!req.session.isAuthenticated){
+        authProvider.handleRedirect(req,res);
+    }else{
+        res.redirect('../app');
+    }
+});
+
 app.get('/signout', async (req,res) => {
     if(req.session.authMethod == "ms"){
         authProvider.logout(req,res);
@@ -199,6 +191,14 @@ app.get('/signout', async (req,res) => {
 app.post('/redirect', async () => {
     authProvider.handleRedirect();
 });
+
+/**
+ * End Microsoft Entra ID Provider sign-in
+ */
+
+/**
+ * API Routes Definition
+ */
 
 app.post('/checkUser', async (req, res) => {
     if(!req.session.isAuthenticated){
@@ -233,8 +233,24 @@ app.post('/checkUser', async (req, res) => {
     }
 });
 
+/**
+ * End API Routes Definition
+ */
+
+
+/**
+ * Dev/Staging
+ */
 
 // //TEST DEV REFERENCE `'"
+
+// app.post('/redirect', (req,res) => {
+//     if(!req.session.isAuthenticated){
+//         res.redirect('../login');
+//     }else{
+//         res.redirect('../app');
+//     }
+// });
 
 // app.get("/requests",(req, res) =>{
 
@@ -306,55 +322,3 @@ app.post('/checkUser', async (req, res) => {
 //         res.render('requests', {_records: JSON.stringify(recordset.recordset)});
 //     })
 // })
-
-        /*
-        request.input('username',sql.VarChar, username);
-        var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
-
-        request.query(query, function (err, recordset) {
-            if (err){ //handling DB errors
-                console.log("Error: " + err)
-                req.session.destroy();
-                res.render('error', {error: err});
-            }
-            console.log(recordset);
-            if(recordset.recordset.length > 0){ //does a user called 'username' exist? if yes, let's compare hashes
-                var db_salt = recordset.recordset[0].salt;
-
-                var local_hash = crypto.createHash("sha256").update(password+db_salt).digest('base64');
-                console.log(local_hash);
-                console.log(recordset.recordset[0].pwd_hash);
-                if(local_hash == recordset.recordset[0].pwd_hash ){ //are hashes correct?
-                    console.log("Username : " + username + " is authenticated!");
-                    req.session.isAuthenticated = true; //create session here
-                    req.session.username = username;
-                    res.redirect('../app');
-                }
-                else{ //no, wrong password! moving you out (session.destroy should not be needed, but has been inserted as a security measure)
-                    console.log("Operation illegal for : " + username + ". Logging out for security.");
-                    req.session.destroy();
-                    res.render('login', { isAuthenticated: false, error: true });
-                }
-            }else //user does not exist in the database, let's create and insert it into SQL!
-            {
-                console.log(username + " never inserted into database. Doing it now.");
-                var salt = crypto.randomBytes(16).toString('base64'); //-ERROR
-                var hash = crypto.createHash("sha256").update(password+salt).digest('base64');
-
-                //request.input('username',sql.VarChar,username); -> already declared above
-                request.input('pwdhash',sql.VarChar,hash);
-                request.input('salt',sql.VarChar,salt);
-
-                var query = "INSERT INTO [SalesLT].Login (username,pwd_hash,salt) values (@username,@pwdhash,@salt)";
-                request.query(query, function(err, recordset){
-                    if (err){
-                        console.log("Error: " + err);
-                        res.render('error', {error: err});
-                    }
-                    //user now exist, no hash to confront. let's directly authenticate it.
-                    req.session.isAuthenticated = true; //create session here
-                    req.session.username = username;
-                    res.render('app', { isAuthenticated: true, username: username, error: false });
-                });
-            }
-        });*/

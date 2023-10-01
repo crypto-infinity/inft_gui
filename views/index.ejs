@@ -24,6 +24,13 @@
     <!-- <a href="/" class="x"><i class="fa-solid fa-x"></i></a> -->
   </div>
   <!-- End Spinning Wheel -->
+
+  <!-- Hidden Message Error Popup -->
+  <div id="test-popup" class="white-popup mfp-with-anim mfp-hide">
+    <h4>Hello there!</h4>
+  </div>
+  <!-- End Spinning Wheel -->
+
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
@@ -476,9 +483,11 @@
   <script>
     wow = new WOW();
     wow.init();
-    $('#browse_docs').on('click', function (e) {
-      $('#spin').show(0);
-    });
+
+
+    // $('#browse_docs').on('click', function (e) {
+    //   $('#spin').show(0);
+    // });
 
     $(document).ready(function (e) {
       $('#video-icon').on('click', function (e) {

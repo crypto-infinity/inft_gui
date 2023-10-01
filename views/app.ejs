@@ -17,6 +17,11 @@
 </head>
 
 <body>
+    <!-- Spin Widget -->
+    <div class="spin-background" id="spin"> 
+        <img class="spin" src="../images/icon.png">
+    </div>
+    <!-- End Spin Widget -->
     <section class="main-banner">
         <div>
             <div class="container centered-section">
@@ -28,10 +33,13 @@
                     </div>
                     <h4>Your user data:</h4>
                     <script>
-                        var output = <%- JSON.stringify(userdata) %>;
-                        var records = JSON.parse(output);
+                        var output = <%- userdata %>;
+                        console.log(output);
 
-                        document.write(records);
+                        document.write(output.name);
+                        document.write(output.username);
+                        document.write(output.tenantId);
+                        document.write(output.localAccountId);
                     </script>
                 </div>
             </div>
