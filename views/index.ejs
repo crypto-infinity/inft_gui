@@ -10,8 +10,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
     integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="style.css" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-    integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Google -->
   <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,500,600,700" rel="stylesheet">
@@ -22,12 +21,14 @@
   <!-- Hidden Spinning Wheel -->
   <div class="spin-background" id="spin">
     <img class="spin" src="../images/icon.png">
+    <!-- <a href="/" class="x"><i class="fa-solid fa-x"></i></a> -->
   </div>
   <!-- End Spinning Wheel -->
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand navbar-logo mobile-hidden" href="/"> <img src="images/logo.png" alt="logo" class="logo-1"> </a>
+      <a class="navbar-brand navbar-logo mobile-hidden" href="/"> <img src="images/logo.png" alt="logo" class="logo-1">
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span
           class="fas fa-bars"></span> </button>
@@ -40,16 +41,16 @@
           <li class="nav-item"> <a class="nav-link" href="#" data-scroll-nav="4">Testimonials</a> </li>
           <li class="nav-item"> <a class="nav-link" href="#" data-scroll-nav="5">Faq</a> </li>
           <script>
-             var authenticated = <%- isAuthenticated %>;
-             if(authenticated){
+            var authenticated = <%- isAuthenticated %>;
+            if (authenticated) {
               document.write(`
                 <li class="nav-item"> <a class="nav-link" href="/signout">Signout</a> </li>
               `);
-             }else{
+            } else {
               document.write(`
                 <li class="nav-item"> <a class="nav-link" href="/login">Signin</a> </li>
               `);
-             }
+            }
           </script>
           <!-- <li class="nav-item"> <a class="nav-link" href="/login">Signin</a> </li> -->
         </ul>
@@ -406,8 +407,7 @@
                   <div class="contact-item media"> <i class="fa fa-envelope media-left media-right-margin"></i>
                     <div class="media-body">
                       <p class="text-uppercase">E-mail</p>
-                      <p class="text-uppercase"><a
-                          href="mailto:abcdefg@gmail.com">yogeshsingh.now@gmail.com</a> </p>
+                      <p class="text-uppercase"><a href="mailto:abcdefg@gmail.com">yogeshsingh.now@gmail.com</a> </p>
                     </div>
                   </div>
                   <div class="contact-item media"> <i class="fa fa-clock media-left media-right-margin"></i>
@@ -476,10 +476,10 @@
   <script>
     wow = new WOW();
     wow.init();
-    $('#browse_docs').on('click', function(e){
-        $('#spin').show(0);
+    $('#browse_docs').on('click', function (e) {
+      $('#spin').show(0);
     });
-    
+
     $(document).ready(function (e) {
       $('#video-icon').on('click', function (e) {
         e.preventDefault();
@@ -506,7 +506,7 @@
 
       var bodyScroll = $(window).scrollTop(),
         navbar = $(".navbar");
-        navbar_logo = $(".navbar-logo");
+      navbar_logo = $(".navbar-logo");
 
       if (bodyScroll > 50) {
         $('.navbar-logo img').attr('src', 'images/logo-black.png');

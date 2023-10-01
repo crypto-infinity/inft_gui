@@ -3,7 +3,7 @@ const {app,sql} = require("./initializer")
 const authProvider = require('./auth/authProvider');
 const { REDIRECT_URI, POST_LOGOUT_REDIRECT_URI } = require('./auth/authConfig');
 const crypto = require('crypto');
-const INFT_Library = require("./utility.js");
+const INFT = require("./utility.js");
 
 //WebServer GET & POST Methods
 app.get('/', (req, res) => {
@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
     }
     else{
         res.redirect('app');
-    }   
+    }
 });
 
 app.get('/app', (req, res) => {
@@ -21,7 +21,7 @@ app.get('/app', (req, res) => {
     }
     else{
         res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
-    }   
+    }
 });
 
 /**
@@ -55,18 +55,19 @@ app.post('/signin/legacy', (req, res) => {
             if(recordset.recordset.length > 0){
                 var db_salt = recordset.recordset[0].salt;
                 var local_hash = crypto.createHash("sha256").update(password+db_salt).digest('base64');
-    
+
                 if(local_hash == recordset.recordset[0].pwd_hash ){ //are hashes correct?
                     console.log("Username : " + username + " is authenticated!");
                     req.session.isAuthenticated = true; //create session here
                     req.session.username = username;
+                    req.session.authMethod = "ms";
                     res.redirect('/app');
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
                     res.setHeader("INFT_ERROR_MESSAGE","ERR_WRONG_PASSWORD");
                     res.status(204).send();
-                }            
+                }
             }else{
                 console.log("Username " + username + " does not exist!");
                 res.setHeader("INFT_ERROR_MESSAGE","ERR_USER_NOT_EXISTENT");
@@ -81,13 +82,23 @@ app.post('/signin/legacy', (req, res) => {
 
 app.get('/signin/microsoft', (req,res) => {
     if(!req.session.isAuthenticated){
-        authProvider.login();
+        authProvider.login({
+            scopes: [],
+            redirectUri: REDIRECT_URI,
+            successRedirect: '/'
+        });
     }else{
         res.redirect('app');
     }
 });
 
-app.post('/auth/redirect', (req,res) => {
+app.get('/acquireToken', authProvider.acquireToken({
+    scopes: ['User.Read'],
+    redirectUri: REDIRECT_URI,
+    successRedirect: '/users/profile'
+}));
+
+app.post('/redirect', (req,res) => {
     if(!req.session.isAuthenticated){
         res.redirect('../login');
     }else{
@@ -95,17 +106,18 @@ app.post('/auth/redirect', (req,res) => {
     }
 });
 
-/**
- * Dev purposes
- */
+// /**
+//  * Dev purposes
+//  */
 
-app.get('/auth/redirect', (req,res) => {
-    if(!req.session.isAuthenticated){
-        res.redirect('../login');
-    }else{
-        res.redirect('../app');
-    }
-});
+// app.get('/redirect', (req,res) => {
+//     authProvider.handleRedirect()
+//     // if(!req.session.isAuthenticated){
+//     //     res.redirect('../login');
+//     // }else{
+//     //     res.redirect('../app');
+//     // }
+// });
 
 app.post('/register', (req, res) => {
     if(!req.session.isAuthenticated){
@@ -124,7 +136,7 @@ app.post('/register', (req, res) => {
             }
             if(recordset.recordset.length == 0){//user does not exist, query result empty
                 console.log(username + " never inserted into database. Doing it now.");
-                var salt = crypto.randomBytes(16).toString('base64'); 
+                var salt = crypto.randomBytes(16).toString('base64');
                 var hash = crypto.createHash("sha256").update(password+salt).digest('base64');
 
                 request.input('pwdhash',sql.VarChar,hash);
@@ -140,6 +152,7 @@ app.post('/register', (req, res) => {
                     //user now exist, no hash to confront. let's directly authenticate it.
                     console.log("User " + username + " is created and authenticated!");
                     req.session.isAuthenticated = true; //create session here
+                    req.session.authMethod = "ms";
                     req.session.username = username;
                     res.redirect('/app');
                 });
@@ -164,11 +177,14 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/signout', async (req,res) => {
-    req.session.destroy();
-    res.redirect('/');
-    // authProvider.logout({
-    //     postLogoutRedirectUri: authProvider.postLogoutRedirectUri
-    // })
+    if(req.session.authMethod == "ms"){
+        authProvider.logout({
+            postLogoutRedirectUri: POST_LOGOUT_REDIRECT_URI
+        });
+    }else{
+        req.session.destroy();
+        res.redirect('/');
+    }
 });
 
 app.post('/redirect', async () => {
@@ -218,10 +234,10 @@ app.post('/checkUser', async (req, res) => {
 // })
 
 // app.get('/register', (req, res) => {
-//     res.render('register', {name: "notset", email: "notset", subject: "notset", message: "notset"});     
+//     res.render('register', {name: "notset", email: "notset", subject: "notset", message: "notset"});
 // });
 // app.get('/register', (req, res) => {
-//     res.render('register', {name: "notset", email: "notset", subject: "notset", message: "notset"});     
+//     res.render('register', {name: "notset", email: "notset", subject: "notset", message: "notset"});
 // });
 
 
@@ -243,11 +259,11 @@ app.post('/checkUser', async (req, res) => {
 
 //         var query = "INSERT INTO [SalesLT].Contact (name,email,subject,message) VALUES (@name,@email,@subject,@message)";
 
-//         request.query(query, function (err, recordset) { 
+//         request.query(query, function (err, recordset) {
 //             if (err){
 //                 console.log("Error: " + err)
 //                 res.render('error', {error: err});
-//             } 
+//             }
 //             // send records as a response, if any
 //             console.log(recordset);
 //             res.render('register', {name: name, email: email, subject: subject, message: message}); //generate register page with form-passed data

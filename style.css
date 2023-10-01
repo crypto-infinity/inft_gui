@@ -72,7 +72,6 @@ input[type="checkbox"] {
 
 .spin-background {
 	position:fixed;
-	display: flex;
 	width:100%;
 	left:0;
 	right:0;
@@ -81,14 +80,21 @@ input[type="checkbox"] {
 	background-color: #ffffffcf;
 	z-index:9999;
 	display:none;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: stretch;
 }
 
 .spin {
-    position:fixed;
-    left:50%;top:50%;
-    width: 90px;height:90px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -45px;
+	margin-left: -45px;
+	width: 90px;
+	height:90px;
 	-webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
+	animation: spin 2s linear infinite;
 }
 
 @-webkit-keyframes spin {
@@ -103,6 +109,21 @@ input[type="checkbox"] {
 
 /*
  	End Loading Wheel
+*/
+
+/*
+	Hidden notification banner section
+*/
+
+.x {
+    position: absolute;
+    left: 50%;
+	top: 60%;
+    transform: translate(-50%, -50%);
+}
+
+/*
+	End notification banner section
 */
 
 .hidden {

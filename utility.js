@@ -2,28 +2,19 @@
 * JS Function Library
 */
 
-const INFT_Library = {
-    userExistinDB(sql,username){
-        var request = new sql.Request();
-
-        request.input('username',sql.VarChar, username);
-        var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
-
-        request.query(query, function (err, recordset) {
-            if (err){ //handling DB errors
-                console.log("Error: " + err)
-                req.session.destroy();
-                res.render('error', {error: err});
-            }
-            if(recordset.recordset.length > 0){ return recordset; }
-            else{ return false; }
-        });
-    },
-    errors: {
-        ERR_USER_NOT_EXISTENT: "ERR_USER_NOT_EXISTENT"
-    }
+class INFT_library {
+    errors = {
+        INFT_STATUS_MESSAGE : "INFT_STATUS_MESSAGE",
+        INFT_ERROR_MESSAGE : "INFT_ERROR_MESSAGE",
+        STATUS_USER_NOT_EXISTENT : "STATUS_USER_NOT_EXISTENT",
+        STATUS_USER_ALREADY_REGISTERED : "STATUS_USER_ALREADY_REGISTERED",
+        ERR_USER_ALREADY_REGISTERED : "ERR_USER_ALREADY_REGISTERED",
+        ERR_USER_NOT_EXISTENT : "ERR_USER_NOT_EXISTENT",
+    };
 }
 
+const INFT = new INFT_library();
+
 module.exports = {
-    INFT_Library
+    INFT
 }; 
