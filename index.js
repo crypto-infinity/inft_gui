@@ -20,7 +20,18 @@ app.get('/app', (req, res) => {
         res.redirect('login');
     }
     else{
-        res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
+        if(req.session.authMethod != undefined){
+            if(req.session.authMethod == "ms"){
+                console.log(req.session.account);
+                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: JSON.stringify(req.session.account), error: false });
+            }else if(req.session.authMethod == "mm"){
+                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
+            }
+        }else{
+            console.log("Error: " + err)
+            req.session.destroy();
+            res.render('error', {error: "Bad Session Parameters."})
+        }
     }
 });
 
@@ -60,7 +71,7 @@ app.post('/signin/legacy', (req, res) => {
                     console.log("Username : " + username + " is authenticated!");
                     req.session.isAuthenticated = true; //create session here
                     req.session.username = username;
-                    req.session.authMethod = "ms";
+                    req.session.authMethod = "legacy";
                     res.redirect('/app');
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
@@ -82,21 +93,11 @@ app.post('/signin/legacy', (req, res) => {
 
 app.get('/signin/microsoft', (req,res) => {
     if(!req.session.isAuthenticated){
-        authProvider.login({
-            scopes: [],
-            redirectUri: REDIRECT_URI,
-            successRedirect: '/'
-        });
+        authProvider.login(req,res);
     }else{
         res.redirect('app');
     }
 });
-
-app.get('/acquireToken', authProvider.acquireToken({
-    scopes: ['User.Read'],
-    redirectUri: REDIRECT_URI,
-    successRedirect: '/users/profile'
-}));
 
 app.post('/redirect', (req,res) => {
     if(!req.session.isAuthenticated){
@@ -105,6 +106,16 @@ app.post('/redirect', (req,res) => {
         res.redirect('../app');
     }
 });
+
+app.post('/auth/redirect', (req,res) => {
+    if(!req.session.isAuthenticated){
+        authProvider.handleRedirect(req,res);
+    }else{
+        res.redirect('../app');
+    }
+});
+
+
 
 // /**
 //  * Dev purposes
@@ -152,7 +163,7 @@ app.post('/register', (req, res) => {
                     //user now exist, no hash to confront. let's directly authenticate it.
                     console.log("User " + username + " is created and authenticated!");
                     req.session.isAuthenticated = true; //create session here
-                    req.session.authMethod = "ms";
+                    req.session.authMethod = "legacy";
                     req.session.username = username;
                     res.redirect('/app');
                 });
@@ -178,9 +189,7 @@ app.post('/register', (req, res) => {
 
 app.get('/signout', async (req,res) => {
     if(req.session.authMethod == "ms"){
-        authProvider.logout({
-            postLogoutRedirectUri: POST_LOGOUT_REDIRECT_URI
-        });
+        authProvider.logout(req,res);
     }else{
         req.session.destroy();
         res.redirect('/');
@@ -188,7 +197,7 @@ app.get('/signout', async (req,res) => {
 });
 
 app.post('/redirect', async () => {
-    authProvider.handleRedirect()
+    authProvider.handleRedirect();
 });
 
 app.post('/checkUser', async (req, res) => {
