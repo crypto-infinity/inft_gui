@@ -25,12 +25,6 @@
   </div>
   <!-- End Spinning Wheel -->
 
-  <!-- Hidden Message Error Popup -->
-  <div id="test-popup" class="white-popup mfp-with-anim mfp-hide">
-    <h4>Hello there!</h4>
-  </div>
-  <!-- End Spinning Wheel -->
-
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
@@ -73,7 +67,7 @@
           <img src="images/logo-highres.png" class="wow fadeInUp header-padding-image" data-wow-delay="0.4s" />
           <h4>A powerful, customizable, and scalable CRM solution based on modern blockchain technologies.</h4>
           <div class="row">
-            <div id="browse_docs" class="col-md-12"><a class="about-btn-solid">Browse Docs</a></div>
+            <div id="inline-popups" class="col-md-12"><a class="about-btn-solid" data-effect="mfp-zoom-in">Browse Docs</a></div>
           </div>
         </div>
       </div>
@@ -483,11 +477,6 @@
   <script>
     wow = new WOW();
     wow.init();
-
-
-    // $('#browse_docs').on('click', function (e) {
-    //   $('#spin').show(0);
-    // });
 
     $(document).ready(function (e) {
       $('#video-icon').on('click', function (e) {

@@ -60,9 +60,9 @@ h6 {
 input[type="checkbox"] {
 	display: inline-block;
 	vertical-align: top;
- }
+}
 
- /*
+/*
  	End Body General Classes
 */
 
@@ -71,15 +71,15 @@ input[type="checkbox"] {
 */
 
 .spin-background {
-	position:fixed;
-	width:100%;
-	left:0;
-	right:0;
-	top:0;
-	bottom:0;
+	position: fixed;
+	width: 100%;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
 	background-color: #ffffffcf;
-	z-index:9999;
-	display:none;
+	z-index: 9999;
+	display: none;
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: stretch;
@@ -92,19 +92,29 @@ input[type="checkbox"] {
 	margin-top: -45px;
 	margin-left: -45px;
 	width: 90px;
-	height:90px;
+	height: 90px;
 	-webkit-animation: spin 2s linear infinite;
 	animation: spin 2s linear infinite;
 }
 
 @-webkit-keyframes spin {
-	from {-webkit-transform:rotate(0deg);}
-	to {-webkit-transform:rotate(360deg);}
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+
+	to {
+		-webkit-transform: rotate(360deg);
+	}
 }
 
 @keyframes spin {
-	from {transform:rotate(0deg);}
-	to {transform:rotate(360deg);}
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 /*
@@ -115,12 +125,7 @@ input[type="checkbox"] {
 	Hidden notification banner section
 */
 
-.x {
-    position: absolute;
-    left: 50%;
-	top: 60%;
-    transform: translate(-50%, -50%);
-}
+
 
 /*
 	End notification banner section
@@ -251,20 +256,22 @@ input[type="checkbox"] {
 */
 
 @keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+	0% {
+		background-position: 0% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 .main-banner {
 	background: var(--main-bg-color);
-    background: var(--main-bg-gradient-color);
+	background: var(--main-bg-gradient-color);
 	position: relative;
 	height: 100vh;
 	width: 100%;
@@ -286,7 +293,7 @@ input[type="checkbox"] {
 }
 
 .main-banner-login {
-    background: var(--main-bg-gradient-color);
+	background: var(--main-bg-gradient-color);
 	position: relative;
 	height: 100vh;
 	width: 100%;
@@ -294,7 +301,7 @@ input[type="checkbox"] {
 	align-items: center;
 	justify-content: center;
 	background-size: 400% 400%;
-    animation: gradient 10s ease infinite;
+	animation: gradient 10s ease infinite;
 }
 
 .main-banner-login::before {
@@ -492,7 +499,7 @@ input[type="checkbox"] {
 
 .about-btn-solid:hover {
 	color: #ffffff;
-	cursor:pointer;
+	cursor: pointer;
 	text-decoration: none;
 }
 
