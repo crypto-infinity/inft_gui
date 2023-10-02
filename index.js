@@ -25,6 +25,8 @@ app.get('/app', (req, res) => {
                 res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: JSON.stringify(req.session.account), error: false });
             }else if(req.session.authMethod == "mm"){
                 res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
+            }else if(req.session.authMethod == "legacy"){
+                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
             }
         }else{
             console.log("Error: " + err)

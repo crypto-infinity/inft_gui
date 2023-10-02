@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
 /*Global Variables Declaration*/
 :root {
 	--main-bg-color: #b30659;
@@ -6,7 +8,10 @@
 	--secondary-bg-gradient-color: linear-gradient(to bottom right, #7d0160, #f00b51);
 	--header-text-color: black;
 	--body-text-color: #4d4949;
+	--vs-primary: 29 92 255;
 }
+
+
 
 /*
  	Body General Classes
@@ -60,9 +65,9 @@ h6 {
 input[type="checkbox"] {
 	display: inline-block;
 	vertical-align: top;
-}
+ }
 
-/*
+ /*
  	End Body General Classes
 */
 
@@ -71,15 +76,15 @@ input[type="checkbox"] {
 */
 
 .spin-background {
-	position: fixed;
-	width: 100%;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
+	position:fixed;
+	width:100%;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
 	background-color: #ffffffcf;
-	z-index: 9999;
-	display: none;
+	z-index:9999;
+	display:none;
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: stretch;
@@ -92,29 +97,19 @@ input[type="checkbox"] {
 	margin-top: -45px;
 	margin-left: -45px;
 	width: 90px;
-	height: 90px;
+	height:90px;
 	-webkit-animation: spin 2s linear infinite;
 	animation: spin 2s linear infinite;
 }
 
 @-webkit-keyframes spin {
-	from {
-		-webkit-transform: rotate(0deg);
-	}
-
-	to {
-		-webkit-transform: rotate(360deg);
-	}
+	from {-webkit-transform:rotate(0deg);}
+	to {-webkit-transform:rotate(360deg);}
 }
 
 @keyframes spin {
-	from {
-		transform: rotate(0deg);
-	}
-
-	to {
-		transform: rotate(360deg);
-	}
+	from {transform:rotate(0deg);}
+	to {transform:rotate(360deg);}
 }
 
 /*
@@ -122,13 +117,57 @@ input[type="checkbox"] {
 */
 
 /*
-	Hidden notification banner section
+	Modal Box 
 */
 
+dialog {
+	top: 50%;
+    left: 50%;
+    position: absolute;
+	transform: translate(-50%, -50%);
+	padding: 1rem 3rem;
+	background: white;
+	max-width: 400px;
+	padding-top: 2rem;
+	border-radius: 20px;
+	border: 0;
+	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
+	animation: fadeIn 0.3s ease both;
+	&::backdrop {
+		animation: fadeIn 0.3s ease both;
+		background: var(--secondary-bg-gradient-color); 
+		z-index: 2;
+		backdrop-filter: blur(8px);
+	}
+	.x {
+		filter: grayscale(1);
+		border: none;
+		background: none;
+		position: absolute;
+		top: 15px;
+		right: 10px;
+		transition: ease filter, transform 0.3s;
+		cursor: pointer;
+		transform-origin: center;
+		&:hover {
+			filter: grayscale(0);
+			transform: scale(1.1);
+		}
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
 
 
 /*
-	End notification banner section
+	End Modal Box
 */
 
 /*
@@ -159,6 +198,10 @@ input[type="checkbox"] {
 
 .text-white-background {
 	color: #fafafa;
+}
+
+.main-color {
+	color: var(--main-bg-color);
 }
 
 .navbar {
@@ -256,22 +299,20 @@ input[type="checkbox"] {
 */
 
 @keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-
-	50% {
-		background-position: 100% 50%;
-	}
-
-	100% {
-		background-position: 0% 50%;
-	}
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .main-banner {
 	background: var(--main-bg-color);
-	background: var(--main-bg-gradient-color);
+    background: var(--main-bg-gradient-color);
 	position: relative;
 	height: 100vh;
 	width: 100%;
@@ -293,7 +334,7 @@ input[type="checkbox"] {
 }
 
 .main-banner-login {
-	background: var(--main-bg-gradient-color);
+    background: var(--main-bg-gradient-color);
 	position: relative;
 	height: 100vh;
 	width: 100%;
@@ -301,7 +342,7 @@ input[type="checkbox"] {
 	align-items: center;
 	justify-content: center;
 	background-size: 400% 400%;
-	animation: gradient 10s ease infinite;
+    animation: gradient 10s ease infinite;
 }
 
 .main-banner-login::before {
@@ -499,7 +540,7 @@ input[type="checkbox"] {
 
 .about-btn-solid:hover {
 	color: #ffffff;
-	cursor: pointer;
+	cursor:pointer;
 	text-decoration: none;
 }
 

@@ -25,6 +25,16 @@
   </div>
   <!-- End Spinning Wheel -->
 
+  <!-- Dialog HTML definition -->
+  <dialog id="dialog">
+    <div id="dialog-content">
+      <h2 id="dialog-title"></h2>
+      <p id="dialog-text"></p>
+    </div>
+    <button id="dialog-close" aria-label="close" class="x">❌</button>
+  </dialog>
+  <!-- end Dialog HTML definition -->
+
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
@@ -60,14 +70,14 @@
   </nav>
   <!-- End Navbar -->
   <!-------Banner Start------->
-  <section class="main-banner" data-scroll-index='0'>
+  <section id="main-banner" class="main-banner" data-scroll-index='0'>
     <div>
       <div class="container centered-section">
         <div class="text-center">
           <img src="images/logo-highres.png" class="wow fadeInUp header-padding-image" data-wow-delay="0.4s" />
           <h4>A powerful, customizable, and scalable CRM solution based on modern blockchain technologies.</h4>
           <div class="row">
-            <div id="inline-popups" class="col-md-12"><a class="about-btn-solid" data-effect="mfp-zoom-in">Browse Docs</a></div>
+            <div id="browse-docs" class="col-md-12"><a class="about-btn-solid">Browse Docs</a></div>
           </div>
         </div>
       </div>
@@ -478,7 +488,23 @@
     wow = new WOW();
     wow.init();
 
+    
+    
+
     $(document).ready(function (e) {
+
+      $('#browse-docs').on('click', function(e){
+        $('#dialog-title').text('Dialog Title');
+        $('#dialog-text').text('Dialog Text');
+        window.dialog.showModal();
+      });
+
+      $('#dialog-close').on('click', function(e){
+        $('#dialog-title').text('');
+        $('#dialog-text').text('');
+        window.dialog.close();
+      });
+
       $('#video-icon').on('click', function (e) {
         e.preventDefault();
         $('.video-popup').css('display', 'flex');
