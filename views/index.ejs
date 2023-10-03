@@ -482,26 +482,24 @@
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
   <!-- scrollIt js -->
-  <script src="js/scrollIt.min.js"></script>
-  <script src="js/wow.min.js"></script>
+  <script src="../js/scrollIt.min.js"></script>
+  <script src="../js/wow.min.js"></script>
   <script>
     wow = new WOW();
     wow.init();
-
-    
-    
-
     $(document).ready(function (e) {
 
       $('#browse-docs').on('click', function(e){
         $('#dialog-title').text('Dialog Title');
         $('#dialog-text').text('Dialog Text');
+        disableScroll();
         window.dialog.showModal();
       });
 
       $('#dialog-close').on('click', function(e){
         $('#dialog-title').text('');
         $('#dialog-text').text('');
+        enableScroll();
         window.dialog.close();
       });
 
@@ -565,6 +563,24 @@
         topOffset: -63
       });
     });
+
+    function disableScroll() {
+        // Get the current page scroll position
+        scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+        scrollLeft =
+        window.pageXOffset || document.documentElement.scrollLeft,
+      
+            // if any scroll is attempted,
+            // set this to the previous value
+            window.onscroll = function() {
+                window.scrollTo(scrollLeft, scrollTop);
+            };
+    }
+      
+    function enableScroll() {
+        window.onscroll = function() {};
+    }
 
   </script>
 </body>

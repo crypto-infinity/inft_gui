@@ -1,209 +1,243 @@
 <!DOCTYPE html>
 <html>
-  
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Login/Signup - INFT</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <link rel="stylesheet" href="../css/animate.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="../style.css"/>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+        integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+        integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-  
+
 <body>
-    <!-- Spin Widget -->
-    <div class="spin-background" id="spin"> 
+    <!-- Hidden Spinning Wheel -->
+    <div class="spin-background" id="spin">
         <img class="spin" src="../images/icon.png">
     </div>
-    <!-- End Spin Widget -->
+    <!-- End Spinning Wheel -->
+
+    <!-- Dialog HTML definition -->
+    <dialog id="dialog">
+        <div id="dialog-content">
+            <h2 id="dialog-title"></h2>
+            <p id="dialog-text"></p>
+        </div>
+        <button id="dialog-close" aria-label="close" class="x">❌</button>
+    </dialog>
+    <!-- end Dialog HTML definition -->
+
     <section class="main-banner-login">
         <div class="text-center">
-            <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png" data-wow-delay="0.2s"></a>
+            <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png"
+                    data-wow-delay="0.2s"></a>
             <form class="centered prelative normal-padding" id="signin_form" method="post">
-                <input type="text" id="username" class="form-input w-100" name="username" placeholder="User Name or Email" required>
-                <input type="password" id="password" class="form-input w-100" name="password" placeholder="Password" required>
+                <input type="text" id="username" class="form-input w-100" name="username"
+                    placeholder="User Name or Email" required>
+                <input type="password" id="password" class="form-input w-100" name="password" placeholder="Password"
+                    required>
                 <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login">Login</button>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="register" id="register">Register</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="register"
+                    id="register">Register</button>
             </form>
-            <h3 class="normal-padding wow fadeInUp prelative" data-wow-delay="0.4s" id="othersigninmethods">Or sign in with..</h3>
+            <h3 class="normal-padding wow fadeInUp prelative" data-wow-delay="0.4s" id="othersigninmethods">Or sign in
+                with..</h3>
             <span class="line"></span>
             <div class="" id="signinmethods">
                 <div class="container normal-padding prelative">
-                    <a id="ms" href="/signin/microsoft"><img src="../images/ms_login.png" class="wow fadeInUp prelative" data-wow-delay="0.6s"/></a>
+                    <a id="ms" href="/signin/microsoft"><img src="../images/ms_login.png" class="wow fadeInUp prelative"
+                            data-wow-delay="0.6s" /></a>
                 </div>
                 <div class="container normal-padding prelative">
-                    <a id="mm" href="#"><img src="../images/metamask_login.png" class="wow fadeInUp prelative" data-wow-delay="0.8s"/></a>
+                    <a id="mm" href="#"><img src="../images/metamask_login.png" class="wow fadeInUp prelative"
+                            data-wow-delay="0.8s" /></a>
                 </div>
             </div>
         </div>
     </section>
 </body>
-  
+
 </html>
 
+<!-- JQuery / Bootstrap JS / CDN -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script> 
-<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script> 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+    integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<!-- End JQuery / Bootstrap JS / CDN -->
 
+<!-- scrollIt js -->
+<script src="js/scrollIt.min.js"></script>
+<script src="js/wow.min.js"></script>
+<!-- End scrollIt js -->
 
-    <!-- scrollIt js --> 
-    <script src="js/scrollIt.min.js"></script> 
-    <script src="js/wow.min.js"></script>
-    <script>
-        wow = new WOW();
-        wow.init();
-        // $('#ms').on('click',function(e){
-        //     $('#spin').show(0);
-        //     $('#spin').hide(0);
-        // });
-        $(document).ready(function(e) {
-            $('form#signin_form').on('submit', function(e){ //Form submit custom handler
-                $('#spin').show(0);
-                var form = this;
-                e.preventDefault();
+<!-- Custom Page Logic -->
+<script>
+    wow = new WOW();
+    wow.init();
 
-                if(document.activeElement.id == "login"){
-                    $.ajax({
-                        url: "/checkUser",//API to check Users
-                        type: "POST",
-                        data: {
-                            username: document.getElementById('username').value
-                        },
-                        success: function(data, textStatus, xhr) {
-                            if(xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_NOT_EXISTENT"){ //IF status message shows the user does not exist..
-                                $('#spin').hide(0);
-                                alert("User not existent! Please register first.");
-                                return; //let's block the form submit
-                            }
-                            $.ajax({
-                                url: "/signin/legacy",
-                                type: "POST",
-                                data: {
-                                    username: document.getElementById('username').value,
-                                    password: document.getElementById('password').value
-                                },
-                                success: function(data, textStatus, xhr) {
-                                    if(xhr.getResponseHeader("INFT_ERROR_MESSAGE") == "ERR_WRONG_PASSWORD"){
-                                        $('#spin').hide(0);
-                                        alert("Wrong password for user " + username);
-                                        return; //let's block the form submit
-                                    }
+    $(document).ready(function (e) {
+        $('form#signin_form').on('submit', function (e) { //Form submit custom handler
+            $('#spin').show(0);
+            var form = this;
+            e.preventDefault();
+
+            if (document.activeElement.id == "login") {
+                $.ajax({
+                    url: "/checkUser",//API to check Users
+                    type: "POST",
+                    data: {
+                        username: document.getElementById('username').value
+                    },
+                    success: function (data, textStatus, xhr) {
+                        if (xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_NOT_EXISTENT") { //IF status message shows the user does not exist..
+                            $('#spin').hide(0);
+                            openModal("Error!", "User not existent! Please register first.");
+                            return; //let's block the form submit
+                        }
+                        $.ajax({
+                            url: "/signin/legacy",
+                            type: "POST",
+                            data: {
+                                username: document.getElementById('username').value,
+                                password: document.getElementById('password').value
+                            },
+                            success: function (data, textStatus, xhr) {
+                                if (xhr.getResponseHeader("INFT_ERROR_MESSAGE") == "ERR_WRONG_PASSWORD") {
                                     $('#spin').hide(0);
-                                },
-                                error: function() {
-
-                                }                                    
-                            });
-                            $('#spin').hide(0);
-                            $('#signin_form').attr('action', '/signin/legacy');//setting /signin/legacy as Express.js route server-side
-                            form.submit();
-                        },
-                        error: function() {
-                            alert("Some error has occured during login, please refresh the page!");
-                            $('#spin').hide(0);
-                        }
-                    });
-                }else if(document.activeElement.id == "register"){ //If register button was pressed
-
-                    //check for password lenght over REGEX
-                    var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-                    var password = document.getElementById('password').value;
-                    console.log(password)
-                    if(!regularExpression.test(document.getElementById('password').value)){
-                        $('#spin').hide(0);
-                        alert("Password should contain at least 1 number and 1 special character, and must be over 8 chars!");
-                        return; //let's block the form submit
-                    }
-
-                    $.ajax({
-                        url: "/checkUser",//API to check Users
-                        type: "POST",
-                        data: {
-                            username: document.getElementById('username').value
-                        },
-                        success: function(data, textStatus, xhr) {
-                            if(xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_ALREADY_REGISTERED"){ //IF status message shows the user already registered..
+                                    openModal("Error!", "Wrong password for user " + username);
+                                    return; //let's block the form submit
+                                }
                                 $('#spin').hide(0);
-                                alert("User already registered!"); 
-                                return; //let's block the form submit
+                            },
+                            error: function () {
+
                             }
-                            $('#spin').hide(0);
-                            $('#signin_form').attr('action', '/register');//setting /register as Express.js route server-side
-                            form.submit();
-                        },
-                        error: function() {
-                            alert("Some error has occured during registration, please refresh the page!");
-                            $('#spin').hide(0);
-                        }
-                    });
-                }else{
-                    alert("Some general error has occured, please refresh the page!");
+                        });
+                        $('#spin').hide(0);
+                        $('#signin_form').attr('action', '/signin/legacy');//setting /signin/legacy as Express.js route server-side
+                        form.submit();
+                    },
+                    error: function () {
+                        $('#spin').hide(0);
+                        openModal("Error!", "Some general error has occured, please refresh the page!");
+                    }
+                });
+            } else if (document.activeElement.id == "register") { //If register button was pressed
+
+                //check for password lenght over REGEX
+                var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+                var password = document.getElementById('password').value;
+                console.log(password)
+                if (!regularExpression.test(document.getElementById('password').value)) {
                     $('#spin').hide(0);
+                    openModal("Error!", "Password should contain at least 1 number and 1 special character, and must be over 8 chars!");
+                    return; //let's block the form submit
                 }
-            });
-            
-            $('#video-icon').on('click',function(e){
-                e.preventDefault();
-                $('.video-popup').css('display','flex');
-                $('.iframe-src').slideDown();
-            });
-            $('.video-popup').on('click',function(e){
-                var $target = e.target.nodeName;
-                var video_src = $(this).find('iframe').attr('src');
-                if($target != 'IFRAME'){
-                    $('.video-popup').fadeOut();
-                    $('.iframe-src').slideUp();
-                    $('.video-popup iframe').attr('src'," ");
-                    $('.video-popup iframe').attr('src',video_src);
-                }
-            });
-            
-            $('.slider').bxSlider({
-                pager: false
-            });
-        });
-        
-        $(window).on("scroll",function () {
-            
-            var bodyScroll = $(window).scrollTop(),
-            navbar = $(".navbar");
-            
-            if(bodyScroll > 50){
-                $('.navbar-logo img').attr('src','images/logo-black.png');
-                navbar.addClass("nav-scroll");
-                
-            }else{
-                $('.navbar-logo img').attr('src','images/logo.png');
-                navbar.removeClass("nav-scroll");
+
+                $.ajax({
+                    url: "/checkUser",//API to check Users
+                    type: "POST",
+                    data: {
+                        username: document.getElementById('username').value
+                    },
+                    success: function (data, textStatus, xhr) {
+                        if (xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_ALREADY_REGISTERED") { //IF status message shows the user already registered..
+                            $('#spin').hide(0);
+                            openModal("Error!", "User is already registered, please try to login!");
+                            return; //let's block the form submit
+                        }
+                        $('#spin').hide(0);
+                        $('#signin_form').attr('action', '/register');//setting /register as Express.js route server-side
+                        form.submit();
+                    },
+                    error: function () {
+                        $('#spin').hide(0);
+                        openModal("Error!", "Some general error has occured, please refresh the page!");
+                    }
+                });
+            } else {
+                $('#spin').hide(0);
+                openModal("Error!", "Some general error has occured, please refresh the page!");
             }
-            
         });
-        $(window).on("load",function (){
-            var bodyScroll = $(window).scrollTop(),
+    });
+
+    $(window).on("scroll", function () {
+
+        var bodyScroll = $(window).scrollTop(),
             navbar = $(".navbar");
-            
-            if(bodyScroll > 50){
-                $('.navbar-logo img').attr('src','images/logo-black.png');
-                navbar.addClass("nav-scroll");
-            }else{
-                $('.navbar-logo img').attr('src','images/logo-white.png');
-                navbar.removeClass("nav-scroll");
-            }
-            
-            $.scrollIt({
-                
-                easing: 'swing',      // the easing function for animation
-                scrollTime: 900,       // how long (in ms) the animation takes
-                activeClass: 'active', // class given to the active nav element
-                onPageChange: null,    // function(pageIndex) that is called when page is changed
-                topOffset: -63
-            });
+
+        if (bodyScroll > 50) {
+            $('.navbar-logo img').attr('src', 'images/logo-black.png');
+            navbar.addClass("nav-scroll");
+
+        } else {
+            $('.navbar-logo img').attr('src', 'images/logo.png');
+            navbar.removeClass("nav-scroll");
+        }
+
+    });
+    $(window).on("load", function () {
+        var bodyScroll = $(window).scrollTop(),
+            navbar = $(".navbar");
+
+        if (bodyScroll > 50) {
+            $('.navbar-logo img').attr('src', 'images/logo-black.png');
+            navbar.addClass("nav-scroll");
+        } else {
+            $('.navbar-logo img').attr('src', 'images/logo-white.png');
+            navbar.removeClass("nav-scroll");
+        }
+
+        $.scrollIt({
+
+            easing: 'swing',      // the easing function for animation
+            scrollTime: 900,       // how long (in ms) the animation takes
+            activeClass: 'active', // class given to the active nav element
+            onPageChange: null,    // function(pageIndex) that is called when page is changed
+            topOffset: -63
         });
-        
-    </script>
+    });
+
+    /* Dialog Methods */
+    $('#dialog-close').on('click', function (e) {
+        $('#dialog-title').text('');
+        $('#dialog-text').text('');
+        enableScroll();
+        window.dialog.close();
+    });
+    function openModal(title, text) {
+        $('#dialog-title').text(title);
+        $('#dialog-text').text(text);
+        disableScroll();
+        window.dialog.showModal();
+    }
+    function disableScroll() {
+        // Get the current page scroll position
+        scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+        scrollLeft =
+            window.pageXOffset || document.documentElement.scrollLeft,
+
+            // if any scroll is attempted,
+            // set this to the previous value
+            window.onscroll = function () {
+                window.scrollTo(scrollLeft, scrollTop);
+            };
+    }
+    function enableScroll() {
+        window.onscroll = function () { };
+    }
+    /* End Dialog Methods */
+</script>
+<!-- End Custom Page Logic -->
