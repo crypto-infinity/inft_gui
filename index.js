@@ -24,9 +24,9 @@ app.get('/app', (req, res) => {
                 console.log(req.session.account);
                 res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: JSON.stringify(req.session.account), error: false });
             }else if(req.session.authMethod == "mm"){
-                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
+                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: "", error: false });
             }else if(req.session.authMethod == "legacy"){
-                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, error: false });
+                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: "", error: false });
             }
         }else{
             console.log("Error: " + err)
@@ -85,7 +85,7 @@ app.post('/signin/legacy', (req, res) => {
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
-                    res.setHeader("INFT_ERROR_MESSAGE",INFT.errors.ERR_WRONG_PASSWORD);
+                    res.setHeader("INFT_ERROR_MESSAGE","ERR_WRONG_PASSWORD");
                     res.status(204).send();
                 }
             }else{

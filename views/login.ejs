@@ -137,7 +137,6 @@
                 //check for password lenght over REGEX
                 var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
                 var password = document.getElementById('password').value;
-                console.log(password)
                 if (!regularExpression.test(document.getElementById('password').value)) {
                     $('#spin').hide(0);
                     openModal("Error!", "Password should contain at least 1 number and 1 special character, and must be over 8 chars!");
