@@ -36,6 +36,16 @@ app.get('/app', (req, res) => {
     }
 });
 
+app.get('/profile', (req, res) => {
+    if(!req.session.isAuthenticated){
+        res.redirect('login');
+    }else{
+        res.send({
+            username: req.session.username
+        });
+    }
+});
+
 /**
  * Login form route
  */

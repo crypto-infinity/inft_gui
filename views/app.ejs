@@ -3,7 +3,8 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Requests</title>
+    <title>INFT App</title>
+    <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <link rel="stylesheet" href="../css/animate.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
@@ -17,24 +18,34 @@
 </head>
 
 <body>
-    <!-- Spin Widget -->
+    <!-- Hidden Spinning Wheel -->
     <div class="spin-background" id="spin">
         <img class="spin" src="../images/icon.png">
     </div>
-    <!-- End Spin Widget -->
-    
+    <!-- End Spinning Wheel -->
+
+    <!-- Dialog HTML definition -->
+    <dialog id="dialog">
+        <div id="dialog-content">
+            <h2 id="dialog-title"></h2>
+            <p id="dialog-text"></p>
+        </div>
+        <button id="dialog-close" aria-label="close" class="x">❌</button>
+    </dialog>
+    <!-- end Dialog HTML definition -->
+
     <section class="main-banner-gradient">
         <div id="main">
             <button class="navbar-toggler navbar-toggler-visible" type="button" id="navbar-expander"> <span
-                class="fas fa-bars"></span> </button>
+                    class="fas fa-bars"></span> </button>
             <div id="sidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn main-color" id="nav-closer">&times;</a>
-                <a href="#"><i class="fa fa-user"></i>  My Profile</a>
-                <a href="#"><i class="fa fa-user"></i>  My NFTs</a>
-                <a href="#"><i class="fa fa-user"></i>  Marketplace</a>
+                <a href="#" id="profiles"><i class="fa fa-user"></i> My Profile</a>
+                <a href="#" id="nfts"><i class="fa fa-user"></i> My NFTs</a>
+                <a href="#" id="marketplace"><i class="fa fa-user"></i> Marketplace</a>
                 <a href="/signout" class="about-btn navbar-centered">Logout</a>
             </div>
-            <div class="container centered-section">
+            <div class="container centered-section" id="main-frame">
                 <div class="text-center">
                     <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png"
                             data-wow-delay="0.2s"></a>
@@ -47,11 +58,48 @@
                         var output = <%- userdata %>;
                         console.log(output);
 
-                        document.write(output.name);
-                        document.write(output.username);
-                        document.write(output.tenantId);
-                        document.write(output.localAccountId);
+                        //document.write(output.name);
+                        //document.write(output.username);
                     </script>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="tile">
+                                <div class="tile-image-container"><img src="../images/sample/1.jpg" class="tile-icon"></div>
+                                <script>
+                                    document.write("<h4>" + output.name + "</h4>");
+                                    document.write("<p>" + output.username + "<p>");
+                                </script>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="tile">
+                                <div class="tile-image-container"><img src="../images/sample/2.png" class="tile-icon"></div>
+                                <script>
+                                    document.write("<h4>" + output.name + "</h4>");
+                                    document.write("<p>" + output.username + "<p>");
+                                </script>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="tile">
+                                <div class="tile-image-container"><img src="../images/sample/3.png" class="tile-icon"></div>
+                                <script>
+                                    document.write("<h4>" + output.name + "</h4>");
+                                    document.write("<p>" + output.username + "<p>");
+                                </script>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="tile">
+                                <div class="tile-image-container"><img src="../images/sample/4.png" class="tile-icon"></div>
+                                <script>
+                                    document.write("<h4>" + output.name + "</h4>");
+                                    document.write("<p>" + output.username + "<p>");
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -60,6 +108,7 @@
 
 </html>
 
+<script src="../node_modules/ejs/ejs.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
     integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
@@ -72,59 +121,119 @@
     wow = new WOW();
     wow.init();
     $(document).ready(function (e) {
+        var opened_tab = "";
 
         //navbar
-        $('#navbar-expander').on('click', function(e){
-            if($('#sidenav').css('width') == '0px'){
-                $('#sidenav').css('width','250');
+        $('#navbar-expander').on('click', function (e) {
+            if ($('#sidenav').css('width') == '0px') {
+                $('#sidenav').css('width', '250');
                 document.getElementById("main").style.marginLeft = "250px";
-            }else if($('#sidenav').css('width') == '250px'){
-                $('#sidenav').css('width','0');
+            } else if ($('#sidenav').css('width') == '250px') {
+                $('#sidenav').css('width', '0');
                 document.getElementById("main").style.marginLeft = "0px";
             }
         });
 
-        $('#nav-closer').on('click', function(e){
-            $('#sidenav').css('width','0');
+        $('#nav-closer').on('click', function (e) {
+            $('#sidenav').css('width', '0');
             document.getElementById("main").style.marginLeft = "0px";
         });
-    });
 
-    $(window).on("scroll", function () {
+        /*
+            Profiles Tab 
+        */
 
-        var bodyScroll = $(window).scrollTop(),
-            navbar = $(".navbar");
-
-        if (bodyScroll > 50) {
-            $('.navbar-logo img').attr('src', 'images/logo-black.png');
-            navbar.addClass("nav-scroll");
-
-        } else {
-            $('.navbar-logo img').attr('src', 'images/logo.png');
-            navbar.removeClass("nav-scroll");
-        }
-
-    });
-    $(window).on("load", function () {
-        var bodyScroll = $(window).scrollTop(),
-            navbar = $(".navbar");
-
-        if (bodyScroll > 50) {
-            $('.navbar-logo img').attr('src', 'images/logo-black.png');
-            navbar.addClass("nav-scroll");
-        } else {
-            $('.navbar-logo img').attr('src', 'images/logo-white.png');
-            navbar.removeClass("nav-scroll");
-        }
-
-        $.scrollIt({
-
-            easing: 'swing',      // the easing function for animation
-            scrollTime: 900,       // how long (in ms) the animation takes
-            activeClass: 'active', // class given to the active nav element
-            onPageChange: null,    // function(pageIndex) that is called when page is changed
-            topOffset: -63
+        $('#profiles').on('click', function (e) {
+            if (opened_tab != "profile") {
+                $.get('./views/profile.ejs', function (template) {
+                    // Compile the EJS template.
+                    var base_template = ejs.compile(template);
+    
+                    $.get('/profile', function (data) {
+                    // Generate the html from the given data.
+                        var html = base_template(data);
+                        opened_tab = "profile";
+                        $('#main-frame').html(html);
+                    });
+                });
+            }
         });
+
+        /*
+            End Profiles Tab 
+        */
+
+        /*
+            NFTs Tab 
+        */
+
+        $('#nfts').on('click', function (e) {
+            $.get('./views/profile.ejs', function (template) {
+                // Compile the EJS template.
+                var base_template = ejs.compile(template);
+
+                $.get('/profile', function (data) {
+                // Generate the html from the given data.
+                    var html = base_template(data);
+                    $('#main-frame').html(html);
+                });
+            });
+        });
+
+        /*
+            End NFTs Tab 
+        */
+
+        /*
+            Marketplace Tab 
+        */
+
+        $('#profiles').on('click', function (e) {
+            $.get('./views/profile.ejs', function (template) {
+                // Compile the EJS template.
+                var base_template = ejs.compile(template);
+
+                $.get('/profile', function (data) {
+                // Generate the html from the given data.
+                    var html = base_template(data);
+                    $('#main-frame').html(html);
+                });
+            });
+        });
+
+        /*
+            End Marketplace Tab 
+        */
     });
 
+    /* Dialog Methods */
+    $('#dialog-close').on('click', function (e) {
+        $('#dialog-title').text('');
+        $('#dialog-text').text('');
+        enableScroll();
+        window.dialog.close();
+    });
+    function openModal(title, text) {
+        $('#dialog-title').text(title);
+        $('#dialog-text').text(text);
+        disableScroll();
+        window.dialog.showModal();
+    }
+    function disableScroll() {
+        // Get the current page scroll position
+        scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+        scrollLeft =
+            window.pageXOffset || document.documentElement.scrollLeft,
+
+            // if any scroll is attempted,
+            // set this to the previous value
+            window.onscroll = function () {
+                window.scrollTo(scrollLeft, scrollTop);
+            };
+    }
+    function enableScroll() {
+        window.onscroll = function () { };
+    }
+    /* End Dialog Methods */
 </script>

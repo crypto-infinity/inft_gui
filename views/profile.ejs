@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Profile</title>
+    <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+        integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+        integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <!-- Hidden Spinning Wheel -->
+    <div class="spin-background" id="spin">
+        <img class="spin" src="../images/icon.png">
+    </div>
+    <!-- End Spinning Wheel -->
+
+    <!-- Dialog HTML definition -->
+    <dialog id="dialog">
+        <div id="dialog-content">
+            <h2 id="dialog-title"></h2>
+            <p id="dialog-text"></p>
+        </div>
+        <button id="dialog-close" aria-label="close" class="x">❌</button>
+    </dialog>
+    <!-- end Dialog HTML definition -->
+
+    <section class="">
+        Hello, <%= username %>!
+    </section>
+</body>
+
+</html>
+
+<!-- JQuery / Bootstrap JS / CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+    integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<!-- End JQuery / Bootstrap JS / CDN -->
+
+<!-- scrollIt js -->
+<script src="js/scrollIt.min.js"></script>
+<script src="js/wow.min.js"></script>
+<!-- End scrollIt js -->
+
+<!-- Custom Page Logic -->
+<script>
+    wow = new WOW();
+    wow.init();
+
+    $(document).ready(function (e) {
+        
+    });
+
+    /* Dialog Methods */
+    $('#dialog-close').on('click', function (e) {
+        $('#dialog-title').text('');
+        $('#dialog-text').text('');
+        enableScroll();
+        window.dialog.close();
+    });
+    function openModal(title, text) {
+        $('#dialog-title').text(title);
+        $('#dialog-text').text(text);
+        disableScroll();
+        window.dialog.showModal();
+    }
+    function disableScroll() {
+        // Get the current page scroll position
+        scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+        scrollLeft =
+            window.pageXOffset || document.documentElement.scrollLeft,
+
+            // if any scroll is attempted,
+            // set this to the previous value
+            window.onscroll = function () {
+                window.scrollTo(scrollLeft, scrollTop);
+            };
+    }
+    function enableScroll() {
+        window.onscroll = function () { };
+    }
+    /* End Dialog Methods */
+</script>
+<!-- End Custom Page Logic -->

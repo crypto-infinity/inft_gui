@@ -276,6 +276,43 @@ dialog {
 	End Sidebar CSS in APP Page
 */
 
+/*
+	CSS Tiles
+*/
+
+.tile {
+	padding: 1rem 3rem;
+	background: white;
+	overflow: auto;
+	padding-top: 2rem;
+	border-radius: 20px;
+	border: 0;
+	word-wrap: break-word;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
+}
+
+.tile-icon {
+	object-fit: cover;
+	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
+	border-radius: 20px;
+	border: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.tile-image-container {
+	width: 150px;
+	height: 150px;
+}
+
+/*
+	End CSS Tiles
+*/
+
 .hidden {
 	display: none;
 }
@@ -433,7 +470,7 @@ dialog {
 
 .main-banner-gradient {
 	background: var(--main-bg-gradient-color);
-	position: relative;
+	position: absolute;
 	height: 100vh;
 	width: 100%;
 	display: flex;
