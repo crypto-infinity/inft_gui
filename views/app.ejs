@@ -18,15 +18,26 @@
 
 <body>
     <!-- Spin Widget -->
-    <div class="spin-background" id="spin"> 
+    <div class="spin-background" id="spin">
         <img class="spin" src="../images/icon.png">
     </div>
     <!-- End Spin Widget -->
+    
     <section class="main-banner-gradient">
-        <div>
+        <div id="main">
+            <button class="navbar-toggler navbar-toggler-visible" type="button" id="navbar-expander"> <span
+                class="fas fa-bars"></span> </button>
+            <div id="sidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn main-color" id="nav-closer">&times;</a>
+                <a href="#"><i class="fa fa-user"></i>  My Profile</a>
+                <a href="#"><i class="fa fa-user"></i>  My NFTs</a>
+                <a href="#"><i class="fa fa-user"></i>  Marketplace</a>
+                <a href="/signout" class="about-btn navbar-centered">Logout</a>
+            </div>
             <div class="container centered-section">
                 <div class="text-center">
-                    <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png" data-wow-delay="0.2s"></a>
+                    <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png"
+                            data-wow-delay="0.2s"></a>
                     <h4>Hi <%- username %>, welcome to the app!</h4>
                     <div class="row">
                         <div class="col-md-12"><a href="/signout" class="about-btn-solid">Logout</a></div>
@@ -62,24 +73,20 @@
     wow.init();
     $(document).ready(function (e) {
 
-        $('#video-icon').on('click', function (e) {
-            e.preventDefault();
-            $('.video-popup').css('display', 'flex');
-            $('.iframe-src').slideDown();
-        });
-        $('.video-popup').on('click', function (e) {
-            var $target = e.target.nodeName;
-            var video_src = $(this).find('iframe').attr('src');
-            if ($target != 'IFRAME') {
-                $('.video-popup').fadeOut();
-                $('.iframe-src').slideUp();
-                $('.video-popup iframe').attr('src', " ");
-                $('.video-popup iframe').attr('src', video_src);
+        //navbar
+        $('#navbar-expander').on('click', function(e){
+            if($('#sidenav').css('width') == '0px'){
+                $('#sidenav').css('width','250');
+                document.getElementById("main").style.marginLeft = "250px";
+            }else if($('#sidenav').css('width') == '250px'){
+                $('#sidenav').css('width','0');
+                document.getElementById("main").style.marginLeft = "0px";
             }
         });
 
-        $('.slider').bxSlider({
-            pager: false
+        $('#nav-closer').on('click', function(e){
+            $('#sidenav').css('width','0');
+            document.getElementById("main").style.marginLeft = "0px";
         });
     });
 

@@ -7,7 +7,6 @@
 	--secondary-bg-gradient-color: linear-gradient(to bottom right, #7d0160, #f00b51);
 	--header-text-color: black;
 	--body-text-color: #4d4949;
-	--vs-primary: 29 92 255;
 }
 
 
@@ -64,9 +63,9 @@ h6 {
 input[type="checkbox"] {
 	display: inline-block;
 	vertical-align: top;
- }
+}
 
- /*
+/*
  	End Body General Classes
 */
 
@@ -75,15 +74,15 @@ input[type="checkbox"] {
 */
 
 .spin-background {
-	position:fixed;
-	width:100%;
-	left:0;
-	right:0;
-	top:0;
-	bottom:0;
+	position: fixed;
+	width: 100%;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
 	background-color: #ffffffcf;
-	z-index:9999;
-	display:none;
+	z-index: 9999;
+	display: none;
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: stretch;
@@ -96,19 +95,29 @@ input[type="checkbox"] {
 	margin-top: -45px;
 	margin-left: -45px;
 	width: 90px;
-	height:90px;
+	height: 90px;
 	-webkit-animation: spin 2s linear infinite;
 	animation: spin 2s linear infinite;
 }
 
 @-webkit-keyframes spin {
-	from {-webkit-transform:rotate(0deg);}
-	to {-webkit-transform:rotate(360deg);}
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+
+	to {
+		-webkit-transform: rotate(360deg);
+	}
 }
 
 @keyframes spin {
-	from {transform:rotate(0deg);}
-	to {transform:rotate(360deg);}
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 /*
@@ -121,8 +130,8 @@ input[type="checkbox"] {
 
 dialog {
 	top: 50%;
-    left: 50%;
-    position: absolute;
+	left: 50%;
+	position: absolute;
 	transform: translate(-50%, -50%);
 	padding: 1rem 3rem;
 	background: white;
@@ -132,12 +141,14 @@ dialog {
 	border: 0;
 	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
 	animation: fadeIn 0.3s ease both;
+
 	&::backdrop {
 		animation: fadeIn 0.3s ease both;
-		background: var(--secondary-bg-gradient-color); 
+		background: var(--secondary-bg-gradient-color);
 		z-index: 2;
 		backdrop-filter: blur(8px);
 	}
+
 	.x {
 		filter: grayscale(1);
 		border: none;
@@ -148,6 +159,7 @@ dialog {
 		transition: ease filter, transform 0.3s;
 		cursor: pointer;
 		transform-origin: center;
+
 		&:hover {
 			filter: grayscale(0);
 			transform: scale(1.1);
@@ -159,6 +171,7 @@ dialog {
 	from {
 		opacity: 0;
 	}
+
 	to {
 		opacity: 1;
 	}
@@ -177,6 +190,90 @@ dialog {
 
 /*
 	End CSS Animations
+*/
+
+/*
+	Sidebar CSS in APP Page
+*/
+
+.sidenav {
+	height: 100%;
+	/* 100% Full-height */
+	width: 0;
+	/* 0 width - change this with JavaScript */
+	position: fixed;
+	/* Stay in place */
+	z-index: 1;
+	/* Stay on top */
+	top: 0;
+	/* Stay at the top */
+	left: 0;
+	background-color: #ffffff;
+	/* Black*/
+	overflow-x: hidden;
+	/* Disable horizontal scroll */
+	padding-top: 60px;
+	/* Place content 60px from the top */
+	transition: 0.5s;
+	/* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	font-size: 25px;
+	color: black;
+	display: block;
+	transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+	color: var(--main-bg-color);
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+	position: absolute;
+	top: 0;
+	left: 0px;
+	font-size: 36px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+	transition: margin-left .5s;
+	padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+	.sidenav {
+		padding-top: 15px;
+	}
+
+	.sidenav a {
+		font-size: 18px;
+	}
+}
+
+.navbar-toggler-visible {
+	position: absolute;
+	margin-top: 20px;
+	margin-left: 20px;
+	top: 0px;
+	left: 0px;
+}
+
+.navbar-centered {
+	margin-left: 30px;
+	margin-right: 30px;
+	text-align: center;
+}
+
+/*
+	End Sidebar CSS in APP Page
 */
 
 .hidden {
@@ -200,7 +297,7 @@ dialog {
 }
 
 .main-color {
-	color: var(--main-bg-color);
+	color: var(--main-bg-color) !important; 
 }
 
 .navbar {
@@ -298,20 +395,22 @@ dialog {
 */
 
 @keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+	0% {
+		background-position: 0% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 .main-banner {
 	background: var(--main-bg-color);
-    background: var(--main-bg-gradient-color);
+	background: var(--main-bg-gradient-color);
 	position: relative;
 	height: 100vh;
 	width: 100%;
@@ -333,7 +432,7 @@ dialog {
 }
 
 .main-banner-gradient {
-    background: var(--main-bg-gradient-color);
+	background: var(--main-bg-gradient-color);
 	position: relative;
 	height: 100vh;
 	width: 100%;
@@ -341,7 +440,7 @@ dialog {
 	align-items: center;
 	justify-content: center;
 	background-size: 400% 400%;
-    animation: gradient 5s ease infinite;
+	animation: gradient 5s ease infinite;
 }
 
 /* .main-banner-gradient::before {
@@ -539,7 +638,7 @@ dialog {
 
 .about-btn-solid:hover {
 	color: #ffffff;
-	cursor:pointer;
+	cursor: pointer;
 	text-decoration: none;
 }
 
