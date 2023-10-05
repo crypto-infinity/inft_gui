@@ -10,10 +10,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
         integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../style.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-        integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -36,70 +34,71 @@
 
     <section class="main-banner-gradient">
         <div id="main">
+            <!-- Navbar Definition -->
             <button class="navbar-toggler navbar-toggler-visible" type="button" id="navbar-expander"> <span
                     class="fas fa-bars"></span> </button>
             <div id="sidenav" class="sidenav">
-                <a href="javascript:void(0)" class="closebtn main-color" id="nav-closer">&times;</a>
+                <a href="javascript:void(0)" class="closebtn" id="nav-closer">&times;</a>
+                <a href="/"><img class="wow fadeInUp app-logo" src="../images/logo.png" data-wow-delay="0.2s"></a>
+                <a href="#"><i ></i></a>
+                <a href="#" id="marketplace" class=""><h4>Hi, <%- username %>!</h4></a>
+                <a href="#"><i></i></a>
+                <a href="#" id="profiles"><i class="fa-solid fa-wand-magic-sparkles"></i> Mint!</a>
+                <a href="#"><i></i></a>
+                <a href="#" id="nfts"><i class="fa-solid fa-list"></i> My NFTs</a>
+                <a href="#" id="marketplace"><i class="fa-solid fa-square-poll-vertical"></i> Marketplace</a>
+                <a href="#"><i></i></a>
+                <a href="#"><i></i></a>
                 <a href="#" id="profiles"><i class="fa fa-user"></i> My Profile</a>
-                <a href="#" id="nfts"><i class="fa fa-user"></i> My NFTs</a>
-                <a href="#" id="marketplace"><i class="fa fa-user"></i> Marketplace</a>
                 <a href="/signout" class="about-btn-solid navbar-centered">Logout</a>
             </div>
+            <!-- End Navbar Definition -->
             <div class="container centered-section" id="main-frame">
                 <div class="text-center">
-                    <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png"
-                            data-wow-delay="0.2s"></a>
-                    <h4>Hi <%- username %>, welcome to the app!</h4>
-                    <div class="row">
-                        <div class="col-md-12"><a href="/signout" class="about-btn-solid">Logout</a></div>
-                    </div>
+
                     <h4>Your user data:</h4>
                     <script>
                         var output = <%- userdata %>;
-                        console.log(output);
-
-                        //document.write(output.name);
-                        //document.write(output.username);
                     </script>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="tile">
-                                <div class="tile-image-container"><img src="../images/sample/1.jpg" class="tile-icon"></div>
+                                <img src="../images/sample/1.jpg" class="tile-icon centered">
                                 <script>
                                     document.write("<h4>" + output.name + "</h4>");
-                                    document.write("<p>" + output.username + "<p>");
+                                    document.write("<p>" + output.username + "</p>");
                                 </script>
-                                <a href="#" class="about-btn-solid navbar-centered read-more-nft">Read More</a>
+                                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="tile">
-                                <div class="tile-image-container"><img src="../images/sample/2.png" class="tile-icon"></div>
+                                <img src="../images/sample/2.png" class="tile-icon">
                                 <script>
                                     document.write("<h4>" + output.name + "</h4>");
-                                    document.write("<p>" + output.username + "<p>");
+                                    document.write("<p>" + output.username + "</p>");
                                 </script>
-                                <a href="#" class="about-btn-solid navbar-centered read-more-nft">Read More</a>
+                                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="tile">
-                                <div class="tile-image-container"><img src="../images/sample/3.png" class="tile-icon"></div>
+                                <img src="../images/sample/3.png" class="tile-icon">
                                 <script>
                                     document.write("<h4>" + output.name + "</h4>");
-                                    document.write("<p>" + output.username + "<p>");
+                                    document.write("<p>" + output.username + "</p>");
                                 </script>
-                                <a href="#" class="about-btn-solid navbar-centered read-more-nft">Read More</a>
+                                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="tile">
-                                <div class="tile-image-container"><img src="../images/sample/4.png" class="tile-icon"></div>
+                                <img src="../images/sample/4.png" class="tile-icon">
                                 <script>
                                     document.write("<h4>" + output.name + "</h4>");
-                                    document.write("<p>" + output.username + "<p>");
+                                    document.write("<p>" + output.username + "</p>");
                                 </script>
-                                <a href="#" class="about-btn-solid navbar-centered read-more-nft">Read More</a>
+                                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
                             </div>
                         </div>
                     </div>
