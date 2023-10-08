@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Login/Signup - INFT</title>
+    <title>Mint your NFT!</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <link rel="stylesheet" href="../css/animate.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
@@ -37,30 +37,10 @@
 
     <section class="main-banner-gradient">
         <div class="text-center">
-            <a href="/"><img class="header-padding-image wow fadeInUp" src="../images/logo-highres.png"
-                    data-wow-delay="0.2s"></a>
-            <form class="centered prelative normal-padding" id="signin_form" method="post">
-                <input type="text" id="username" class="form-input w-75" name="username"
-                    placeholder="User Name or Email" required>
-                <input type="password" id="password" class="form-input w-75" name="password" placeholder="Password"
-                    required>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login">Login</button>
-                <button class="about-btn w-50 text-uppercase" type="submit" name="register"
-                    id="register">Register</button>
+            <form id="files-input">
+                <input type="file" id="myFile" name="filename" multiple>
+                <input type="submit">
             </form>
-            <h4 class="normal-padding wow fadeInUp" data-wow-delay="0.4s" id="othersigninmethods">Or sign in
-                with..</h4>
-            <span class="line"></span>
-            <div class="" id="signinmethods">
-                <div class="container normal-padding prelative">
-                    <a id="ms" href="/signin/microsoft"><img src="../images/ms_login.png" class="wow fadeInUp prelative"
-                            data-wow-delay="0.6s" /></a>
-                </div>
-                <div class="container normal-padding prelative">
-                    <a id="mm" href="#"><img src="../images/metamask_login.png" class="wow fadeInUp prelative"
-                            data-wow-delay="0.8s" /></a>
-                </div>
-            </div>
         </div>
     </section>
 </body>

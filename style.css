@@ -204,7 +204,7 @@ dialog {
 	/* 0 width - change this with JavaScript */
 	position: fixed;
 	/* Stay in place */
-	z-index: 1;
+	z-index: 2;
 	/* Stay on top */
 	top: 0;
 	/* Stay at the top */
@@ -276,6 +276,67 @@ dialog {
 /*
 	End Sidebar CSS in APP Page
 */
+
+/*
+	Operation Status Popup
+*/
+
+.operation-status-icon {
+	position: absolute;
+	margin-top: 20px;
+	margin-right: 20px;
+	top: 0px;
+	right: 0px;
+	cursor: pointer;
+}
+
+.operation-status-icon span {
+	color: #333;
+}
+
+#operation-status-popup {
+	top: 0%;
+	right: 0%;
+	position: absolute;
+	padding: 1rem 3rem;
+	background: white;
+	margin-top: 60px;
+	margin-right: 20px;
+	border-radius: 20px;
+	border: 0;
+	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
+	animation: fadeIn 0.3s ease both;
+	z-index: 2;
+	max-width: 500px;
+	word-wrap: break-word;
+	display: none;
+}
+
+.button__badge {
+	border-radius: 2px;
+	color: white;
+   
+	padding: 1px 3px;
+	font-size: 10px;
+	
+	position: absolute; /* Position the badge within the relatively positioned button */
+	top: 0;
+	right: 0;
+  }
+
+@media screen and (max-width: 768px) {
+
+	#operation-status-popup-content {
+		max-width: 200px;
+		word-wrap: break-word;
+	}
+
+}
+
+/*
+	End Operation Status Popup
+*/
+
 
 /*
 	CSS Tiles
@@ -515,18 +576,6 @@ dialog {
 	background-size: 400% 400%;
 	animation: gradient 5s ease infinite;
 }
-
-/* .main-banner-gradient::before {
-	background-image: url("./images/blockchain_background.png");
-	content: "";
-	background-size: cover;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
-	opacity: 0.05;
-} */
 
 .banner {
 	background: var(--main-bg-color);

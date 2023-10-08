@@ -35,13 +35,16 @@
     <section class="main-banner-gradient">
         <div id="main">
             <!-- Navbar Definition -->
-            <button class="navbar-toggler navbar-toggler-visible" type="button" id="navbar-expander"> <span
-                    class="fas fa-bars"></span> </button>
+            <button class="navbar-toggler navbar-toggler-visible" type="button" id="navbar-expander">
+                <span class="fa fa-bars"></span>
+            </button>
             <div id="sidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" id="nav-closer">&times;</a>
                 <a href="/"><img class="wow fadeInUp app-logo" src="../images/logo.png" data-wow-delay="0.2s"></a>
-                <a href="#"><i ></i></a>
-                <a href="#" id="marketplace" class=""><h4>Hi, <%- username %>!</h4></a>
+                <a href="#"><i></i></a>
+                <a href="#" id="marketplace" class="">
+                    <h4>Hi, <%- username %>!</h4>
+                </a>
                 <a href="#"><i></i></a>
                 <a href="#" id="profiles"><i class="fa-solid fa-wand-magic-sparkles"></i> Mint!</a>
                 <a href="#"><i></i></a>
@@ -53,6 +56,20 @@
                 <a href="/signout" class="about-btn-solid navbar-centered">Logout</a>
             </div>
             <!-- End Navbar Definition -->
+            <!-- Operation Status Popup -->
+            <button class="navbar-toggler operation-status-icon" type="button" id="operation-status-expander">
+                <span class="fa-solid fa-bell"></span>
+                <span class="button__badge" id="notification-count"></span>
+            </button>
+            <div id="operation-status-popup">
+                <div id="operation-status-popup-content">
+                    <h4 id="operation-status-title">Ciao!</h4>
+                    <p>Ciao testo! Sucaklsfobwefpwiehfowebf934750hallalalahalalalalaaaaaa</p>
+                    <p>Ciao testo!</p>
+                    <p>Ciao testo!</p>
+                </div>
+            </div>
+            <!-- End Operation Status Popup -->
             <div class="container centered-section" id="main-frame">
                 <div class="text-center">
 
@@ -102,7 +119,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -126,7 +143,9 @@
     $(document).ready(function (e) {
         var opened_tab = "";
 
-        //navbar
+        /*
+            Navbar
+        */
         $('#navbar-expander').on('click', function (e) {
             if ($('#sidenav').css('width') == '0px') {
                 $('#sidenav').css('width', '250');
@@ -141,6 +160,28 @@
             $('#sidenav').css('width', '0');
             document.getElementById("main").style.marginLeft = "0px";
         });
+        /*
+            End Navbar
+        */
+
+        /*
+            Operation Status
+        */
+
+        $('#operation-status-expander').on('click',function(e){
+            if($('#operation-status-popup').css('display') == "none"){
+                $('#operation-status-expander').children().addClass('fa-regular').removeClass('fa-solid');
+                $('#operation-status-popup').css('display','block');
+                //$('#notification-count').html("10"); //SETS NOTIFICATION COUNT
+            }else if ($('#operation-status-popup').css('display') == "block"){
+                $('#operation-status-popup').css('display','none');
+                $('#operation-status-expander').children().addClass('fa-solid').removeClass('fa-regular');
+            }
+        });
+
+        /*
+            End Operation Status
+        */
 
         /*
             Profiles Tab 
@@ -151,9 +192,9 @@
                 $.get('./views/profile.ejs', function (template) {
                     // Compile the EJS template.
                     var base_template = ejs.compile(template);
-    
+
                     $.get('/profile', function (data) {
-                    // Generate the html from the given data.
+                        // Generate the html from the given data.
                         var html = base_template(data);
                         opened_tab = "profile";
                         $('#main-frame').html(html);
@@ -176,7 +217,7 @@
                 var base_template = ejs.compile(template);
 
                 $.get('/profile', function (data) {
-                // Generate the html from the given data.
+                    // Generate the html from the given data.
                     var html = base_template(data);
                     $('#main-frame').html(html);
                 });
@@ -197,7 +238,7 @@
                 var base_template = ejs.compile(template);
 
                 $.get('/profile', function (data) {
-                // Generate the html from the given data.
+                    // Generate the html from the given data.
                     var html = base_template(data);
                     $('#main-frame').html(html);
                 });
