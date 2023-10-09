@@ -42,7 +42,7 @@
                 <a href="javascript:void(0)" class="closebtn" id="nav-closer">&times;</a>
                 <a href="/"><img class="wow fadeInUp app-logo" src="../images/logo.png" data-wow-delay="0.2s"></a>
                 <a href="#"><i></i></a>
-                <a href="#" id="marketplace" class="">
+                <a href="#" id="user">
                     <h4>Hi, <%- username %>!</h4>
                 </a>
                 <a href="#"><i></i></a>
@@ -147,12 +147,22 @@
             Navbar
         */
         $('#navbar-expander').on('click', function (e) {
-            if ($('#sidenav').css('width') == '0px') {
-                $('#sidenav').css('width', '250');
-                document.getElementById("main").style.marginLeft = "250px";
-            } else if ($('#sidenav').css('width') == '250px') {
-                $('#sidenav').css('width', '0');
-                document.getElementById("main").style.marginLeft = "0px";
+            if(window.innerWidth > 768){
+                if ($('#sidenav').css('width') == '0px') {
+                    $('#sidenav').css('width', '250');
+                    document.getElementById("main").style.marginLeft = "250px";
+                } else if ($('#sidenav').css('width') == '250px') {
+                    $('#sidenav').css('width', '0');
+                    document.getElementById("main").style.marginLeft = "0px";
+                }
+            }else{
+                if ($('#sidenav').css('width') == '0px') {
+                    $('#sidenav').css('width', '100vh');
+                    //document.getElementById("main").style.marginLeft = "100vh";
+                } else if ($('#sidenav').css('width') == '100vh') {
+                    $('#sidenav').css('width', '0');
+                    //document.getElementById("main").style.marginLeft = "0px";
+                }
             }
         });
 
