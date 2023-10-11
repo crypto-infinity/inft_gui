@@ -73,7 +73,7 @@ app.post('/signin/legacy', (req, res) => {
         var password = req.body.password;
 
         request.input('username',sql.VarChar, username);
-        var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
+        var query = "SELECT * FROM [dbo].Login WHERE username=@username";
 
         request.query(query, function (err, recordset) {
             if (err){ //handling DB errors
@@ -91,7 +91,7 @@ app.post('/signin/legacy', (req, res) => {
                     req.session.isAuthenticated = true; //create session here
                     req.session.username = username;
                     req.session.authMethod = "legacy";
-                    res.redirect('/app');
+                    res.redirect('../app');
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
@@ -117,7 +117,7 @@ app.post('/register', (req, res) => {
         var password = req.body.password;
 
         request.input('username',sql.VarChar, username);
-        var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
+        var query = "SELECT * FROM [dbo].Login WHERE username=@username";
 
         request.query(query, function (err, recordset) {
             if (err){ //handling DB errors
@@ -133,7 +133,7 @@ app.post('/register', (req, res) => {
                 request.input('pwdhash',sql.VarChar,hash);
                 request.input('salt',sql.VarChar,salt);
 
-                var query = "INSERT INTO [SalesLT].Login (username,pwd_hash,salt) values (@username,@pwdhash,@salt)";
+                var query = "INSERT INTO [dbo].Login (username,pwd_hash,salt) values (@username,@pwdhash,@salt)";
                 request.query(query, function(err, recordset){
                     if (err){ //handling DB errors
                         console.log("Error: " + err)
@@ -145,7 +145,7 @@ app.post('/register', (req, res) => {
                     req.session.isAuthenticated = true; //create session here
                     req.session.authMethod = "legacy";
                     req.session.username = username;
-                    res.redirect('/app');
+                    res.redirect('app');
                 });
             }else{
                 if(recordset.recordset.length != 0){
@@ -183,9 +183,9 @@ app.get('/signin/microsoft', (req,res) => {
     }
 });
 
-app.post('/auth/redirect', (req,res) => {
+app.post('/auth/redirect', (req,res,next) => {
     if(!req.session.isAuthenticated){
-        authProvider.handleRedirect(req,res);
+        authProvider.handleRedirect(req,res,next);
     }else{
         res.redirect('../app');
     }
@@ -218,7 +218,7 @@ app.post('/checkUser', async (req, res) => {
         var username = req.body.username;
 
         request.input('username',sql.VarChar, username);
-        var query = "SELECT * FROM [SalesLT].Login WHERE username=@username";
+        var query = "SELECT * FROM [dbo].Login WHERE username=@username";
 
         request.query(query, function (err, recordset) {
             if (err){ //handling DB errors
@@ -294,7 +294,7 @@ app.post('/checkUser', async (req, res) => {
 //         request.input('subject', sql.VarChar, subject);
 //         request.input('message', sql.VarChar, message);
 
-//         var query = "INSERT INTO [SalesLT].Contact (name,email,subject,message) VALUES (@name,@email,@subject,@message)";
+//         var query = "INSERT INTO [dbo].Contact (name,email,subject,message) VALUES (@name,@email,@subject,@message)";
 
 //         request.query(query, function (err, recordset) {
 //             if (err){
@@ -313,7 +313,7 @@ app.post('/checkUser', async (req, res) => {
 
 // app.post("/requests", (req, res) =>{
 //     var request = new sql.Request();
-//     var query = "SELECT * FROM [SalesLT].Contact";
+//     var query = "SELECT * FROM [dbo].Contact";
 //     request.query(query, (err, recordset) => {
 //         if (err){
 //             console.log("Error: " + err)
@@ -325,7 +325,7 @@ app.post('/checkUser', async (req, res) => {
 
 // app.get("/requests", (req, res) =>{
 //     var request = new sql.Request();
-//     var query = "SELECT * FROM [SalesLT].Contact";
+//     var query = "SELECT * FROM [dbo].Contact";
 //     request.query(query, (err, recordset) => {
 //         if (err){
 //             console.log("Error: " + err)

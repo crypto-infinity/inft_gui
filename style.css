@@ -251,8 +251,8 @@ dialog {
 }
 
 .navbar-toggler-visible {
-	position: sticky;
-	margin-top: 20px;
+	position: absolute;
+	padding-top: 20px;
 	margin-left: 20px;
 	top: 0px;
 	left: 0px;
@@ -274,12 +274,12 @@ dialog {
 */
 
 .operation-status-icon {
-	position: sticky;
-	margin-top: 20px;
+	position: absolute;
+	padding-top: 20px;
 	margin-right: 20px;
 	top: 0px;
-	right: 50%;
-	z-index: 2;
+	right: 0px;
+	/* z-index: 2; */
 	cursor: pointer;
 }
 
@@ -287,7 +287,7 @@ dialog {
 	color: #333;
 }
 
-#operation-status-popup {
+.operation-status-popup {
 	top: 0%;
 	right: 0%;
 	position: absolute;
@@ -372,6 +372,7 @@ dialog {
 	.tile {
 		-webkit-transform: scale(0.85) !important;
 		transform: scale(0.85) !important;
+		padding: 5px;
 	}
 
 	.tile > * {
@@ -561,9 +562,9 @@ dialog {
 .main-banner-gradient {
 	background: var(--main-bg-gradient-color);
 	position: absolute;
-	/* height: 100vh; */
+	height: 100vh;
 	width: 100%;
-	/* display: flex; */
+	display: flex;
 	align-items: center;
 	justify-content: center;
 	background-size: 400% 400%;
@@ -747,6 +748,7 @@ dialog {
 	border: 2px solid var(--main-bg-color);
 	border-radius: 7px;
 	margin-top: 30px;
+	display: inline-block;
 	max-width: 300px;
 	text-align: center;
 }
@@ -1158,8 +1160,7 @@ input {
 	}
 
 	h4 {
-		-webkit-transform: scale(0.65) !important;
-		transform: scale(0.65) !important;
+		font-size: 20px;
 	}
 
 	.section-padding {

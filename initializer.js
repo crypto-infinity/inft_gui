@@ -39,19 +39,35 @@ const session = require('express-session');
 require('dotenv').config(); //Import .env 
 const { SQL_DB_SERVER, SQL_DB_NAME, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID } = process.env;
 
-// sqlconfig
+// // sqlconfig
+// var sql_config = {
+//     server: SQL_DB_SERVER, 
+//     database: SQL_DB_NAME,
+//     authentication: {
+//         type: 'azure-active-directory-service-principal-secret',
+//         options: {
+//             clientId: AZURE_CLIENT_ID,
+//             clientSecret: AZURE_CLIENT_SECRET,
+//             tenantId: AZURE_TENANT_ID
+//         }
+//     },
+//     trustServerCertificate: false, //self-signed cert error
+//     options: {
+//         connectTimeout: 40000
+//     }
+// };
+
 var sql_config = {
-    server: SQL_DB_SERVER, 
+    server: "localhost", 
     database: SQL_DB_NAME,
     authentication: {
-        type: 'azure-active-directory-service-principal-secret',
+        type: 'default',
         options: {
-            clientId: AZURE_CLIENT_ID,
-            clientSecret: AZURE_CLIENT_SECRET,
-            tenantId: AZURE_TENANT_ID
+            userName: "sa",
+            password: "Superuser,2023!"
         }
     },
-    trustServerCertificate: false, //self-signed cert error
+    trustServerCertificate: true, //self-signed cert error
     options: {
         connectTimeout: 40000
     }

@@ -32,6 +32,7 @@
     </dialog>
     <!-- end Dialog HTML definition -->
 
+
     <section class="main-banner-gradient">
         <div id="main">
             <!-- Navbar Definition -->
@@ -42,9 +43,7 @@
                 <a href="javascript:void(0)" class="closebtn" id="nav-closer">&times;</a>
                 <a href="/"><img class="wow fadeInUp app-logo" src="../images/logo.png" data-wow-delay="0.2s"></a>
                 <a href="#"><i></i></a>
-                <a href="#" id="user">
-                    <h4>Hi, <%- username %>!</h4>
-                </a>
+                <a href="#" id="user"><h4>Hi, <%- username %>!</h4></a>
                 <a href="#"><i></i></a>
                 <a href="#" id="profiles"><i class="fa-solid fa-wand-magic-sparkles"></i> Mint!</a>
                 <a href="#"><i></i></a>
@@ -56,20 +55,23 @@
                 <a href="/signout" class="about-btn-solid navbar-centered">Logout</a>
             </div>
             <!-- End Navbar Definition -->
-            <!-- Operation Status Popup -->
-            <button class="navbar-toggler operation-status-icon" type="button" id="operation-status-expander">
-                <span class="fa-solid fa-bell"></span>
-                <span class="button__badge" id="notification-count"></span>
-            </button>
-            <div id="operation-status-popup">
-                <div id="operation-status-popup-content">
-                    <h4 id="operation-status-title">Ciao!</h4>
-                    <p>Ciao testo! Sucaklsfobwefpwiehfowebf934750hallalalahalalalalaaaaaa</p>
-                    <p>Ciao testo!</p>
-                    <p>Ciao testo!</p>
+                <!-- Operation Status Popup -->
+            <div>
+                <button class="navbar-toggler operation-status-icon" type="button" id="operation-status-expander">
+                    <span class="fa-solid fa-bell"></span>
+                    <span class="button__badge" id="notification-count"></span>
+                </button>
+                <div id="operation-status-popup" class="operation-status-popup">
+                    <div id="operation-status-popup-content">
+                        <h4 id="operation-status-title">Ciao!</h4>
+                        <p>Ciao testo! Sucaklsfobwefpwiehfowebf934750hallalalahalalalalaaaaaa</p>
+                        <p>Ciao testo!</p>
+                        <p>Ciao testo!</p>
+                    </div>
                 </div>
             </div>
             <!-- End Operation Status Popup -->
+
             <div class="container centered-section" id="main-frame">
                 <div class="text-center">
 
@@ -77,49 +79,44 @@
                     <script>
                         var output = <%- userdata %>;
                     </script>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="tile">
-                                <img src="../images/sample/1.jpg" class="tile-icon centered">
-                                <script>
-                                    document.write("<h4>" + output.name + "</h4>");
-                                    document.write("<p>" + output.username + "</p>");
-                                </script>
-                                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                    <div class="slider">
+                        <div class="slider-item">
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <img src="../images/sample/1.jpg" class="tile-icon centered">
+                                    <script>
+                                        document.write("<h4>" + output.name + "</h4>");
+                                        document.write("<p>" + output.username + "</p>");
+                                    </script>
+                                    <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="tile">
-                                <img src="../images/sample/2.png" class="tile-icon">
-                                <script>
-                                    document.write("<h4>" + output.name + "</h4>");
-                                    document.write("<p>" + output.username + "</p>");
-                                </script>
-                                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                        <div class="slider-item">
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <img src="../images/sample/2.png" class="tile-icon">
+                                    <script>
+                                        document.write("<h4>" + output.name + "</h4>");
+                                        document.write("<p>" + output.username + "</p>");
+                                    </script>
+                                    <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="tile">
-                                <img src="../images/sample/3.png" class="tile-icon">
-                                <script>
-                                    document.write("<h4>" + output.name + "</h4>");
-                                    document.write("<p>" + output.username + "</p>");
-                                </script>
-                                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="tile">
-                                <img src="../images/sample/4.png" class="tile-icon">
-                                <script>
-                                    document.write("<h4>" + output.name + "</h4>");
-                                    document.write("<p>" + output.username + "</p>");
-                                </script>
-                                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                        <div class="slider-item">
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <img src="../images/sample/3.png" class="tile-icon">
+                                    <script>
+                                        document.write("<h4>" + output.name + "</h4>");
+                                        document.write("<p>" + output.username + "</p>");
+                                    </script>
+                                    <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -290,4 +287,7 @@
         window.onscroll = function () { };
     }
     /* End Dialog Methods */
+    $('.slider').bxSlider({
+        pager: false
+      });
 </script>
