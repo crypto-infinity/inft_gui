@@ -42,6 +42,8 @@
     "mssql": "^10.0.1",
     "pug": "^3.0.2",
     "session": "^0.1.0",
-    "sessions": "^0.0.2-7"
+    "sessions": "^0.0.2-7",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2"
   }
 }

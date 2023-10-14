@@ -1,8 +1,18 @@
 //dependencies initialization
-const {app,sql} = require("./initializer"); //Initializer JS Module
+const {httpServer,app,sql,io} = require("./initializer"); //Initializer JS Module
 const authProvider = require('./auth/microsoft_authProvider'); //MS Authentication Provider
 const crypto = require('crypto'); //Cryptographic check of has/salts for legacy auth
-const INFT = require("./js/utility.js"); //INFT Utility Class Module
+//const INFT = require("./js/utility.js"); //INFT Utility Class Module
+const { setTimeout } = require("timers/promises");
+
+/**
+ * Websocket Listeners
+ */
+
+io.on("connection", (socket) => {
+    console.log("Connected to WebSocket Server! Client: " + socket.id);
+    io.emit("connected","Connected to WS!");
+});
 
 //WebServer GET & POST Methods
 app.get('/', (req, res) => {
@@ -37,6 +47,16 @@ app.get('/app', (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
+    if(!req.session.isAuthenticated){
+        res.redirect('login');
+    }else{
+        res.send({
+            username: req.session.username
+        });
+    }
+});
+
+app.get('/mint', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
@@ -91,7 +111,7 @@ app.post('/signin/legacy', (req, res) => {
                     req.session.isAuthenticated = true; //create session here
                     req.session.username = username;
                     req.session.authMethod = "legacy";
-                    res.redirect('../app');
+                    res.redirect('./app');
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
@@ -253,6 +273,11 @@ app.post('/checkUser', async (req, res) => {
 /**
  * Dev/Staging
  */
+
+app.get('/test-event', async (req,res) => {
+    var test = await setTimeout(10000, "Hello there!");
+    res.send(test);
+})
 
 // //TEST DEV REFERENCE `'"
 

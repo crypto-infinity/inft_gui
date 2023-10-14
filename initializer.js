@@ -4,18 +4,23 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const sessions = require('express-session');
+const { Server } = require("socket.io");
+const { createServer } = require("http");
 
-//webserver initialization
+//Express initialization
 const app = express();              
 const port = 443; //WebServer Port
+
+//Websocket initialization
+const httpServer = createServer(app);
+const io = new Server(httpServer, {}); //Socket.io HTTP Wrapper
 
 const oneDay = 1000 * 60 * 60 * 24;
 
 try {
     //webserver listener and registrations
-    app.listen(port, () => { console.log(`Now listening on port ${port}`); });
-    
-    
+    httpServer.listen(port, () => { console.log(`Now listening on port ${port}`); }); //HTTP & WS
+
     app.set('views', './views');
     app.set('view engine', 'ejs');
     app.use(express.static(__dirname));
@@ -34,10 +39,9 @@ try {
 * MS SQL Server Connection initialization, based on mssql and tedious
 */
 const sql = require("mssql");
-const session = require('express-session');
 
 require('dotenv').config(); //Import .env 
-const { SQL_DB_SERVER, SQL_DB_NAME, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID } = process.env;
+const { SQL_DB_SERVER, SQL_DB_NAME, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID, TEMP_SQL_PASSWORD } = process.env;
 
 // // sqlconfig
 // var sql_config = {
@@ -64,7 +68,7 @@ var sql_config = {
         type: 'default',
         options: {
             userName: "sa",
-            password: "Superuser,2023!"
+            password: TEMP_SQL_PASSWORD
         }
     },
     trustServerCertificate: true, //self-signed cert error
@@ -80,6 +84,8 @@ sql.connect(sql_config, function (err) {
 });
 
 module.exports = {
+    httpServer,
     app,
-    sql
-}; //Exports the app instance
+    sql,
+    io
+}; //Exports the httpServer instance

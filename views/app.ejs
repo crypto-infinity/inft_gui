@@ -43,15 +43,15 @@
                 <a href="javascript:void(0)" class="closebtn" id="nav-closer">&times;</a>
                 <a href="/"><img class="wow fadeInUp app-logo" src="../images/logo.png" data-wow-delay="0.2s"></a>
                 <a href="#"><i></i></a>
-                <a href="#" id="user"><h4>Hi, <%- username %>!</h4></a>
+                <a href="#"><h4>Hi, <%- username %>!</h4></a>
                 <a href="#"><i></i></a>
-                <a href="#" id="profiles"><i class="fa-solid fa-wand-magic-sparkles"></i> Mint!</a>
+                <a href="#" id="mint"><i class="fa-solid fa-wand-magic-sparkles"></i> Mint!</a>
                 <a href="#"><i></i></a>
                 <a href="#" id="nfts"><i class="fa-solid fa-list"></i> My NFTs</a>
                 <a href="#" id="marketplace"><i class="fa-solid fa-square-poll-vertical"></i> Marketplace</a>
                 <a href="#"><i></i></a>
                 <a href="#"><i></i></a>
-                <a href="#" id="profiles"><i class="fa fa-user"></i> My Profile</a>
+                <a href="#" id="profile"><i class="fa fa-user"></i> My Profile</a>
                 <a href="/signout" class="about-btn-solid navbar-centered">Logout</a>
             </div>
             <!-- End Navbar Definition -->
@@ -74,48 +74,33 @@
 
             <div class="container centered-section" id="main-frame">
                 <div class="text-center">
-
                     <h4>Your user data:</h4>
                     <script>
                         var output = <%- userdata %>;
                     </script>
-                    <div class="slider">
-                        <div class="slider-item">
-                            <div class="col-md-3">
-                                <div class="tile">
-                                    <img src="../images/sample/1.jpg" class="tile-icon centered">
-                                    <script>
-                                        document.write("<h4>" + output.name + "</h4>");
-                                        document.write("<p>" + output.username + "</p>");
-                                    </script>
-                                    <a href="#" class="about-btn-solid read-more-nft">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slider-item">
-                            <div class="col-md-3">
-                                <div class="tile">
-                                    <img src="../images/sample/2.png" class="tile-icon">
-                                    <script>
-                                        document.write("<h4>" + output.name + "</h4>");
-                                        document.write("<p>" + output.username + "</p>");
-                                    </script>
-                                    <a href="#" class="about-btn-solid read-more-nft">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slider-item">
-                            <div class="col-md-3">
-                                <div class="tile">
-                                    <img src="../images/sample/3.png" class="tile-icon">
-                                    <script>
-                                        document.write("<h4>" + output.name + "</h4>");
-                                        document.write("<p>" + output.username + "</p>");
-                                    </script>
-                                    <a href="#" class="about-btn-solid read-more-nft">Read More</a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="tile">
+                        <img src="../images/sample/1.jpg" class="tile-icon centered">
+                        <script>
+                            document.write("<h4>" + output.name + "</h4>");
+                            document.write("<p>" + output.username + "</p>");
+                        </script>
+                        <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                    </div>
+                    <div class="tile">
+                        <img src="../images/sample/2.png" class="tile-icon">
+                        <script>
+                            document.write("<h4>" + output.name + "</h4>");
+                            document.write("<p>" + output.username + "</p>");
+                        </script>
+                        <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                    </div>
+                    <div class="tile">
+                        <img src="../images/sample/3.png" class="tile-icon">
+                        <script>
+                            document.write("<h4>" + output.name + "</h4>");
+                            document.write("<p>" + output.username + "</p>");
+                        </script>
+                        <a href="#" class="about-btn-solid read-more-nft">Read More</a>
                     </div>
                 </div>
             </div>
@@ -126,6 +111,7 @@
 </html>
 
 <script src="../node_modules/ejs/ejs.min.js"></script>
+<script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
     integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
@@ -135,8 +121,15 @@
 <script src="js/scrollIt.min.js"></script>
 <script src="js/wow.min.js"></script>
 <script>
+    const socket = io();
+    console.log('Websocket ready!');
     wow = new WOW();
     wow.init();
+
+    socket.on('connected', function(arg){
+        console.log('Data received from WS: ' + arg);
+    });
+
     $(document).ready(function (e) {
         var opened_tab = "";
 
@@ -188,6 +181,32 @@
 
         /*
             End Operation Status
+        */
+
+        /*
+            Mint Tab 
+        */
+
+        $('#mint').on('click', function (e) {
+            if (opened_tab != "mint") {
+                $.get('./views/mint.ejs', function (template) {
+                    // Compile the EJS template.
+                    var base_template = ejs.compile(template);
+
+                    $.get('/mint', function (data) {
+                        // Generate the html from the given data.
+                        var html = base_template(data);
+                        opened_tab = "mint";
+                        $('#main-frame').html(html);
+                    }).error(function (e){
+                        openModal("Error!","Request has not been fullfilled!");
+                    });
+                });
+            }
+        });
+
+        /*
+            End Mint Tab 
         */
 
         /*
@@ -287,7 +306,13 @@
         window.onscroll = function () { };
     }
     /* End Dialog Methods */
-    $('.slider').bxSlider({
-        pager: false
-      });
+
+    /*
+        Slider JS
+    */
+        //TO DO
+    /*
+        End Slider JS
+    */
+
 </script>
