@@ -90,14 +90,10 @@
         
     });
 
-    $('#test-event').on('click', function(e){
-        console.log('event started');
-        $.get('/test-event', function(data){
-            console.log('event finished! Data: ' + data);
-        }).error(function(e){
-            console.log('event failed: ');
-        });
-    });
+    // $('#test-event').on('click', function(e){
+    //     const socket = io('http://localhost:443');
+    //     socket.emit("test", "test");
+    // });
 
     /* Dialog Methods */
     $('#dialog-close').on('click', function (e) {

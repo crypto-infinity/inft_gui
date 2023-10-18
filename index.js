@@ -9,10 +9,19 @@ const { setTimeout } = require("timers/promises");
  * Websocket Listeners
  */
 
-io.on("connection", (socket) => {
-    console.log("Connected to WebSocket Server! Client: " + socket.id);
-    io.emit("connected","Connected to WS!");
-});
+io.on('connection', function(client){
+    console.log("Connected to WebSocket Server! Client: " + client.id);
+
+    client.on('test', async (socket) => {
+        console.log("Event test triggered! Data: " + socket);
+        const timer = await setTimeout(3000, "Time has come!");
+        client.emit('test-finished',timer);
+    });
+
+
+}); 
+
+
 
 //WebServer GET & POST Methods
 app.get('/', (req, res) => {
@@ -111,7 +120,7 @@ app.post('/signin/legacy', (req, res) => {
                     req.session.isAuthenticated = true; //create session here
                     req.session.username = username;
                     req.session.authMethod = "legacy";
-                    res.redirect('./app');
+                    res.redirect('../app');
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
@@ -220,8 +229,8 @@ app.get('/signout', async (req,res) => {
     }
 });
 
-app.post('/redirect', async () => {
-    authProvider.handleRedirect();
+app.post('/redirect', async (req,res) => {
+    authProvider.handleRedirect(req,res);
 });
 
 /**

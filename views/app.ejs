@@ -117,19 +117,35 @@
     integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-<!-- scrollIt js -->
 <script src="js/scrollIt.min.js"></script>
 <script src="js/wow.min.js"></script>
 <script>
-    const socket = io();
-    console.log('Websocket ready!');
-    wow = new WOW();
-    wow.init();
-
-    socket.on('connected', function(arg){
-        console.log('Data received from WS: ' + arg);
+    /*
+        Websocket Methods
+    */
+    const socket = io('http://localhost:443');
+    socket.on("connect_error", () => { //automatic connection error error handling
+        setTimeout(() => {
+            socket.connect();
+        }, 1000);
+    });
+    socket.on("disconnect", (reason) => { //handle specific disconnection cases
+        if (reason === "io server disconnect") {
+            socket.connect();
+        }
     });
 
+    socket.on('test-finished', function(arg){
+        console.log('Data received from WS: ' + arg);
+    });
+    /*
+        End Websocket Methods
+    */
+
+    //WOW effect initialization
+    wow = new WOW();
+    wow.init();
+    
     $(document).ready(function (e) {
         var opened_tab = "";
 
@@ -198,6 +214,11 @@
                         var html = base_template(data);
                         opened_tab = "mint";
                         $('#main-frame').html(html);
+                        $('#test-event').on('click', function(e){
+                            console.log('Button pressed');
+                            socket.emit('test', 'Test');
+                            console.log('Event emitted!');
+                        });
                     }).error(function (e){
                         openModal("Error!","Request has not been fullfilled!");
                     });
