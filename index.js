@@ -2,7 +2,7 @@
 const {httpServer,app,sql,io} = require("./initializer"); //Initializer JS Module
 const authProvider = require('./auth/microsoft_authProvider'); //MS Authentication Provider
 const crypto = require('crypto'); //Cryptographic check of has/salts for legacy auth
-//const INFT = require("./js/utility.js"); //INFT Utility Class Module
+const { provider,signer,contract } = require('./js/web3');
 const { setTimeout } = require("timers/promises");
 
 /**
@@ -19,9 +19,7 @@ io.on('connection', function(client){
     });
 
 
-}); 
-
-
+});
 
 //WebServer GET & POST Methods
 app.get('/', (req, res) => {
@@ -69,9 +67,7 @@ app.get('/mint', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
-        res.send({
-            username: req.session.username
-        });
+        //TO DO
     }
 });
 
@@ -282,11 +278,6 @@ app.post('/checkUser', async (req, res) => {
 /**
  * Dev/Staging
  */
-
-app.get('/test-event', async (req,res) => {
-    var test = await setTimeout(10000, "Hello there!");
-    res.send(test);
-})
 
 // //TEST DEV REFERENCE `'"
 

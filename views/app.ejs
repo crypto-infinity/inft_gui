@@ -113,6 +113,7 @@
 <script src="../node_modules/ejs/ejs.min.js"></script>
 <script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
     integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
     crossorigin="anonymous"></script>
@@ -214,16 +215,20 @@
                         var html = base_template(data);
                         opened_tab = "mint";
                         $('#main-frame').html(html);
-                        $('#test-event').on('click', function(e){
-                            console.log('Button pressed');
-                            socket.emit('test', 'Test');
-                            console.log('Event emitted!');
-                        });
+                        // $('#test-event').on('click', function(e){
+                        //     console.log('Button pressed');
+                        //     socket.emit('test', 'Test');
+                        //     console.log('Event emitted!');
+                        // });
                     }).error(function (e){
                         openModal("Error!","Request has not been fullfilled!");
                     });
                 });
             }
+        });
+
+        $('#main-frame').on('click', '#test-event', function(e){
+            openModal("suca","suca");
         });
 
         /*
@@ -297,18 +302,23 @@
         */
     });
 
+    $("#dialog").dialog({
+        autoOpen: false
+    });
+
     /* Dialog Methods */
     $('#dialog-close').on('click', function (e) {
         $('#dialog-title').text('');
         $('#dialog-text').text('');
         enableScroll();
-        window.dialog.close();
+        //dialog.close();
+        $('#dialog').dialog('close');
     });
     function openModal(title, text) {
         $('#dialog-title').text(title);
         $('#dialog-text').text(text);
-        disableScroll();
-        window.dialog.showModal();
+        disableScroll();   
+        $('#dialog').dialog('open');
     }
     function disableScroll() {
         // Get the current page scroll position

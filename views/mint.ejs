@@ -69,10 +69,6 @@
 </html>
 
 <!-- JQuery / Bootstrap JS / CDN -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
-    integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-    crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 <!-- End JQuery / Bootstrap JS / CDN -->
 
@@ -85,48 +81,5 @@
 <script>
     wow = new WOW();
     wow.init();
-
-    $(document).ready(function (e) {
-        
-    });
-
-    // $('#test-event').on('click', function(e){
-    //     const socket = io('http://localhost:443');
-    //     socket.emit("test", "test");
-    // });
-
-    /* Dialog Methods */
-    $('#dialog-close').on('click', function (e) {
-        $('#dialog-title').text('');
-        $('#dialog-text').text('');
-        enableScroll();
-        window.dialog.close();
-    });
-    function openModal(title, text) {
-        $('#dialog-title').text(title);
-        $('#dialog-text').text(text);
-        disableScroll();
-        window.dialog.showModal();
-    }
-    function disableScroll() {
-        // Get the current page scroll position
-        scrollTop =
-            window.pageYOffset || document.documentElement.scrollTop;
-        scrollLeft =
-            window.pageXOffset || document.documentElement.scrollLeft,
-
-            // if any scroll is attempted,
-            // set this to the previous value
-            window.onscroll = function () {
-                window.scrollTo(scrollLeft, scrollTop);
-            };
-    }
-    function enableScroll() {
-        window.onscroll = function () { };
-    }
-    /* End Dialog Methods */
-
-
-
 </script>
 <!-- End Custom Page Logic -->
