@@ -38,7 +38,10 @@ io.on('connection', function(client){
 
 });
 
-//WebServer GET & POST Methods
+/**
+ * Webserver Main Routes (Express)
+ */
+
 app.get('/', (req, res) => {
     if(!req.session.isAuthenticated){
         res.render('index', { isAuthenticated: false });
@@ -87,6 +90,10 @@ app.get('/mint', (req, res) => {
         //TO DO
     }
 });
+
+/**
+ * End Webserver Main Routes (Express)
+ */
 
 /**
  * Login form route
@@ -290,89 +297,3 @@ app.post('/checkUser', async (req, res) => {
 /**
  * End API Routes Definition
  */
-
-
-/**
- * Dev/Staging
- */
-
-// //TEST DEV REFERENCE `'"
-
-// app.post('/redirect', (req,res) => {
-//     if(!req.session.isAuthenticated){
-//         res.redirect('../login');
-//     }else{
-//         res.redirect('../app');
-//     }
-// });
-
-// app.get("/requests",(req, res) =>{
-
-//     console.log(html);
-//     res.send(html);
-// })
-
-// app.get('/register', (req, res) => {
-//     res.render('register', {name: "notset", email: "notset", subject: "notset", message: "notset"});
-// });
-// app.get('/register', (req, res) => {
-//     res.render('register', {name: "notset", email: "notset", subject: "notset", message: "notset"});
-// });
-
-
-// app.post("/register", (req, res) => {
-//     try
-//     {
-//         console.log("Querying the DB...")
-//         var request = new sql.Request();
-
-//         var name = req.body.name;
-//         var email = req.body.email;
-//         var subject = req.body.subject;
-//         var message = req.body.message;
-
-//         request.input('name', sql.VarChar, name);
-//         request.input('email', sql.VarChar, email);
-//         request.input('subject', sql.VarChar, subject);
-//         request.input('message', sql.VarChar, message);
-
-//         var query = "INSERT INTO [dbo].Contact (name,email,subject,message) VALUES (@name,@email,@subject,@message)";
-
-//         request.query(query, function (err, recordset) {
-//             if (err){
-//                 console.log("Error: " + err)
-//                 res.render('error', {error: err});
-//             }
-//             // send records as a response, if any
-//             console.log(recordset);
-//             res.render('register', {name: name, email: email, subject: subject, message: message}); //generate register page with form-passed data
-//         });
-//     }
-//     catch(err){
-//         res.render('error', {error: err})
-//     }
-// });
-
-// app.post("/requests", (req, res) =>{
-//     var request = new sql.Request();
-//     var query = "SELECT * FROM [dbo].Contact";
-//     request.query(query, (err, recordset) => {
-//         if (err){
-//             console.log("Error: " + err)
-//             res.render('error', {error: err});
-//         }
-//         res.render('requests', {_records: JSON.stringify(recordset.recordset)});
-//     })
-// })
-
-// app.get("/requests", (req, res) =>{
-//     var request = new sql.Request();
-//     var query = "SELECT * FROM [dbo].Contact";
-//     request.query(query, (err, recordset) => {
-//         if (err){
-//             console.log("Error: " + err)
-//             res.render('error', {error: err});
-//         }
-//         res.render('requests', {_records: JSON.stringify(recordset.recordset)});
-//     })
-// })
