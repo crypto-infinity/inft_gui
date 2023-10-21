@@ -1,12 +1,29 @@
-//dependencies initialization
-const {httpServer,app,sql,io} = require("./initializer"); //Initializer JS Module
-const authProvider = require('./auth/microsoft_authProvider'); //MS Authentication Provider
+/**
+ * Dependencies Init
+ */
+
+const {app,io} = require("./js/init/init_express"); //Webserver Express Init
+const sql = require("./js/init/init_sql"); //SQL Connection Init
+const authProvider = require('./auth/microsoft_authProvider'); //MS Authentication Init
 const crypto = require('crypto'); //Cryptographic check of has/salts for legacy auth
-const { provider,signer,contract } = require('./js/web3');
+const { provider,signer,contract } = require('./js/init/init_web3'); //web3 Instances Init
+
+/**
+ * End Dependencies Init
+ */
+
+/**
+ * Utility Init
+ */
+
 const { setTimeout } = require("timers/promises");
 
 /**
- * Websocket Listeners
+ * End Utility Init
+ */ 
+
+/**
+ * Websocket Listeners (Socket.IO)
  */
 
 io.on('connection', function(client){
