@@ -92,7 +92,9 @@ app.get('/mint', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
-        //TO DO
+        res.send({
+            username: req.session.username
+        });
     }
 });
 

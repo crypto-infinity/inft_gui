@@ -11,7 +11,7 @@
         integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -112,19 +112,15 @@
 
 <script src="../node_modules/ejs/ejs.min.js"></script>
 <script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
-    integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script src="js/scrollIt.min.js"></script>
 <script src="js/wow.min.js"></script>
 <script>
     /*
         Websocket Methods
     */
-    const socket = io('http://localhost:443');
+    const socket = io();
     socket.on("connect_error", () => { //automatic connection error error handling
         setTimeout(() => {
             socket.connect();
@@ -148,7 +144,38 @@
     wow.init();
     
     $(document).ready(function (e) {
-        var opened_tab = "";
+        var opened_tab = "app"; //set current open tab
+
+        /* Dialog Methods */
+        $('#dialog-close').on('click', function (e) {
+            $('#dialog-title').text('');
+            $('#dialog-text').text('');
+            enableScroll();
+            dialog.close();
+        });
+        function openModal(title, text) {
+            $('#dialog-title').text(title);
+            $('#dialog-text').text(text);
+            disableScroll();   
+            window.dialog.showModal();
+        }
+        function disableScroll() {
+            // Get the current page scroll position
+            scrollTop =
+                window.pageYOffset || document.documentElement.scrollTop;
+            scrollLeft =
+                window.pageXOffset || document.documentElement.scrollLeft,
+
+                // if any scroll is attempted,
+                // set this to the previous value
+                window.onscroll = function () {
+                    window.scrollTo(scrollLeft, scrollTop);
+                };
+        }
+        function enableScroll() {
+            window.onscroll = function () { };
+        }
+        /* End Dialog Methods */
 
         /*
             Navbar
@@ -206,10 +233,9 @@
 
         $('#mint').on('click', function (e) {
             if (opened_tab != "mint") {
-                $.get('./views/mint.ejs', function (template) {
+                $.get('views/mint.ejs', function (template) {
                     // Compile the EJS template.
                     var base_template = ejs.compile(template);
-
                     $.get('/mint', function (data) {
                         // Generate the html from the given data.
                         var html = base_template(data);
@@ -220,9 +246,13 @@
                         //     socket.emit('test', 'Test');
                         //     console.log('Event emitted!');
                         // });
-                    }).error(function (e){
+                    }).fail(function (e){
+                        console.log("Ajax Query failed");
                         openModal("Error!","Request has not been fullfilled!");
                     });
+                }).fail(function(){
+                    console.log("Ajax Query failed");
+                    openModal("Error!","Please reload the page");
                 });
             }
         });
@@ -301,42 +331,6 @@
             End Marketplace Tab 
         */
     });
-
-    $("#dialog").dialog({
-        autoOpen: false
-    });
-
-    /* Dialog Methods */
-    $('#dialog-close').on('click', function (e) {
-        $('#dialog-title').text('');
-        $('#dialog-text').text('');
-        enableScroll();
-        //dialog.close();
-        $('#dialog').dialog('close');
-    });
-    function openModal(title, text) {
-        $('#dialog-title').text(title);
-        $('#dialog-text').text(text);
-        disableScroll();   
-        $('#dialog').dialog('open');
-    }
-    function disableScroll() {
-        // Get the current page scroll position
-        scrollTop =
-            window.pageYOffset || document.documentElement.scrollTop;
-        scrollLeft =
-            window.pageXOffset || document.documentElement.scrollLeft,
-
-            // if any scroll is attempted,
-            // set this to the previous value
-            window.onscroll = function () {
-                window.scrollTo(scrollLeft, scrollTop);
-            };
-    }
-    function enableScroll() {
-        window.onscroll = function () { };
-    }
-    /* End Dialog Methods */
 
     /*
         Slider JS

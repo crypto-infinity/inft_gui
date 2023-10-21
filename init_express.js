@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const sessions = require('express-session');
 const { Server } = require("socket.io");
 const { createServer } = require("http");
+const path = require('path'); 
 
 //Express initialization
 const app = express();              
@@ -21,8 +22,8 @@ try {
     //webserver listener and registrations
     httpServer.listen(port, () => { console.log(`Now listening on port ${port}`); }); //HTTP & WS
 
-    app.set('views', './views');
     app.set('view engine', 'ejs');
+    app.set('views', path.join(__dirname, 'views'));
     app.use(express.static(__dirname));
     app.use(bodyParser.urlencoded({ extended: true }))
     app.use(sessions({
