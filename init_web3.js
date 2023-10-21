@@ -2,21 +2,23 @@ require('dotenv').config(); //Import .env
 const { API_KEY_GOERLI_ALCHEMY, PRIVATE_KEY, CONTRACT_ADDRESS, CONNECTION_STRING_GOERLI_ALCHEMY_HTTPS } = process.env;
 
 const { ethers } = require("ethers");
-const contract_json = require("../abi/standardNFT_DB.json");
+const contract_json = require("./abi/standardNFT_DB.json");
 
 try{
     const provider = new ethers.providers.JsonRpcProvider(CONNECTION_STRING_GOERLI_ALCHEMY_HTTPS);
     const signer = new ethers.Wallet(PRIVATE_KEY, provider);
     const contract = new ethers.Contract(CONTRACT_ADDRESS, contract_json.abi, signer);
+
+    module.exports = {
+        provider,
+        signer,
+        contract
+    };
 }catch(err){
     throw err;
 }
 
-module.exports = {
-    provider,
-    signer,
-    contract
-};
+
 
 /**
  * DEV REFERENCE

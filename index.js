@@ -1,9 +1,27 @@
-//dependencies initialization
-const {httpServer,app,sql,io} = require("./initializer"); //Initializer JS Module
-const authProvider = require('./auth/microsoft_authProvider'); //MS Authentication Provider
+/**
+ * Dependencies Init
+ */
+
+const {app,io} = require("./init_express"); //Express Init
+const {sql} = require("./init_sql"); //SQL Init
+const { provider,signer,contract } = require('./init_web3'); //Web3 Endpoint Init
+
+const authProvider = require('./auth/microsoft_authProvider'); //MS Provider Init
+
+/**
+ * End Dependencies Init
+ */
+
+/**
+ * Utilities Init
+ */
+
 const crypto = require('crypto'); //Cryptographic check of has/salts for legacy auth
-const { provider,signer,contract } = require('./js/web3');
 const { setTimeout } = require("timers/promises");
+
+/**
+ * End Utilities Init
+ */
 
 /**
  * Websocket Listeners
@@ -20,6 +38,10 @@ io.on('connection', function(client){
 
 
 });
+
+/**
+ * End Websocket Listeners (Socket.IO)
+ */
 
 /**
  * Webserver Main Routes (Express)
@@ -215,9 +237,9 @@ app.get('/signin/microsoft', (req,res) => {
     }
 });
 
-app.post('/auth/redirect', (req,res,next) => {
+app.post('/auth/redirect', (req,res) => {
     if(!req.session.isAuthenticated){
-        authProvider.handleRedirect(req,res,next);
+        authProvider.handleRedirect(req,res);
     }else{
         res.redirect('../app');
     }
