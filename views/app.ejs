@@ -121,20 +121,34 @@
         Websocket Methods
     */
     const socket = io();
+
+    socket.on('connect', function(){
+        console.log("WS Connection connected!");
+        socket.on('blockchain_task_finished', function(arg){
+            if (socket.recovered) {
+                console.log("WS Connection recovered!");
+                console.log("Blockchain Task " + arg + " finished! Socket ID: " + socket.id);
+            } else {
+                console.log("WS Connection NOT recovered, but it's new!");
+                console.log("Blockchain Task " + arg + " finished with socket not recovered! Socket ID: " + socket.id);
+            }  
+        });
+
+    });
+
     socket.on("connect_error", () => { //automatic connection error error handling
+        console.log("WS Connection can't be reestablished");
         setTimeout(() => {
             socket.connect();
         }, 1000);
     });
     socket.on("disconnect", (reason) => { //handle specific disconnection cases
+        console.log("WS Connection disconnected");
         if (reason === "io server disconnect") {
             socket.connect();
         }
     });
 
-    socket.on('test-finished', function(arg){
-        console.log('Data received from WS: ' + arg);
-    });
     /*
         End Websocket Methods
     */
@@ -272,6 +286,12 @@
             console.log("Blockchain query parameters: " + parameters);
             socket.emit("blockchain_task",parameters);
         });
+
+        $('#main-frame').on('click', '#send', function(e){
+            openModal("Notification!","I'm doing something interesting today, what about you?");
+        });
+
+
 
         /*
             End Mint Tab 

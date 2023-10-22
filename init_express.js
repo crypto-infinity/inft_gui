@@ -14,7 +14,12 @@ const port = 443; //WebServer Port
 
 //Websocket initialization
 const httpServer = createServer(app);
-const io = new Server(httpServer, {}); //Socket.io HTTP Wrapper
+const io = new Server(httpServer, {
+    connectionStateRecovery: {
+        maxDisconnectionDuration: 2 * 60 * 1000,
+        skipMiddlewares: true
+    }
+}); //Socket.io HTTP Wrapper
 
 const oneDay = 1000 * 60 * 60 * 24;
 

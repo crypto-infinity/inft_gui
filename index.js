@@ -28,16 +28,16 @@ const { setTimeout } = require("timers/promises");
  */
 
 io.on('connection', function(client){
+    var count = 0;
     console.log("Connected to WebSocket Server! Client: " + client.id);
 
-    client.on('test', async (socket) => {
-        console.log("Event test triggered! Data: " + socket);
-        const timer = await setTimeout(3000, "Time has come!");
-        client.emit('test-finished',timer);
-    });
-
-    client.on('blockchain_task', async function(socket){
-        console.log("Blockchain event received from " + socket + ". Beginning execution.");
+    client.on('blockchain_task', async function(data){
+        console.log("Blockchain event received from " + client.id + ". Beginning execution.");
+        console.log("Data received: " + data.id);
+        await setTimeout(30000);
+        console.log("Blockchain event " + count + " finished!");
+        client.emit('blockchain_task_finished',count);
+        count++;
         //event.enqueue
         //wait for execution
         //return feedback
