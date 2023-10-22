@@ -92,6 +92,7 @@ class AuthProvider {
             req.session.account = tokenResponse.account;
             req.session.username = tokenResponse.account.name;
 
+            //INFT Custom Express Values
             req.session.isAuthenticated = true;
             req.session.authMethod = "ms";
 

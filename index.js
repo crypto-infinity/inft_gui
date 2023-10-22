@@ -36,6 +36,13 @@ io.on('connection', function(client){
         client.emit('test-finished',timer);
     });
 
+    client.on('blockchain_task', async function(socket){
+        console.log("Blockchain event received from " + socket + ". Beginning execution.");
+        //event.enqueue
+        //wait for execution
+        //return feedback
+    });
+
 
 });
 
@@ -63,7 +70,7 @@ app.get('/app', (req, res) => {
     else{
         if(req.session.authMethod != undefined){
             if(req.session.authMethod == "ms"){
-                console.log(req.session.account);
+                //console.log(req.session.account);
                 res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: JSON.stringify(req.session.account), error: false });
             }else if(req.session.authMethod == "mm"){
                 res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: "", error: false });
@@ -137,7 +144,7 @@ app.post('/signin/legacy', (req, res) => {
                 req.session.destroy();
                 res.render('error', {error: err});
             }
-            console.log(recordset);
+            //console.log(recordset);
             if(recordset.recordset.length > 0){
                 var db_salt = recordset.recordset[0].salt;
                 var local_hash = crypto.createHash("sha256").update(password+db_salt).digest('base64');
@@ -147,7 +154,7 @@ app.post('/signin/legacy', (req, res) => {
                     req.session.isAuthenticated = true; //create session here
                     req.session.username = username;
                     req.session.authMethod = "legacy";
-                    res.redirect('../app');
+                    res.redirect('app');
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
@@ -243,7 +250,7 @@ app.post('/auth/redirect', (req,res) => {
     if(!req.session.isAuthenticated){
         authProvider.handleRedirect(req,res);
     }else{
-        res.redirect('../app');
+        res.redirect('app');
     }
 });
 
@@ -256,9 +263,9 @@ app.get('/signout', async (req,res) => {
     }
 });
 
-app.post('/redirect', async (req,res) => {
-    authProvider.handleRedirect(req,res);
-});
+// app.post('/redirect', async (req,res) => {
+//     authProvider.handleRedirect(req,res);
+// });
 
 /**
  * End Microsoft Entra ID Provider sign-in

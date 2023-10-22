@@ -146,7 +146,9 @@
     $(document).ready(function (e) {
         var opened_tab = "app"; //set current open tab
 
-        /* Dialog Methods */
+        /*
+            Dialog Methods
+        */
         $('#dialog-close').on('click', function (e) {
             $('#dialog-title').text('');
             $('#dialog-text').text('');
@@ -175,7 +177,9 @@
         function enableScroll() {
             window.onscroll = function () { };
         }
-        /* End Dialog Methods */
+        /*
+           End Dialog Methods
+        */
 
         /*
             Navbar
@@ -257,8 +261,16 @@
             }
         });
 
-        $('#main-frame').on('click', '#test-event', function(e){
-            openModal("suca","suca");
+        //reference #test-event rendered on main-frame
+        $('#main-frame').on('click', '#test-event', function(e){ 
+            var parameters = {
+                id: 1,
+                command: "test",
+                onError: "err",
+                username: "user@user.it"
+            }
+            console.log("Blockchain query parameters: " + parameters);
+            socket.emit("blockchain_task",parameters);
         });
 
         /*
