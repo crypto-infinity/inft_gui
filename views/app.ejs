@@ -32,30 +32,31 @@
     </dialog>
     <!-- end Dialog HTML definition -->
 
-
     <section class="main-banner-gradient">
         <div id="main">
+
             <!-- Navbar Definition -->
             <button class="navbar-toggler navbar-toggler-visible" type="button" id="navbar-expander">
                 <span class="fa fa-bars"></span>
             </button>
             <div id="sidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" id="nav-closer">&times;</a>
-                <a href="/"><img class="wow fadeInUp app-logo" src="../res/logo.png" data-wow-delay="0.2s"></a>
-                <a href="#"><i></i></a>
+                <a href="#" id="main-link"><img class="app-logo" src="../res/logo.png" data-wow-delay="0.2s"></a>
+                <a href="#"><i class="cursor-pointer"></i></a>
                 <a href="#"><h4>Hi, <%- username %>!</h4></a>
-                <a href="#"><i></i></a>
+                <a href="#"><i class="cursor-pointer"></i></a>
                 <a href="#" id="mint"><i class="fa-solid fa-wand-magic-sparkles"></i> Mint!</a>
-                <a href="#"><i></i></a>
+                <a href="#"><i class="cursor-pointer"></i></a>
                 <a href="#" id="nfts"><i class="fa-solid fa-list"></i> My NFTs</a>
                 <a href="#" id="marketplace"><i class="fa-solid fa-square-poll-vertical"></i> Marketplace</a>
-                <a href="#"><i></i></a>
-                <a href="#"><i></i></a>
+                <a href="#"><i class="cursor-pointer"></i></a>
+                <a href="#"><i class="cursor-pointer"></i></a>
                 <a href="#" id="profile"><i class="fa fa-user"></i> My Profile</a>
                 <a href="/signout" class="about-btn-solid navbar-centered">Logout</a>
             </div>
             <!-- End Navbar Definition -->
-                <!-- Operation Status Popup -->
+
+            <!-- Operation Status Popup -->
             <div>
                 <button class="navbar-toggler operation-status-icon" type="button" id="operation-status-expander">
                     <span class="fa-solid fa-bell"></span>
@@ -63,46 +64,23 @@
                 </button>
                 <div id="operation-status-popup" class="operation-status-popup">
                     <div id="operation-status-popup-content">
-                        <h4 id="operation-status-title">Ciao!</h4>
-                        <p>Ciao testo! Sucaklsfobwefpwiehfowebf934750hallalalahalalalalaaaaaa</p>
-                        <p>Ciao testo!</p>
-                        <p>Ciao testo!</p>
+                        <h4 id="operation-status-title"><i class="fa-solid fa-bars-progress"></i>  Current Tasks</h4>
+                        <div class="tile-margin-top-bottom">
+                            <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #23364341                    
+                        </div>
+                        <div class="tile-margin-top-bottom">
+                            <a href="#">❌</a> Removing NFT - ID: #23364341             
+                        </div>
+                        <div class="tile-margin-top-bottom">
+                            <a href="#">❌</a> Editing NFT - ID: #23364341       
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- End Operation Status Popup -->
 
             <div class="container centered-section" id="main-frame">
-                <div class="text-center">
-                    <h4>Your user data:</h4>
-                    <script>
-                        var output = <%- userdata %>;
-                    </script>
-                    <div class="tile">
-                        <img src="../res/sample/1.jpg" class="tile-icon centered">
-                        <script>
-                            document.write("<h4>" + output.name + "</h4>");
-                            document.write("<p>" + output.username + "</p>");
-                        </script>
-                        <a href="#" class="about-btn-solid read-more-nft">Read More</a>
-                    </div>
-                    <div class="tile">
-                        <img src="../res/sample/2.png" class="tile-icon">
-                        <script>
-                            document.write("<h4>" + output.name + "</h4>");
-                            document.write("<p>" + output.username + "</p>");
-                        </script>
-                        <a href="#" class="about-btn-solid read-more-nft">Read More</a>
-                    </div>
-                    <div class="tile">
-                        <img src="../res/sample/3.png" class="tile-icon">
-                        <script>
-                            document.write("<h4>" + output.name + "</h4>");
-                            document.write("<p>" + output.username + "</p>");
-                        </script>
-                        <a href="#" class="about-btn-solid read-more-nft">Read More</a>
-                    </div>
-                </div>
+                <!-- Dynamic JQuery content is rendered here -->
             </div>
         </div>
     </section>
@@ -124,16 +102,6 @@
 
     socket.on('connect', function(){
         console.log("WS Connection connected!");
-        socket.on('blockchain_task_finished', function(arg){
-            if (socket.recovered) {
-                console.log("WS Connection recovered!");
-                console.log("Blockchain Task " + arg + " finished! Socket ID: " + socket.id);
-            } else {
-                console.log("WS Connection NOT recovered, but it's new!");
-                console.log("Blockchain Task " + arg + " finished with socket not recovered! Socket ID: " + socket.id);
-            }  
-        });
-
     });
 
     socket.on("connect_error", () => { //automatic connection error error handling
@@ -143,10 +111,20 @@
         }, 1000);
     });
     socket.on("disconnect", (reason) => { //handle specific disconnection cases
-        console.log("WS Connection disconnected");
+        //console.log("WS Connection disconnected");
         if (reason === "io server disconnect") {
             socket.connect();
         }
+    });
+
+    socket.on('blockchain_task_finished', function(arg){
+        if (socket.recovered) {
+            //console.log("WS Connection recovered!");
+            console.log("Blockchain Task " + arg + " finished! Socket ID: " + socket.id);
+        } else {
+            //console.log("WS Connection NOT recovered, but it's new!");
+            console.log("Blockchain Task " + arg + " finished with socket not recovered! Socket ID: " + socket.id);
+        }  
     });
 
     /*
@@ -158,7 +136,26 @@
     wow.init();
     
     $(document).ready(function (e) {
-        var opened_tab = "app"; //set current open tab
+        var opened_tab = "main"; //set current open tab
+
+        if (opened_tab == "main") {
+                $.get('views/main.ejs', function (template) {
+                    // Compile the EJS template.
+                    var base_template = ejs.compile(template);
+                    $.get('/main', function (data) {
+                        // Generate the html from the given data.
+                        var html = base_template(data);
+                        opened_tab = "main";
+                        $('#main-frame').html(html);
+                    }).fail(function (e){
+                        console.log("Ajax Query failed");
+                        openModal("Error!","Please reload the page");
+                    });
+                }).fail(function(){
+                    console.log("Ajax Query failed");
+                    openModal("Error!","Please reload the page");
+                });
+            }
 
         /*
             Dialog Methods
@@ -246,6 +243,37 @@
         */
 
         /*
+            Main Tab  
+        */
+
+        $('#main-link').on('click', function (e) {
+            if (opened_tab != "main") {
+                $.get('views/main.ejs', function (template) {
+                    // Compile the EJS template.
+                    var base_template = ejs.compile(template);
+                    $.get('/main', function (data) {
+                        // Generate the html from the given data.
+                        var html = base_template(data);
+                        opened_tab = "main";
+                        $('#main-frame').animate({'opacity' : 0}, 300, function(){
+                            $('#main-frame').html(html).animate({'opacity': 1}, 400);
+                        });                       
+                    }).fail(function (e){
+                        console.log("Ajax Query failed");
+                        openModal("Error!","Please reload the page");
+                    });
+                }).fail(function(){
+                    console.log("Ajax Query failed");
+                    openModal("Error!","Please reload the page");
+                });
+            }
+        });
+
+        /*
+            End Main Tab 
+        */
+
+        /*
             Mint Tab 
         */
 
@@ -258,12 +286,9 @@
                         // Generate the html from the given data.
                         var html = base_template(data);
                         opened_tab = "mint";
-                        $('#main-frame').html(html);
-                        // $('#test-event').on('click', function(e){
-                        //     console.log('Button pressed');
-                        //     socket.emit('test', 'Test');
-                        //     console.log('Event emitted!');
-                        // });
+                        $('#main-frame').animate({'opacity' : 0}, 300, function(){
+                            $('#main-frame').html(html).animate({'opacity': 1}, 400);
+                        });       
                     }).fail(function (e){
                         console.log("Ajax Query failed");
                         openModal("Error!","Request has not been fullfilled!");
@@ -275,7 +300,8 @@
             }
         });
 
-        //reference #test-event rendered on main-frame
+        //Mint Events
+
         $('#main-frame').on('click', '#test-event', function(e){ 
             var parameters = {
                 id: 1,
@@ -285,13 +311,12 @@
             }
             console.log("Blockchain query parameters: " + parameters);
             socket.emit("blockchain_task",parameters);
+            openModal("Event sent!","Blockchain operation in progress. Please check the status bar for more info!");
         });
 
         $('#main-frame').on('click', '#send', function(e){
             openModal("Notification!","I'm doing something interesting today, what about you?");
         });
-
-
 
         /*
             End Mint Tab 
@@ -302,19 +327,7 @@
         */
 
         $('#profiles').on('click', function (e) {
-            if (opened_tab != "profile") {
-                $.get('./views/profile.ejs', function (template) {
-                    // Compile the EJS template.
-                    var base_template = ejs.compile(template);
-
-                    $.get('/profile', function (data) {
-                        // Generate the html from the given data.
-                        var html = base_template(data);
-                        opened_tab = "profile";
-                        $('#main-frame').html(html);
-                    });
-                });
-            }
+            //TO DO
         });
 
         /*
@@ -326,16 +339,7 @@
         */
 
         $('#nfts').on('click', function (e) {
-            $.get('./views/profile.ejs', function (template) {
-                // Compile the EJS template.
-                var base_template = ejs.compile(template);
-
-                $.get('/profile', function (data) {
-                    // Generate the html from the given data.
-                    var html = base_template(data);
-                    $('#main-frame').html(html);
-                });
-            });
+            //TO DO
         });
 
         /*
@@ -346,22 +350,15 @@
             Marketplace Tab 
         */
 
-        $('#profiles').on('click', function (e) {
-            $.get('./views/profile.ejs', function (template) {
-                // Compile the EJS template.
-                var base_template = ejs.compile(template);
-
-                $.get('/profile', function (data) {
-                    // Generate the html from the given data.
-                    var html = base_template(data);
-                    $('#main-frame').html(html);
-                });
-            });
+        $('#marketplace').on('click', function (e) {
+            //TO DO
         });
 
         /*
             End Marketplace Tab 
         */
+
+
     });
 
     /*

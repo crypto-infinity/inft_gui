@@ -54,6 +54,7 @@ io.on('connection', function(client){
  * Webserver Main Routes (Express)
  */
 
+//Default Website route
 app.get('/', (req, res) => {
     if(!req.session.isAuthenticated){
         res.render('index', { isAuthenticated: false });
@@ -63,6 +64,7 @@ app.get('/', (req, res) => {
     }
 });
 
+//Web App route, handles redirect phase after login
 app.get('/app', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
@@ -85,6 +87,18 @@ app.get('/app', (req, res) => {
     }
 });
 
+//Mainpage route, defaults to main.ejs
+app.get('/main', (req, res) => {
+    if(!req.session.isAuthenticated){
+        res.redirect('login');
+    }else{
+        res.send({
+            username: req.session.username
+        });
+    }
+});
+
+//Profile page Route
 app.get('/profile', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
@@ -95,6 +109,7 @@ app.get('/profile', (req, res) => {
     }
 });
 
+//Mint Page route
 app.get('/mint', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
