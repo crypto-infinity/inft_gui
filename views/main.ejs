@@ -15,34 +15,21 @@
 
 <body>
     <section class="main-banner-gradient">
-        <div class="text-center">
+        <div class="container">
             <h4>Your user data:</h4>
             <script>
-                var output = <%- username %>;
-                document.write(output);
+                var output = <%- userdata %>;
             </script>
             <div class="tile">
                 <img src="../res/sample/1.jpg" class="tile-icon centered">
-                <script>
-                    document.write("<h4>" + output.name + "</h4>");
-                    document.write("<p>" + output.username + "</p>");
-                </script>
                 <a href="#" class="about-btn-solid read-more-nft">Read More</a>
             </div>
             <div class="tile">
                 <img src="../res/sample/2.png" class="tile-icon">
-                <script>
-                    document.write("<h4>" + output.name + "</h4>");
-                    document.write("<p>" + output.username + "</p>");
-                </script>
                 <a href="#" class="about-btn-solid read-more-nft">Read More</a>
             </div>
             <div class="tile">
                 <img src="../res/sample/3.png" class="tile-icon">
-                <script>
-                    document.write("<h4>" + output.name + "</h4>");
-                    document.write("<p>" + output.username + "</p>");
-                </script>
                 <a href="#" class="about-btn-solid read-more-nft">Read More</a>
             </div>
         </div>
@@ -65,5 +52,10 @@
 <script>
     wow = new WOW();
     wow.init();
+
+    $(document).ready(function (e) {
+        $('.tile-icon').after("<p>" + output.name + "</p>");
+        $('.tile-icon').after("<p>" + output.username + "</p>");
+    });
 </script>
 <!-- End Custom Page Logic -->

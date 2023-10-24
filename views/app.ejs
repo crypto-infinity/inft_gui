@@ -28,7 +28,7 @@
             <h2 id="dialog-title"></h2>
             <p id="dialog-text"></p>
         </div>
-        <button id="dialog-close" aria-label="close" class="x">❌</button>
+        <button id="dialog-close" aria-label="close" class="x"><i class="fa-solid fa-x"></i></button>
     </dialog>
     <!-- end Dialog HTML definition -->
 
@@ -64,15 +64,20 @@
                 </button>
                 <div id="operation-status-popup" class="operation-status-popup">
                     <div id="operation-status-popup-content">
-                        <h4 id="operation-status-title"><i class="fa-solid fa-bars-progress"></i>  Current Tasks</h4>
-                        <div class="tile-margin-top-bottom">
-                            <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #23364341                    
+                        <div class="psticky">
+                            <h4 id="operation-status-title"><i class="fa-solid fa-bars-progress"></i>  Current Tasks</h4>
                         </div>
-                        <div class="tile-margin-top-bottom">
-                            <a href="#">❌</a> Removing NFT - ID: #23364341             
-                        </div>
-                        <div class="tile-margin-top-bottom">
-                            <a href="#">❌</a> Editing NFT - ID: #23364341       
+                        <div id="operation-status-content">
+                            <h6 id="operation-status-nocontent">No tasks for now!</h6>
+                            <!-- <div class="tile-margin-top-bottom">
+                                <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #23364341                    
+                            </div>
+                            <div class="tile-margin-top-bottom">
+                                <a href="#"><i class="fa-solid fa-check"></i></a> Removing NFT - ID: #23364341             
+                            </div>
+                            <div class="tile-margin-top-bottom">
+                                <a href="#"><i class="fa-solid fa-xmark"></i></a> Editing NFT - ID: #23364341       
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -95,6 +100,19 @@
 <script src="js/scrollIt.min.js"></script>
 <script src="js/wow.min.js"></script>
 <script>
+
+    /*
+        Global Variables Definition
+    */
+   
+    var NFT_ID_COUNT = 0;
+    var CURRENT_JOBS = 0;
+
+    /*
+        End Global Variables Definition
+    */
+
+
     /*
         Websocket Methods
     */
@@ -117,13 +135,29 @@
         }
     });
 
-    socket.on('blockchain_task_finished', function(arg){
+    socket.on('blockchain_task_finished', function(data){
         if (socket.recovered) {
-            //console.log("WS Connection recovered!");
-            console.log("Blockchain Task " + arg + " finished! Socket ID: " + socket.id);
+            console.log("Blockchain Task " + data.id + " finished - socket recovered! Socket ID: " + socket.id);
         } else {
-            //console.log("WS Connection NOT recovered, but it's new!");
-            console.log("Blockchain Task " + arg + " finished with socket not recovered! Socket ID: " + socket.id);
+            //Task Finished, let's remove the spinning wheel
+            console.log("Blockchain Task " + data.id + " finished! Socket ID: " + socket.id);
+            var status_link_obj = $('#operation-status-content').find('#' + data.id).find('i');
+            status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-check');
+
+            //Current Job Counter Decreasing
+            CURRENT_JOBS--;
+            $('#notification-count').text(CURRENT_JOBS);
+            if(CURRENT_JOBS == 0){ 
+                $('#notification-count').text(""); 
+            }
+
+            //attach handler for tile removal
+            status_link_obj.on('click', function(){
+                $('#operation-status-content').find('#' + data.id).remove();
+                if($('#operation-status-content').children().length == 1){
+                    $('#operation-status-nocontent').show();
+                }                
+            });
         }  
     });
 
@@ -138,6 +172,7 @@
     $(document).ready(function (e) {
         var opened_tab = "main"; //set current open tab
 
+
         if (opened_tab == "main") {
                 $.get('views/main.ejs', function (template) {
                     // Compile the EJS template.
@@ -146,7 +181,9 @@
                         // Generate the html from the given data.
                         var html = base_template(data);
                         opened_tab = "main";
-                        $('#main-frame').html(html);
+                        $('#main-frame').animate({'opacity' : 0}, 300, function(){
+                            $('#main-frame').html(html).animate({'opacity': 1}, 400);
+                        });
                     }).fail(function (e){
                         console.log("Ajax Query failed");
                         openModal("Error!","Please reload the page");
@@ -231,7 +268,7 @@
             if($('#operation-status-popup').css('display') == "none"){
                 $('#operation-status-expander').children().addClass('fa-regular').removeClass('fa-solid');
                 $('#operation-status-popup').css('display','block');
-                //$('#notification-count').html("10"); //SETS NOTIFICATION COUNT
+                //$('#notification-NFT_ID_COUNT').html("10"); //SETS NOTIFICATION COUNT
             }else if ($('#operation-status-popup').css('display') == "block"){
                 $('#operation-status-popup').css('display','none');
                 $('#operation-status-expander').children().addClass('fa-solid').removeClass('fa-regular');
@@ -304,15 +341,28 @@
 
         $('#main-frame').on('click', '#test-event', function(e){ 
             var parameters = {
-                id: 1,
-                command: "test",
-                onError: "err",
-                username: "user@user.it"
+                id: NFT_ID_COUNT,
+                nftName: $('#main-frame').find('#nftname').val()
             }
             console.log("Blockchain query parameters: " + parameters);
             socket.emit("blockchain_task",parameters);
-            openModal("Event sent!","Blockchain operation in progress. Please check the status bar for more info!");
+            $('#operation-status-nocontent').hide();
+            $('#operation-status-nocontent').after(`
+                <div class="tile-margin-top-bottom" id="${parameters.id}">                    
+                    <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #${parameters.nftName}                    
+                </div>
+            `);
+            CURRENT_JOBS++;
+            $('#notification-count').text(CURRENT_JOBS);
+            openModal(`Event ID ${parameters.id} sent!`,"Please check the status bar for more info!");
+            NFT_ID_COUNT++;
         });
+
+        /*
+            <div class="tile-margin-top-bottom">
+                <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #23364341                    
+            </div>
+        */
 
         $('#main-frame').on('click', '#send', function(e){
             openModal("Notification!","I'm doing something interesting today, what about you?");

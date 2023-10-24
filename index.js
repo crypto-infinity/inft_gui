@@ -34,9 +34,9 @@ io.on('connection', function(client){
     client.on('blockchain_task', async function(data){
         console.log("Blockchain event received from " + client.id + ". Beginning execution.");
         console.log("Data received: " + data.id);
-        await setTimeout(30000);
-        console.log("Blockchain event " + count + " finished!");
-        client.emit('blockchain_task_finished',count);
+        await setTimeout(10000);
+        console.log("Blockchain event ID" + data.id + " finished!");
+        client.emit('blockchain_task_finished',data);
         count++;
         //event.enqueue
         //wait for execution
@@ -92,8 +92,11 @@ app.get('/main', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
-        res.send({
-            username: req.session.username
+        res.send({ 
+            isAuthenticated: req.session.isAuthenticated, 
+            username: req.session.username, 
+            userdata: JSON.stringify(req.session.account), 
+            error: false 
         });
     }
 });
