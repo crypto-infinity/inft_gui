@@ -15,23 +15,32 @@
 
 <body>
     <section class="main-banner-gradient">
-        <div class="container">
-            <h4>Your user data:</h4>
+        <div>
+            <h4 class="centered">Your user data:</h4>
             <script>
                 var output = <%- userdata %>;
             </script>
-            <div class="tile">
-                <img src="../res/sample/1.jpg" class="tile-icon centered">
-                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="tile">
+                        <img src="../res/sample/1.jpg" class="tile-icon centered">
+                        <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tile">
+                        <img src="../res/sample/2.png" class="tile-icon">
+                        <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tile">
+                        <img src="../res/sample/3.png" class="tile-icon">
+                        <a href="#" class="about-btn-solid read-more-nft">Read More</a>
+                    </div>
+                </div>
             </div>
-            <div class="tile">
-                <img src="../res/sample/2.png" class="tile-icon">
-                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
-            </div>
-            <div class="tile">
-                <img src="../res/sample/3.png" class="tile-icon">
-                <a href="#" class="about-btn-solid read-more-nft">Read More</a>
-            </div>
+                        
         </div>
     </section>
 </body>

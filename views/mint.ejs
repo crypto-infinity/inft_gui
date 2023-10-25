@@ -22,22 +22,23 @@
     <section class="main-banner-gradient">
         <div class="col-md-4">
             <div class="text-center">
+                <h4 class="centered">Mint your NFT(s)!</h4>
+                <!--  
+                    Requested data for NFT minting:
+                        address to,
+                        uint256 tokenId, -> 
+                        uint256 amount,
+                        string memory contract_uri,
+                        bool burnable,
+                        bool nonMutable
+                -->
                 <form class="centered prelative normal-padding" id="mint_form">
-                    <input type="file" id="myFile" name="filename" class="form-input w-50" multiple required>
-                    
+                    <input type="text" id="nftname" class="form-input w-50" name="username" placeholder="NFT Name" required>
+                    <input type="file" id="file-upload" name="filename" class="w-50" multiple required>
+                    <label for="file-upload" class="about-btn">Custom Upload</label> 
                     <span class="line"></span>
-                    <button class="about-btn w-50 text-uppercase" type="submit" name="send" id="send">Mint!</button>
+                    <button class="about-btn-solid w-50 text-uppercase" type="submit" name="send" id="mint-button">Mint!</button>
                 </form>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="text-center">
-                <form class="centered prelative normal-padding" id="mint_form">
-                    <input type="text" id="nftname" class="form-input w-50" name="username"
-                        placeholder="NFT Name" required>
-                    <span class="line"></span>
-                </form>
-                <button class="about-btn" id="test-event">Test</button>
             </div>
         </div>
     </section>

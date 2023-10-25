@@ -65,6 +65,10 @@ input[type="checkbox"] {
 	vertical-align: top;
 }
 
+input[type="file"] {
+    display: none;
+}
+
 /*
  	End Body General Classes
 */

@@ -42,15 +42,10 @@
             <div id="sidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" id="nav-closer">&times;</a>
                 <a href="#" id="main-link"><img class="app-logo" src="../res/logo.png" data-wow-delay="0.2s"></a>
-                <a href="#"><i class="cursor-pointer"></i></a>
                 <a href="#"><h4>Hi, <%- username %>!</h4></a>
-                <a href="#"><i class="cursor-pointer"></i></a>
                 <a href="#" id="mint"><i class="fa-solid fa-wand-magic-sparkles"></i> Mint!</a>
-                <a href="#"><i class="cursor-pointer"></i></a>
                 <a href="#" id="nfts"><i class="fa-solid fa-list"></i> My NFTs</a>
                 <a href="#" id="marketplace"><i class="fa-solid fa-square-poll-vertical"></i> Marketplace</a>
-                <a href="#"><i class="cursor-pointer"></i></a>
-                <a href="#"><i class="cursor-pointer"></i></a>
                 <a href="#" id="profile"><i class="fa fa-user"></i> My Profile</a>
                 <a href="/signout" class="about-btn-solid navbar-centered">Logout</a>
             </div>
@@ -339,7 +334,7 @@
 
         //Mint Events
 
-        $('#main-frame').on('click', '#test-event', function(e){ 
+        $('#main-frame').on('click', '#mint-button', function(e){ 
             var parameters = {
                 id: NFT_ID_COUNT,
                 nftName: $('#main-frame').find('#nftname').val()
