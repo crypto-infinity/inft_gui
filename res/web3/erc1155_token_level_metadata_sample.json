@@ -1,0 +1,23 @@
+{
+  "description": "While the talks were ongoing, an elite Sith army infiltrated Coruscant and immediately began attacking important structures, including the Jedi Temple. Six Jedi Council members were killed as Sith warships pummeled the world with turbolaser fire. The Jedi Temple was eventually destroyed and the world was in ruins.",
+  "external_url": "https://www.swtor.com/",
+  "image": "https://ipfs.io/ipfs/QmNi1T88vMXP2vihU3QeP2Ry2CAKXHV26PZdVhexn1XgXj?filename=SWTOR_Logo_2.jpg",
+  "animation_url": "https://ipfs.io/ipfs/QmbbpKGiW1TL7S188zHCFeGML3UeRrTPru8tMchjtAcBxn?filename=swtor_cinematic.mp4",
+  "youtube_url": "https://www.youtube.com/watch?v=Pb8M5P1QKX8",
+  "name": "The Coruscant Sacking",
+  "attributes": [
+    { 
+      "trait_type": "Periodo Storico", 
+      "value": "Vecchia Repubblica"
+    },
+    { 
+      "trait_type": "Fazioni Coinvolte", 
+      "value": "Vecchia Repubblica - Vecchio Impero Sith"
+    },
+    {
+      "display_type": "date", 
+      "trait_type": "Anni - BBY", 
+      "value": 115277545656
+    }
+  ]
+}

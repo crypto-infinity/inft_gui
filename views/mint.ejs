@@ -22,20 +22,31 @@
     <section class="main-banner-gradient">
         <div class="col-md-4">
             <div class="text-center">
-                <h4 class="centered">Mint your NFT(s)!</h4>
+                
                 <!--  
                     Requested data for NFT minting:
-                        address to,
-                        uint256 tokenId, -> 
-                        uint256 amount,
-                        string memory contract_uri,
-                        bool burnable,
-                        bool nonMutable
+                        string image url
+                        string name
+
+                        (optional) string description
+                        (optional) string url for redirect
+                        (optional) string YT video
+                        (optional) obj attributes, eg:
+                        { 
+                            "trait_type": "Periodo Storico", 
+                            "value": "Vecchia Repubblica"
+                        },
                 -->
-                <form class="centered prelative normal-padding" id="mint_form">
-                    <input type="text" id="nftname" class="form-input w-50" name="username" placeholder="NFT Name" required>
-                    <input type="file" id="file-upload" name="filename" class="w-50" multiple required>
-                    <label for="file-upload" class="about-btn">Custom Upload</label> 
+
+                <form class="centered prelative" id="mint_form">
+                    <h4 class="centered">Your NFT</h4>
+                    <img class="card-icon" src="../res/user.png" alt="User">
+                    <input type="file" id="file-upload" name="filename" class="w-50" style="display: none;" multiple required>
+                    <input type="text" id="nftname" class="form-input w-50" placeholder="Name*" required>
+                    <input type="textarea" id="description" class="form-input w-50" placeholder="Description">
+                    <input type="text" id="nfturl" class="form-input w-50" placeholder="Website URL">
+                    <input type="text" id="nftyoutubevideourl" class="form-input w-50" placeholder="Animation Video">
+                    
                     <span class="line"></span>
                     <button class="about-btn-solid w-50 text-uppercase" type="submit" name="send" id="mint-button">Mint!</button>
                 </form>
@@ -60,5 +71,45 @@
 <script>
     wow = new WOW();
     wow.init();
+
+    $(document).ready(function (e) {
+        $('.card-icon').on('click', function(e){
+            $('#file-upload').click();
+        });
+
+        $('#file-upload').on('change', function(e){
+            if(validFileType(document.getElementById("file-upload").files[0])){
+                console.log("IMG Source: " + document.getElementById("file-upload").files[0]);
+                $('.card-icon').attr('src',URL.createObjectURL(document.getElementById("file-upload").files[0]));
+            }else{
+                alert('File not valid!');
+            }
+
+        });                             
+
+
+
+
+
+        //Image Check
+
+        // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
+        const fileTypes = [
+        "image/apng",
+        "image/bmp",
+        "image/gif",
+        "image/jpeg",
+        "image/pjpeg",
+        "image/png",
+        "image/svg+xml",
+        "image/tiff",
+        "image/webp",
+        "image/x-icon",
+        ];
+
+        function validFileType(file) {
+            return fileTypes.includes(file.type);
+        }
+    });
 </script>
 <!-- End Custom Page Logic -->

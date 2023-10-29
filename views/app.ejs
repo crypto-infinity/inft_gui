@@ -337,7 +337,8 @@
         $('#main-frame').on('click', '#mint-button', function(e){ 
             var parameters = {
                 id: NFT_ID_COUNT,
-                nftName: $('#main-frame').find('#nftname').val()
+                nftName: $('#main-frame').find('#nftname').val(),
+                nftImageUrl: $('#main-frame').find('#file-upload').val()
             }
             console.log("Blockchain query parameters: " + parameters);
             socket.emit("blockchain_task",parameters);

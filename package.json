@@ -40,6 +40,7 @@
     "linkedin-private-api": "^1.1.2",
     "morgan": "^1.10.0",
     "mssql": "^10.0.1",
+    "nft.storage": "^7.1.1",
     "pug": "^3.0.2",
     "session": "^0.1.0",
     "sessions": "^0.0.2-7",

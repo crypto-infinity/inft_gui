@@ -5,6 +5,7 @@
 const {app,io} = require("./init_express"); //Express Init
 const {sql} = require("./init_sql"); //SQL Init
 const { provider,signer,contract } = require('./init_web3'); //Web3 Endpoint Init
+const { nftClient } = require('./init_nftstorage'); //NFT.storage client Object Init
 
 const authProvider = require('./auth/microsoft_authProvider'); //MS Provider Init
 
