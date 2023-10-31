@@ -96,13 +96,21 @@
 <script src="js/scrollIt.min.js"></script>
 <script src="js/wow.min.js"></script>
 
+<!-- Dialog opener functions -->
+
 <script type="module">
     import { openModal, disableScroll, enableScroll } from '../js/library.js';
+
     $('#profile').on('click', function (e) {
         openModal("Ciao","Ciao");
     });
 
+
+
+
 </script>
+
+<!-- End Dialog opener functions -->
 
 <script>
 
@@ -177,8 +185,6 @@
     $(document).ready(function (e) {
         var opened_tab = "main"; //set current open tab
 
-        
-
         if (opened_tab == "main") {
                 $.get('views/main.ejs', function (template) {
                     // Compile the EJS template.
@@ -199,41 +205,6 @@
                     openModal("Error!","Please reload the page");
                 });
             }
-
-        /*
-            Dialog Methods
-        */
-        // $('#dialog-close').on('click', function (e) {
-        //     $('#dialog-title').text('');
-        //     $('#dialog-text').text('');
-        //     enableScroll();
-        //     dialog.close();
-        // });
-        // function openModal(title, text) {
-        //     $('#dialog-title').text(title);
-        //     $('#dialog-text').text(text);
-        //     disableScroll();   
-        //     window.dialog.showModal();
-        // }
-        // function disableScroll() {
-        //     // Get the current page scroll position
-        //     scrollTop =
-        //         window.pageYOffset || document.documentElement.scrollTop;
-        //     scrollLeft =
-        //         window.pageXOffset || document.documentElement.scrollLeft,
-
-        //         // if any scroll is attempted,
-        //         // set this to the previous value
-        //         window.onscroll = function () {
-        //             window.scrollTo(scrollLeft, scrollTop);
-        //         };
-        // }
-        // function enableScroll() {
-        //     window.onscroll = function () { };
-        // }
-        /*
-           End Dialog Methods
-        */
 
         /*
             Navbar
@@ -345,25 +316,46 @@
 
         //Mint Events
 
-        $('#main-frame').on('click', '#mint-button', function(e){ 
+        $('#main-frame').on('submit', 'form#mint_form', function(e){ 
+            $('#spin').show(0);
+            var form = this;
+            e.preventDefault();
+
+            //TO DO : image upload to BLOB
+
             var parameters = {
                 id: NFT_ID_COUNT,
+                nftImageUrl: "image_uri",
                 nftName: $('#main-frame').find('#nftname').val(),
-                nftImageUrl: $('#main-frame').find('#file-upload').val()
+                nftDescription: $('#main-frame').find('#nftdescription').val(),
+                nftUrl: $('#main-frame').find('#nfturl').val(),
+                nftAnimationVideo: $('#main-frame').find('#nftanimationvideourl').val()
             }
+
+            //Task emitter
             console.log("Blockchain query parameters: " + parameters);
             socket.emit("blockchain_task",parameters);
+
+            //adjust operation status GUI view
             $('#operation-status-nocontent').hide();
             $('#operation-status-nocontent').after(`
                 <div class="tile-margin-top-bottom" id="${parameters.id}">                    
                     <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #${parameters.nftName}                    
                 </div>
             `);
+
+            //increment counters and set view
             CURRENT_JOBS++;
-            $('#notification-count').text(CURRENT_JOBS);
-            $.openDialog(`Event ID ${parameters.id} sent!`,"Please check the status bar for more info!");
-            //openModal(`Event ID ${parameters.id} sent!`,"Please check the status bar for more info!");
             NFT_ID_COUNT++;
+            $('#notification-count').text(CURRENT_JOBS);
+                
+            //give feedback to user!
+            $('#spin').hide(0);
+            openModal(`Event ID ${parameters.id} sent!`,"Please check the status bar for more info!");
+        });
+
+        $('#main-frame').on('click', '#mint-button', function(e){ 
+
         });
 
         /*
