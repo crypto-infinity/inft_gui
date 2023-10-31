@@ -39,7 +39,7 @@
                 -->
 
                 <form class="centered prelative" id="mint_form">
-                    <h4 class="centered">Your NFT</h4>
+                    <h3 class="centered">Your NFT</h3>
                     <img class="card-icon" src="../res/user.png" alt="User">
                     <input type="file" id="file-upload" name="filename" class="w-50" style="display: none;" multiple required>
                     <input type="text" id="nftname" class="form-input w-50" placeholder="Name*" required>
@@ -79,13 +79,13 @@
 
         $('#file-upload').on('change', function(e){
             if(validFileType(document.getElementById("file-upload").files[0])){
-                console.log("IMG Source: " + document.getElementById("file-upload").files[0]);
                 $('.card-icon').attr('src',URL.createObjectURL(document.getElementById("file-upload").files[0]));
             }else{
                 alert('File not valid!');
             }
+        });
 
-        });                             
+
 
 
 

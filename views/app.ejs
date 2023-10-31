@@ -90,10 +90,20 @@
 
 <script src="../node_modules/ejs/ejs.min.js"></script>
 <script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
+<script type="module" src="../js/library.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script src="js/scrollIt.min.js"></script>
 <script src="js/wow.min.js"></script>
+
+<script type="module">
+    import { openModal, disableScroll, enableScroll } from '../js/library.js';
+    $('#profile').on('click', function (e) {
+        openModal("Ciao","Ciao");
+    });
+
+</script>
+
 <script>
 
     /*
@@ -167,6 +177,7 @@
     $(document).ready(function (e) {
         var opened_tab = "main"; //set current open tab
 
+        
 
         if (opened_tab == "main") {
                 $.get('views/main.ejs', function (template) {
@@ -192,34 +203,34 @@
         /*
             Dialog Methods
         */
-        $('#dialog-close').on('click', function (e) {
-            $('#dialog-title').text('');
-            $('#dialog-text').text('');
-            enableScroll();
-            dialog.close();
-        });
-        function openModal(title, text) {
-            $('#dialog-title').text(title);
-            $('#dialog-text').text(text);
-            disableScroll();   
-            window.dialog.showModal();
-        }
-        function disableScroll() {
-            // Get the current page scroll position
-            scrollTop =
-                window.pageYOffset || document.documentElement.scrollTop;
-            scrollLeft =
-                window.pageXOffset || document.documentElement.scrollLeft,
+        // $('#dialog-close').on('click', function (e) {
+        //     $('#dialog-title').text('');
+        //     $('#dialog-text').text('');
+        //     enableScroll();
+        //     dialog.close();
+        // });
+        // function openModal(title, text) {
+        //     $('#dialog-title').text(title);
+        //     $('#dialog-text').text(text);
+        //     disableScroll();   
+        //     window.dialog.showModal();
+        // }
+        // function disableScroll() {
+        //     // Get the current page scroll position
+        //     scrollTop =
+        //         window.pageYOffset || document.documentElement.scrollTop;
+        //     scrollLeft =
+        //         window.pageXOffset || document.documentElement.scrollLeft,
 
-                // if any scroll is attempted,
-                // set this to the previous value
-                window.onscroll = function () {
-                    window.scrollTo(scrollLeft, scrollTop);
-                };
-        }
-        function enableScroll() {
-            window.onscroll = function () { };
-        }
+        //         // if any scroll is attempted,
+        //         // set this to the previous value
+        //         window.onscroll = function () {
+        //             window.scrollTo(scrollLeft, scrollTop);
+        //         };
+        // }
+        // function enableScroll() {
+        //     window.onscroll = function () { };
+        // }
         /*
            End Dialog Methods
         */
@@ -350,18 +361,9 @@
             `);
             CURRENT_JOBS++;
             $('#notification-count').text(CURRENT_JOBS);
-            openModal(`Event ID ${parameters.id} sent!`,"Please check the status bar for more info!");
+            $.openDialog(`Event ID ${parameters.id} sent!`,"Please check the status bar for more info!");
+            //openModal(`Event ID ${parameters.id} sent!`,"Please check the status bar for more info!");
             NFT_ID_COUNT++;
-        });
-
-        /*
-            <div class="tile-margin-top-bottom">
-                <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #23364341                    
-            </div>
-        */
-
-        $('#main-frame').on('click', '#send', function(e){
-            openModal("Notification!","I'm doing something interesting today, what about you?");
         });
 
         /*

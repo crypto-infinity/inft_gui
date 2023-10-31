@@ -461,8 +461,11 @@ dialog {
 	border: 0;
 	width: 250px;
 	height: 250px;
-	margin: 40px;
-	object-fit: contain;
+	margin-bottom: 40px;
+	margin-left: 40px;
+	margin-right: 40px;
+	margin-top: 20px;
+	object-fit: fill;
 	cursor: pointer;
 }
 
