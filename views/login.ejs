@@ -4,18 +4,28 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Login/Signup - INFT</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <link rel="stylesheet" href="../css/animate.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-        integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-        integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="js/scrollIt.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script> //WOW effect initialization
+        wow = new WOW();
+        wow.init();
+    </script>
+
+    <!-- Custom Page Logic -->
+    <script type="module" src="../js/library.js"></script>
+    <script type="module" src="../js/ui/login.js"></script>
+    <!-- End JS -->
+
 </head>
 
 <body>
@@ -66,140 +76,3 @@
 </body>
 
 </html>
-
-<!-- JQuery / Bootstrap JS / CDN -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
-    integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-<!-- End JQuery / Bootstrap JS / CDN -->
-
-<!-- scrollIt js -->
-<script src="js/scrollIt.min.js"></script>
-<script src="js/wow.min.js"></script>
-<!-- End scrollIt js -->
-
-<!-- Custom Page Logic -->
-<script>
-    wow = new WOW();
-    wow.init();
-
-    $(document).ready(function (e) {
-        $('form#signin_form').on('submit', function (e) { //Form submit custom handler
-            $('#spin').show(0);
-            var form = this;
-            e.preventDefault();
-
-            if (document.activeElement.id == "login") {
-                $.ajax({
-                    url: "/checkUser",//API to check Users
-                    type: "POST",
-                    data: {
-                        username: document.getElementById('username').value
-                    },
-                    success: function (data, textStatus, xhr) {
-                        if (xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_NOT_EXISTENT") { //IF status message shows the user does not exist..
-                            $('#spin').hide(0);
-                            openModal("Error!", "User not existent! Please register first.");
-                            return; //let's block the form submit
-                        }
-                        $.ajax({
-                            url: "/signin/legacy",
-                            type: "POST",
-                            data: {
-                                username: document.getElementById('username').value,
-                                password: document.getElementById('password').value
-                            },
-                            success: function (data, textStatus, xhr) {
-                                if (xhr.getResponseHeader("INFT_ERROR_MESSAGE") == "ERR_WRONG_PASSWORD") {
-                                    $('#spin').hide(0);
-                                    openModal("Error!", "Wrong password for user " + username);
-                                    return; //let's block the form submit
-                                }
-                                $('#spin').hide(0);
-                            },
-                            error: function () {
-
-                            }
-                        });
-                        $('#spin').hide(0);
-                        $('#signin_form').attr('action', '/signin/legacy');//setting /signin/legacy as Express.js route server-side
-                        form.submit();
-                    },
-                    error: function () {
-                        $('#spin').hide(0);
-                        openModal("Error!", "Some general error has occured, please refresh the page!");
-                    }
-                });
-            } else if (document.activeElement.id == "register") { //If register button was pressed
-
-                //check for password lenght over REGEX
-                var regularExpression = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-                var password = document.getElementById('password').value;
-                if (!regularExpression.test(document.getElementById('password').value)) {
-                    $('#spin').hide(0);
-                    openModal("Error!", "Password should contain at least 1 number and 1 special character, and must be over 8 chars!");
-                    return; //let's block the form submit
-                }
-
-                $.ajax({
-                    url: "/checkUser",//API to check Users
-                    type: "POST",
-                    data: {
-                        username: document.getElementById('username').value
-                    },
-                    success: function (data, textStatus, xhr) {
-                        if (xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_USER_ALREADY_REGISTERED") { //IF status message shows the user already registered..
-                            $('#spin').hide(0);
-                            openModal("Error!", "User is already registered, please try to login!");
-                            return; //let's block the form submit
-                        }
-                        $('#spin').hide(0);
-                        $('#signin_form').attr('action', '/register');//setting /register as Express.js route server-side
-                        form.submit();
-                    },
-                    error: function () {
-                        $('#spin').hide(0);
-                        openModal("Error!", "Some general error has occured, please refresh the page!");
-                    }
-                });
-            } else {
-                $('#spin').hide(0);
-                openModal("Error!", "Some general error has occured, please refresh the page!");
-            }
-        });
-    });
-
-    /* Dialog Methods */
-    $('#dialog-close').on('click', function (e) {
-        $('#dialog-title').text('');
-        $('#dialog-text').text('');
-        enableScroll();
-        window.dialog.close();
-    });
-    function openModal(title, text) {
-        $('#dialog-title').text(title);
-        $('#dialog-text').text(text);
-        disableScroll();
-        window.dialog.showModal();
-    }
-    function disableScroll() {
-        // Get the current page scroll position
-        scrollTop =
-            window.pageYOffset || document.documentElement.scrollTop;
-        scrollLeft =
-            window.pageXOffset || document.documentElement.scrollLeft,
-
-            // if any scroll is attempted,
-            // set this to the previous value
-            window.onscroll = function () {
-                window.scrollTo(scrollLeft, scrollTop);
-            };
-    }
-    function enableScroll() {
-        window.onscroll = function () { };
-    }
-    /* End Dialog Methods */
-</script>
-<!-- End Custom Page Logic -->

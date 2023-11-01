@@ -4,44 +4,36 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Mint your NFT!</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <link rel="stylesheet" href="../css/animate.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-        integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-        integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="js/scrollIt.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script> //WOW effect initialization
+        wow = new WOW();
+        wow.init();
+    </script>
+
+    <!-- Custom Page Logic -->
+    <script type="module" src="../js/library.js"></script>
+    <script type="module" src="../js/ui/mint.js"></script>
+    <!-- End JS -->
 </head>
 
 <body>
     <section class="main-banner-gradient">
         <div class="col-md-4">
             <div class="text-center">
-                
-                <!--  
-                    Requested data for NFT minting:
-                        string image url
-                        string name
-
-                        (optional) string description
-                        (optional) string url for redirect
-                        (optional) string YT video
-                        (optional) obj attributes, eg:
-                        { 
-                            "trait_type": "Periodo Storico", 
-                            "value": "Vecchia Repubblica"
-                        },
-                -->
 
                 <form class="centered prelative" id="mint_form">
                     <h3 class="centered">Your NFT</h3>
                     <img class="card-icon" src="../res/user.png" alt="User">
-                    <input type="file" id="file-upload" name="filename" class="w-50" style="display: none;" multiple required>
+                    <input type="file" id="file-upload" class="w-50" multiple required>
                     <input type="text" id="nftname" class="form-input w-50" placeholder="Name*" required>
                     <input type="textarea" id="nftdescription" class="form-input w-50" placeholder="Description">
                     <input type="text" id="nfturl" class="form-input w-50" placeholder="Website URL">
@@ -57,36 +49,18 @@
 
 </html>
 
-<!-- JQuery / JQuery UI imports -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-<!-- End JQuery / JQuery UI imports -->
+                
+                <!--  
+                    Requested data for NFT minting:
+                        string image url
+                        string name
 
-<!-- scrollIt js -->
-<script src="js/scrollIt.min.js"></script>
-<script src="js/wow.min.js"></script>
-<!-- End scrollIt js -->
-
-<!-- Custom Page Logic -->
-<script type="module" src="../js/library.js"></script>
-<script type="module">
-    import { openModal, disableScroll, enableScroll, validFileType } from '../js/library.js';
-    wow = new WOW();
-    wow.init();
-
-    $(document).ready(function (e) {
-        $('.card-icon').on('click', function(e){
-            $('#file-upload').click();
-        });
-
-        $('#file-upload').on('change', function(e){
-            if(validFileType(document.getElementById("file-upload").files[0])){
-                $('.card-icon').attr('src',URL.createObjectURL(document.getElementById("file-upload").files[0]));
-            }else{
-                openModal('File not valid!',"Test");
-            }
-        });
-
-    });
-</script>
-<!-- End Custom Page Logic -->
+                        (optional) string description
+                        (optional) string url for redirect
+                        (optional) string YT video
+                        (optional) obj attributes, eg:
+                        { 
+                            "trait_type": "Periodo Storico", 
+                            "value": "Vecchia Repubblica"
+                        },
+                -->

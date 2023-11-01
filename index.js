@@ -124,6 +124,15 @@ app.get('/mint', (req, res) => {
     }
 });
 
+//Mint Page route
+app.post('/uploadNftImage', (req, res) => {
+    if(!req.session.isAuthenticated){
+        res.redirect('login');
+    }else{
+        
+    }
+});
+
 /**
  * End Webserver Main Routes (Express)
  */

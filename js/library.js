@@ -63,3 +63,33 @@ export function validFileType(file) {
 /**
  * End Image file type check
  */
+
+/**
+ * AJAX Page Load
+ */
+
+export function ajaxOpenPage(page) {
+    if (opened_tab != page) {
+        $.get(`views/${page}.ejs`, function (template) {
+            // Compile the EJS template.
+            var base_template = ejs.compile(template);
+            $.get(`/${page}`, function (data) {
+                // Generate the html from the given data.
+                var html = base_template(data);
+                opened_tab = page;
+                $('#main-frame').animate({ 'opacity': 0 }, 300, function () {
+                    $('#main-frame').html(html).animate({ 'opacity': 1 }, 400);
+                });
+            }).fail(function (e) {
+                console.log("Ajax Query failed");
+                openModal("Error!", "Request has not been fullfilled!");
+            });
+        }).fail(function () {
+            console.log("Ajax Query failed");
+            openModal("Error!", "Please reload the page");
+        });
+    }
+}
+/**
+ * End AJAX Page Load
+ */

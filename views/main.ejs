@@ -6,11 +6,23 @@
     <title>Mainpage</title>
     <link rel="stylesheet" href="../css/animate.css">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-        integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="js/scrollIt.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script> //WOW effect initialization
+        wow = new WOW();
+        wow.init();
+    </script>
+
+    <!-- Custom Page Logic -->
+    <script type="module" src="../js/library.js"></script>
+    <script src="../js/ui/main.js"></script>
+    <!-- End JS -->
 </head>
 
 <body>
@@ -46,25 +58,3 @@
 </body>
 
 </html>
-
-<!-- JQuery / JQuery UI imports -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-<!-- End JQuery / JQuery UI imports -->
-
-<!-- scrollIt js -->
-<script src="js/scrollIt.min.js"></script>
-<script src="js/wow.min.js"></script>
-<!-- End scrollIt js -->
-
-<!-- Custom Page Logic -->
-<script>
-    wow = new WOW();
-    wow.init();
-
-    $(document).ready(function (e) {
-        $('.tile-icon').after("<p>" + output.name + "</p>");
-        $('.tile-icon').after("<p>" + output.username + "</p>");
-    });
-</script>
-<!-- End Custom Page Logic -->

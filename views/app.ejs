@@ -5,14 +5,38 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>INFT App</title>
     <link rel="shortcut icon" href="./res/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+
+    <!-- Style -->
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
         integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- JS -->
+    <script src="../node_modules/ejs/ejs.min.js"></script>
+    <script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <script src="js/scrollIt.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script> //WOW effect initialization
+        wow = new WOW();
+        wow.init();
+    </script>
+    <script> //Global Variables Initialization
+        var opened_tab = "none"; //set current open tab        
+        var NFT_ID_COUNT = 0;
+        var CURRENT_JOBS = 0;
+    </script>
+
+    <!-- Custom Page Logic -->
+    <script type="module" src="../js/library.js"></script>
+    <script type="module" src="../js/ui/app.js"></script>
+    <!-- End JS -->
 </head>
 
 <body>
@@ -87,326 +111,3 @@
 </body>
 
 </html>
-
-<script src="../node_modules/ejs/ejs.min.js"></script>
-<script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
-<script type="module" src="../js/library.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-<script src="js/scrollIt.min.js"></script>
-<script src="js/wow.min.js"></script>
-
-<!-- Dialog opener functions -->
-
-<script type="module">
-    import { openModal, disableScroll, enableScroll } from '../js/library.js';
-
-    $('#profile').on('click', function (e) {
-        openModal("Ciao","Ciao");
-    });
-
-
-
-
-</script>
-
-<!-- End Dialog opener functions -->
-
-<script>
-
-    /*
-        Global Variables Definition
-    */
-   
-    var NFT_ID_COUNT = 0;
-    var CURRENT_JOBS = 0;
-
-    /*
-        End Global Variables Definition
-    */
-
-
-    /*
-        Websocket Methods
-    */
-    const socket = io();
-
-    socket.on('connect', function(){
-        console.log("WS Connection connected!");
-    });
-
-    socket.on("connect_error", () => { //automatic connection error error handling
-        console.log("WS Connection can't be reestablished");
-        setTimeout(() => {
-            socket.connect();
-        }, 1000);
-    });
-    socket.on("disconnect", (reason) => { //handle specific disconnection cases
-        //console.log("WS Connection disconnected");
-        if (reason === "io server disconnect") {
-            socket.connect();
-        }
-    });
-
-    socket.on('blockchain_task_finished', function(data){
-        if (socket.recovered) {
-            console.log("Blockchain Task " + data.id + " finished - socket recovered! Socket ID: " + socket.id);
-        } else {
-            //Task Finished, let's remove the spinning wheel
-            console.log("Blockchain Task " + data.id + " finished! Socket ID: " + socket.id);
-            var status_link_obj = $('#operation-status-content').find('#' + data.id).find('i');
-            status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-check');
-
-            //Current Job Counter Decreasing
-            CURRENT_JOBS--;
-            $('#notification-count').text(CURRENT_JOBS);
-            if(CURRENT_JOBS == 0){ 
-                $('#notification-count').text(""); 
-            }
-
-            //attach handler for tile removal
-            status_link_obj.on('click', function(){
-                $('#operation-status-content').find('#' + data.id).remove();
-                if($('#operation-status-content').children().length == 1){
-                    $('#operation-status-nocontent').show();
-                }                
-            });
-        }  
-    });
-
-    /*
-        End Websocket Methods
-    */
-
-    //WOW effect initialization
-    wow = new WOW();
-    wow.init();
-    
-    $(document).ready(function (e) {
-        var opened_tab = "main"; //set current open tab
-
-        if (opened_tab == "main") {
-                $.get('views/main.ejs', function (template) {
-                    // Compile the EJS template.
-                    var base_template = ejs.compile(template);
-                    $.get('/main', function (data) {
-                        // Generate the html from the given data.
-                        var html = base_template(data);
-                        opened_tab = "main";
-                        $('#main-frame').animate({'opacity' : 0}, 300, function(){
-                            $('#main-frame').html(html).animate({'opacity': 1}, 400);
-                        });
-                    }).fail(function (e){
-                        console.log("Ajax Query failed");
-                        openModal("Error!","Please reload the page");
-                    });
-                }).fail(function(){
-                    console.log("Ajax Query failed");
-                    openModal("Error!","Please reload the page");
-                });
-            }
-
-        /*
-            Navbar
-        */
-        $('#navbar-expander').on('click', function (e) {
-            if(window.innerWidth > 768){
-                if ($('#sidenav').css('width') == '0px') {
-                    $('#sidenav').css('width', '250');
-                    document.getElementById("main").style.marginLeft = "250px";
-                } else if ($('#sidenav').css('width') == '250px') {
-                    $('#sidenav').css('width', '0');
-                    document.getElementById("main").style.marginLeft = "0px";
-                }
-            }else{
-                if ($('#sidenav').css('width') == '0px') {
-                    $('#sidenav').css('width', '100vh');
-                    //document.getElementById("main").style.marginLeft = "100vh";
-                } else if ($('#sidenav').css('width') == '100vh') {
-                    $('#sidenav').css('width', '0');
-                    //document.getElementById("main").style.marginLeft = "0px";
-                }
-            }
-        });
-
-        $('#nav-closer').on('click', function (e) {
-            $('#sidenav').css('width', '0');
-            document.getElementById("main").style.marginLeft = "0px";
-        });
-        /*
-            End Navbar
-        */
-
-        /*
-            Operation Status
-        */
-
-        $('#operation-status-expander').on('click',function(e){
-            if($('#operation-status-popup').css('display') == "none"){
-                $('#operation-status-expander').children().addClass('fa-regular').removeClass('fa-solid');
-                $('#operation-status-popup').css('display','block');
-                //$('#notification-NFT_ID_COUNT').html("10"); //SETS NOTIFICATION COUNT
-            }else if ($('#operation-status-popup').css('display') == "block"){
-                $('#operation-status-popup').css('display','none');
-                $('#operation-status-expander').children().addClass('fa-solid').removeClass('fa-regular');
-            }
-        });
-
-        /*
-            End Operation Status
-        */
-
-        /*
-            Main Tab  
-        */
-
-        $('#main-link').on('click', function (e) {
-            if (opened_tab != "main") {
-                $.get('views/main.ejs', function (template) {
-                    // Compile the EJS template.
-                    var base_template = ejs.compile(template);
-                    $.get('/main', function (data) {
-                        // Generate the html from the given data.
-                        var html = base_template(data);
-                        opened_tab = "main";
-                        $('#main-frame').animate({'opacity' : 0}, 300, function(){
-                            $('#main-frame').html(html).animate({'opacity': 1}, 400);
-                        });                       
-                    }).fail(function (e){
-                        console.log("Ajax Query failed");
-                        openModal("Error!","Please reload the page");
-                    });
-                }).fail(function(){
-                    console.log("Ajax Query failed");
-                    openModal("Error!","Please reload the page");
-                });
-            }
-        });
-
-        /*
-            End Main Tab 
-        */
-
-        /*
-            Mint Tab 
-        */
-
-        $('#mint').on('click', function (e) {
-            if (opened_tab != "mint") {
-                $.get('views/mint.ejs', function (template) {
-                    // Compile the EJS template.
-                    var base_template = ejs.compile(template);
-                    $.get('/mint', function (data) {
-                        // Generate the html from the given data.
-                        var html = base_template(data);
-                        opened_tab = "mint";
-                        $('#main-frame').animate({'opacity' : 0}, 300, function(){
-                            $('#main-frame').html(html).animate({'opacity': 1}, 400);
-                        });       
-                    }).fail(function (e){
-                        console.log("Ajax Query failed");
-                        openModal("Error!","Request has not been fullfilled!");
-                    });
-                }).fail(function(){
-                    console.log("Ajax Query failed");
-                    openModal("Error!","Please reload the page");
-                });
-            }
-        });
-
-        //Mint Events
-
-        $('#main-frame').on('submit', 'form#mint_form', function(e){ 
-            $('#spin').show(0);
-            var form = this;
-            e.preventDefault();
-
-            //TO DO : image upload to BLOB
-
-            var parameters = {
-                id: NFT_ID_COUNT,
-                nftImageUrl: "image_uri",
-                nftName: $('#main-frame').find('#nftname').val(),
-                nftDescription: $('#main-frame').find('#nftdescription').val(),
-                nftUrl: $('#main-frame').find('#nfturl').val(),
-                nftAnimationVideo: $('#main-frame').find('#nftanimationvideourl').val()
-            }
-
-            //Task emitter
-            console.log("Blockchain query parameters: " + parameters);
-            socket.emit("blockchain_task",parameters);
-
-            //adjust operation status GUI view
-            $('#operation-status-nocontent').hide();
-            $('#operation-status-nocontent').after(`
-                <div class="tile-margin-top-bottom" id="${parameters.id}">                    
-                    <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #${parameters.nftName}                    
-                </div>
-            `);
-
-            //increment counters and set view
-            CURRENT_JOBS++;
-            NFT_ID_COUNT++;
-            $('#notification-count').text(CURRENT_JOBS);
-                
-            //give feedback to user!
-            $('#spin').hide(0);
-            openModal(`Event ID ${parameters.id} sent!`,"Please check the status bar for more info!");
-        });
-
-        $('#main-frame').on('click', '#mint-button', function(e){ 
-
-        });
-
-        /*
-            End Mint Tab 
-        */
-
-        /*
-            Profiles Tab 
-        */
-
-        $('#profiles').on('click', function (e) {
-            //TO DO
-        });
-
-        /*
-            End Profiles Tab 
-        */
-
-        /*
-            NFTs Tab 
-        */
-
-        $('#nfts').on('click', function (e) {
-            //TO DO
-        });
-
-        /*
-            End NFTs Tab 
-        */
-
-        /*
-            Marketplace Tab 
-        */
-
-        $('#marketplace').on('click', function (e) {
-            //TO DO
-        });
-
-        /*
-            End Marketplace Tab 
-        */
-
-
-    });
-
-    /*
-        Slider JS
-    */
-        //TO DO
-    /*
-        End Slider JS
-    */
-
-</script>
