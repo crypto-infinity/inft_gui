@@ -2,7 +2,8 @@
 Global Variables Definition
 */
 
-import { ajaxOpenPage } from "../library.js";
+import { ajaxOpenPage, openModal } from "../library.js";
+
 
 
 /*
@@ -144,7 +145,80 @@ $(function (e) {
 
     //Mint Events
 
-    
+    $('#main-frame').on('submit', '#mintform', async function (e) {
+        $('#spin').show(0);
+        e.preventDefault();
+        
+        const media_input = document.getElementById("file-upload").files[0];
+        var file_properties = "";
+        var file_contents = "";
+
+        if (media_input) {
+            const reader = new FileReader();
+            reader.onload = function(e) { 
+                file_properties = { //does not assign variable to right place
+                    name: media_input.name,
+                    type: media_input.type,
+                    size: media_input.size
+                }
+                file_contents = e.target.result;
+            };
+            reader.readAsDataURL(media_input);
+        }else
+        {
+            openModal("Error!","No file specified!");
+        }
+        console.log("File properties: " + file_properties);
+
+        //TO DO : HTTP POST to /uploadNftImage
+
+        $.ajax({
+            url: "/uploadNftImage",//API to check Users
+            type: "POST",
+            data: {
+                post_file_properties: file_properties,
+                post_file_contents: file_contents
+            },
+            success: function (data, textStatus, xhr) {
+                const image_url = data.file_properties;
+                console.log("Image url: " + image_url);
+
+                var parameters = {
+                    id: NFT_ID_COUNT,
+                    nftImageUrl: image_url,
+                    nftName: $('#main-frame').find('#nftname').val(),
+                    nftDescription: $('#main-frame').find('#nftdescription').val(),
+                    nftUrl: $('#main-frame').find('#nfturl').val(),
+                    nftAnimationVideo: $('#main-frame').find('#nftanimationvideourl').val()
+                }
+        
+                //Task emitter
+                console.log("Blockchain query parameters: " + parameters);
+                socket.emit("blockchain_task", parameters);
+        
+                //adjust operation status GUI view
+                $('#operation-status-nocontent').hide();
+                $('#operation-status-nocontent').after(`
+                    <div class="tile-margin-top-bottom" id="${parameters.id}">                    
+                        <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #${parameters.nftName}                    
+                    </div>
+                `);
+        
+                //increment counters and set view
+                CURRENT_JOBS++;
+                NFT_ID_COUNT++;
+                $('#notification-count').text(CURRENT_JOBS);
+        
+                //give feedback to user!
+                $('#spin').hide(0);
+                openModal(`Event ID ${parameters.id} sent!`, "Please check the status bar for more info!");
+            },
+            error: function () {
+                $('#spin').hide(0);
+                openModal("Error!", "Some general error has occured, please refresh the page!");
+            }
+        });
+    });
 
     /*
         End Mint Tab 

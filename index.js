@@ -129,7 +129,16 @@ app.post('/uploadNftImage', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
-        
+        //TO DO: upload image received and return its CID/URI
+        var file_properties = req.body.post_file_properties;
+        var file_contents = req.body.post_file_contents;
+
+        console.log(file_properties);
+        console.log(file_contents);
+
+        res.send({
+            file_properties: file_properties
+        });
     }
 });
 
