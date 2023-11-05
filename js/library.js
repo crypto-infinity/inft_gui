@@ -5,7 +5,7 @@
 export function openModal(title, text) {
     $('#dialog-title').text(title);
     $('#dialog-text').text(text);
-    disableScroll();   
+    disableScroll();
     window.dialog.showModal();
 }
 
@@ -13,7 +13,7 @@ export function openModal(title, text) {
 export function disableScroll() {
     // Get the current page scroll position
     var scrollTop = window.scrollY || document.documentElement.scrollTop;
-    
+
     var scrollLeft = window.scrollX || document.documentElement.scrollLeft;
 
     // if any scroll is attempted,
@@ -92,4 +92,22 @@ export function ajaxOpenPage(page) {
 }
 /**
  * End AJAX Page Load
+ */
+
+/**
+ * Base64 Image Conversion
+ */
+
+export function b64(e) { 
+    var t = ""; 
+    var n = new Uint8Array(e); 
+    var r = n.byteLength; 
+    for (var i = 0; i < r; i++){ 
+        t += String.fromCharCode(n[i]) 
+    } 
+    return window.btoa(t) 
+}
+
+/**
+ * End Base64 Image Conversion
  */

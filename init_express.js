@@ -18,7 +18,8 @@ const io = new Server(httpServer, {
     connectionStateRecovery: {
         maxDisconnectionDuration: 2 * 60 * 1000,
         skipMiddlewares: true
-    }
+    },
+    maxHttpBufferSize: 1e7 // Maximum 10 MB of HTTP Upload
 }); //Socket.io HTTP Wrapper
 
 const oneDay = 1000 * 60 * 60 * 24;

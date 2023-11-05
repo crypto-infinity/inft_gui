@@ -37,25 +37,7 @@ socket.on('blockchain_task_finished', function (data) {
     if (socket.recovered) {
         console.log("Blockchain Task " + data.id + " finished - socket recovered! Socket ID: " + socket.id);
     } else {
-        //Task Finished, let's remove the spinning wheel
-        console.log("Blockchain Task " + data.id + " finished! Socket ID: " + socket.id);
-        var status_link_obj = $('#operation-status-content').find('#' + data.id).find('i');
-        status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-check');
-
-        //Current Job Counter Decreasing
-        CURRENT_JOBS--;
-        $('#notification-count').text(CURRENT_JOBS);
-        if (CURRENT_JOBS == 0) {
-            $('#notification-count').text("");
-        }
-
-        //attach handler for tile removal
-        status_link_obj.on('click', function () {
-            $('#operation-status-content').find('#' + data.id).remove();
-            if ($('#operation-status-content').children().length == 1) {
-                $('#operation-status-nocontent').show();
-            }
-        });
+        
     }
 });
 
@@ -149,82 +131,65 @@ $(function (e) {
         $('#spin').show(0);
         e.preventDefault();
         
-        const media_input = document.getElementById("file-upload").files[0];
+        //NFT Metadata Build info
+        const image = document.getElementById("file-upload").files[0];
 
-        if (media_input) {
-            var file_properties;
-            var file_contents;
+        if(image.size < 5e6){ //check and troubleshoot
+            //upload Image and mint NFT
+            socket.emit('mint_nft', { 
 
-            const reader = new FileReader();
-            reader.onload = function(evt) { 
-                file_properties = { //does not assign variable to right place
-                    name: media_input.name,
-                    type: media_input.type,
-                    size: media_input.size
+                id: NFT_ID_COUNT,
+                nftImage: image,
+                nftImageName: image.name,
+                nftImageType: image.type,
+                nftImageSize: image.size,
+                nftName: $('#main-frame').find('#nftname').val(),
+                nftDescription: $('#main-frame').find('#nftdescription').val(),
+                nftUrl: $('#main-frame').find('#nfturl').val(),
+                nftAnimationVideo: $('#main-frame').find('#nftanimationvideourl').val()
+
+            }, function(id){
+
+                //Task Finished, let's update status bar
+                console.log("Blockchain Task " + id + " finished! Socket ID: " + socket.id);
+                var status_link_obj = $('#operation-status-content').find('#' + id).find('i');
+                status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-check');
+
+                //Current Job Counter Decreasing
+                CURRENT_JOBS--;
+                $('#notification-count').text(CURRENT_JOBS);
+                if (CURRENT_JOBS == 0) {
+                    $('#notification-count').text("");
                 }
-                file_contents = evt.target.result;
-            };
-            reader.readAsDataURL(media_input);
 
-            console.log("File properties: " + file_properties);
-
-            //TO DO : HTTP POST to /uploadNftImage
-
-            $.ajax({
-                url: "/uploadNftImage",//API to check Users
-                type: "POST",
-                data: {
-                    post_file_property_name: file_properties.name,
-                    post_file_property_type: file_properties.type,
-                    post_file_property_size: file_properties.size,
-                    post_file_contents: file_contents
-                },
-                success: function (data, textStatus, xhr) {
-                    const image_url = data.file_properties;
-                    console.log("Image url: " + image_url);
-
-                    var parameters = {
-                        id: NFT_ID_COUNT,
-                        nftImageUrl: image_url,
-                        nftName: $('#main-frame').find('#nftname').val(),
-                        nftDescription: $('#main-frame').find('#nftdescription').val(),
-                        nftUrl: $('#main-frame').find('#nfturl').val(),
-                        nftAnimationVideo: $('#main-frame').find('#nftanimationvideourl').val()
+                //attach handler for tile removal
+                status_link_obj.on('click', function () {
+                    $('#operation-status-content').find('#' + id).remove();
+                    if ($('#operation-status-content').children().length == 1) {
+                        $('#operation-status-nocontent').show();
                     }
-            
-                    //Task emitter
-                    console.log("Blockchain query parameters: " + parameters);
-                    socket.emit("blockchain_task", parameters);
-            
-                    //adjust operation status GUI view
-                    $('#operation-status-nocontent').hide();
-                    $('#operation-status-nocontent').after(`
-                        <div class="tile-margin-top-bottom" id="${parameters.id}">                    
-                            <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #${parameters.nftName}                    
-                        </div>
-                    `);
-            
-                    //increment counters and set view
-                    CURRENT_JOBS++;
-                    NFT_ID_COUNT++;
-                    $('#notification-count').text(CURRENT_JOBS);
-            
-                    //give feedback to user!
-                    $('#spin').hide(0);
-                    openModal(`Event ID ${parameters.id} sent!`, "Please check the status bar for more info!");
-                },
-                error: function () {
-                    $('#spin').hide(0);
-                    openModal("Error!", "Some general error has occured, please refresh the page!");
-                }
+                });               
             });
-        }else
-        {
-            openModal("Error!","No file specified!");
+
+            //adjust operation status GUI view
+            $('#operation-status-nocontent').hide();
+            $('#operation-status-nocontent').after(`
+                <div class="tile-margin-top-bottom" id="${NFT_ID_COUNT}">                    
+                    <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #${NFT_ID_COUNT}                    
+                </div>
+            `);
+
+            //increment counters and set view
+            CURRENT_JOBS++;
+            NFT_ID_COUNT++;
+            $('#notification-count').text(CURRENT_JOBS);
         }
-        console.log("File properties: " + file_properties);
+        else{
+            openModal("Error!","Image file larger than 5MB!");
+        }
 
-
+        openModal(`NFT ID ${NFT_ID_COUNT} minting in progress!`, "Please check the status bar for more information.");
+        $('#spin').hide(0);
     });
 
     /*

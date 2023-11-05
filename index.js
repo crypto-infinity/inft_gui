@@ -5,7 +5,7 @@
 const {app,io} = require("./init_express"); //Express Init
 const {sql} = require("./init_sql"); //SQL Init
 const { provider,signer,contract } = require('./init_web3'); //Web3 Endpoint Init
-const { nftClient } = require('./init_nftstorage'); //NFT.storage client Object Init
+const { nftClient, File, Blob } = require('./init_nftstorage'); //NFT.storage client Object Init
 
 const authProvider = require('./auth/microsoft_authProvider'); //MS Provider Init
 
@@ -33,15 +33,47 @@ io.on('connection', function(client){
     console.log("Connected to WebSocket Server! Client: " + client.id);
 
     client.on('blockchain_task', async function(data){
-        console.log("Blockchain event received from " + client.id + ". Beginning execution.");
+        
         console.log("Data received: " + data.id);
         await setTimeout(10000);
-        console.log("Blockchain event ID" + data.id + " finished!");
+
         client.emit('blockchain_task_finished',data);
         count++;
         //event.enqueue
         //wait for execution
         //return feedback
+    });
+
+    client.on('mint_nft', async function(data, callback){
+        console.log("Blockchain event received from " + client.id + ". Beginning execution.");
+
+        //Uploading the NFT Metadata to Filecoin
+        console.log("Converting Image...");
+        const image_base64 = Buffer.from(data.nftImage).toString('base64');
+        const image_blob = b64toBlob(image_base64,data.type);
+
+        console.log(`File Name: ${data.name}, Type: ${data.type}, Size: ${data.size}, Content: ${image_blob}`);
+
+        const nft = {
+            image: image_blob, 
+            name: data.nftName,
+            description: data.nftDescription,
+            external_url: data.nftUrl,
+            animation_url: data.nftAnimationVideo
+        }
+
+        console.log("Uploading NFT Client info...");
+        var metadata = await nftClient.store(nft);
+
+        //Mint the NFT
+        console.log("Minting NFT...");
+
+        //contract.mintToken(); //TO DO
+        await setTimeout(5000);
+
+        //give feedback to user 
+        console.log("Blockchain event ID" + data.id + " finished!");
+        callback(data.id);
     });
 
 
@@ -120,24 +152,6 @@ app.get('/mint', (req, res) => {
     }else{
         res.send({
             username: req.session.username
-        });
-    }
-});
-
-//Mint Page route
-app.post('/uploadNftImage', (req, res) => {
-    if(!req.session.isAuthenticated){
-        res.redirect('login');
-    }else{
-        //TO DO: upload image received and return its CID/URI
-        var file_name = req.body.post_file_property_name;
-        var file_contents = req.body.post_file_contents;
-
-        console.log("File Properties: " + file_name);
-        console.log("File Contents: " +file_contents);
-
-        res.send({
-            file_properties: file_properties
         });
     }
 });
@@ -348,3 +362,24 @@ app.post('/checkUser', async (req, res) => {
 /**
  * End API Routes Definition
  */
+
+function b64toBlob(base64Data, contentType) {
+    contentType = contentType || '';
+    var sliceSize = 512;
+    var byteCharacters = atob(base64Data);
+    var bytesLength = byteCharacters.length;
+    var slicesCount = Math.ceil(bytesLength / sliceSize);
+    var byteArrays = new Array(slicesCount);
+
+    for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+        var begin = sliceIndex * sliceSize;
+        var end = Math.min(begin + sliceSize, bytesLength);
+
+        var bytes = new Array(end - begin);
+        for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+            bytes[i] = byteCharacters[offset].charCodeAt(0);
+        }
+        byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return new Blob(byteArrays, { type: contentType });
+}
