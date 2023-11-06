@@ -148,12 +148,19 @@ $(function (e) {
                 nftUrl: $('#main-frame').find('#nfturl').val(),
                 nftAnimationVideo: $('#main-frame').find('#nftanimationvideourl').val()
 
-            }, function(id){
+            }, function(data){
 
-                //Task Finished, let's update status bar
-                console.log("Blockchain Task " + id + " finished! Socket ID: " + socket.id);
-                var status_link_obj = $('#operation-status-content').find('#' + id).find('i');
-                status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-check');
+                if(data.error != "none"){
+                    console.log("ERROR: " + data.error + " for ID " + data.id);
+                    var status_link_obj = $('#operation-status-content').find('#' + data.id).find('i');
+                    status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-triangle-exclamation');
+                }else{
+                    //Task Finished, let's update status bar
+                    console.log("Blockchain Task " + data.id + " finished! Socket ID: " + socket.id);
+                    console.log("Transaction details: " + data.transaction);
+                    var status_link_obj = $('#operation-status-content').find('#' + data.id).find('i');
+                    status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-check');
+                }
 
                 //Current Job Counter Decreasing
                 CURRENT_JOBS--;
@@ -164,11 +171,13 @@ $(function (e) {
 
                 //attach handler for tile removal
                 status_link_obj.on('click', function () {
-                    $('#operation-status-content').find('#' + id).remove();
+                    $('#operation-status-content').find('#' + data.id).remove();
                     if ($('#operation-status-content').children().length == 1) {
                         $('#operation-status-nocontent').show();
                     }
-                });               
+                });
+
+
             });
 
             //adjust operation status GUI view

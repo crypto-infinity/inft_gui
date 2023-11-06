@@ -65,15 +65,43 @@ io.on('connection', function(client){
         console.log("Uploading NFT Client info...");
         var metadata = await nftClient.store(nft);
 
-        //Mint the NFT
-        console.log("Minting NFT...");
+        if(metadata){
 
-        //contract.mintToken(); //TO DO
-        await setTimeout(5000);
+        }else{
+            console.log("Metadata Upload Error!");
+            var result = {
+                id: data.id,
+                error: "METADATA_UPLOAD_ERROR"
+            }
+            callback(result);
+        }
+
+        console.log("Minting NFT...");
+        var tx = await contract.mintToken("0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0",data.id,1,metadata.url,true,true);
+
+        if(tx){
+            console.log(tx);
+
+        }else{
+            console.log("NFT Minting Error");
+            var result = {
+                id: data.id,
+                error: "NFT_MINT_ERROR"
+            }
+            callback(result);
+        }
+
 
         //give feedback to user 
         console.log("Blockchain event ID" + data.id + " finished!");
-        callback(data.id);
+
+        var result = {
+            id: data.id,
+            error: "none",
+            transaction: tx
+        }
+
+        callback(result);
     });
 
 

@@ -1,5 +1,5 @@
 require('dotenv').config(); //Import .env 
-const { API_KEY_GOERLI_ALCHEMY, PRIVATE_KEY, CONTRACT_ADDRESS, CONNECTION_STRING_GOERLI_ALCHEMY_HTTPS } = process.env;
+const { PRIVATE_KEY, CONTRACT_ADDRESS, CONNECTION_STRING_GOERLI_ALCHEMY_HTTPS } = process.env;
 
 const { ethers } = require("ethers");
 const contract_json = require("./abi/standardNFT_DB.json");
