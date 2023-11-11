@@ -70,8 +70,8 @@ input[type="file"] {
 }
 
 label {
-    vertical-align: bottom;
-	margin: 5px;
+    vertical-align: middle;
+	margin: 15px;
 }
 
 /*
@@ -480,14 +480,15 @@ dialog {
 */
 
 .card-icon {
+	position: relative;
 	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
 	border-radius: 20px;
 	border: 0;
 	width: 250px;
 	height: 250px;
-	margin-bottom: 40px;
-	margin-left: 40px;
-	margin-right: 40px;
+	margin-bottom: 20px;
+	margin-left: 20px;
+	margin-right: 20px;
 	margin-top: 20px;
 	object-fit: fill;
 	cursor: pointer;
@@ -883,7 +884,7 @@ dialog {
 	width: 50px;
 	background: var(--secondary-bg-color);
 	display: block;
-	margin: 20px auto 20px;
+	margin: 30px auto 20px;
 }
 
 .line::after {
@@ -1347,6 +1348,11 @@ input {
 	}
 
 	.form-input {
+		-webkit-transform: scale(0.75) !important;
+		transform: scale(0.75) !important;
+	}
+
+	.card-icon {
 		-webkit-transform: scale(0.75) !important;
 		transform: scale(0.75) !important;
 	}

@@ -66,7 +66,7 @@ io.on('connection', function(client){
         var metadata = await nftClient.store(nft);
 
         if(metadata){
-
+            console.log("Metadata: " + metadata);
         }else{
             console.log("Metadata Upload Error!");
             var result = {
@@ -78,10 +78,10 @@ io.on('connection', function(client){
 
         console.log("Minting NFT...");
         var tx = await contract.mintToken("0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0",data.id,1,metadata.url,true,true);
+        var tx2 = tx.wait();
 
-        if(tx){
-            console.log(tx);
-
+        if(tx2){
+            console.log("Transaction: " + tx);
         }else{
             console.log("NFT Minting Error");
             var result = {

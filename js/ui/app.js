@@ -134,7 +134,7 @@ $(function (e) {
         //NFT Metadata Build info
         const image = document.getElementById("file-upload").files[0];
 
-        if(image.size < 5e6){ //check and troubleshoot
+        if(image.size < 5e6 && $('#main-frame').find('.card-icon').attr('src') != "../res/user.png"){ //check and troubleshoot
             //upload Image and mint NFT
             socket.emit('mint_nft', { 
 
@@ -146,9 +146,11 @@ $(function (e) {
                 nftName: $('#main-frame').find('#nftname').val(),
                 nftDescription: $('#main-frame').find('#nftdescription').val(),
                 nftUrl: $('#main-frame').find('#nfturl').val(),
-                nftAnimationVideo: $('#main-frame').find('#nftanimationvideourl').val()
+                nftAnimationVideo: $('#main-frame').find('#nftanimationvideourl').val(),
+                nftBurnable: $('#main-frame').find('#nftburnable').is(":checked"),
+                nftMutable: $('#main-frame').find('#nftmutable').is(":checked")
 
-            }, function(data){
+            }, function(data){ //Emit Callback
 
                 if(data.error != "none"){
                     console.log("ERROR: " + data.error + " for ID " + data.id);
@@ -157,7 +159,7 @@ $(function (e) {
                 }else{
                     //Task Finished, let's update status bar
                     console.log("Blockchain Task " + data.id + " finished! Socket ID: " + socket.id);
-                    console.log("Transaction details: " + data.transaction);
+                    console.log("Transaction details: " + JSON.stringify(data.transaction));
                     var status_link_obj = $('#operation-status-content').find('#' + data.id).find('i');
                     status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-check');
                 }

@@ -34,12 +34,21 @@
 
                 <form class="centered prelative" id="mintform">
                     <h3 class="centered">Your NFT</h3>
-                    <img class="card-icon" src="../res/user.png" alt="User">
-                    <input type="file" id="file-upload" class="w-50" multiple required>
+                    <div><img class="card-icon" src="../res/user.png" alt="User"></div>
+
+                    <input type="file" id="file-upload" multiple required>
                     <input type="text" id="nftname" class="form-input w-50" placeholder="Name*" required>
                     <input type="textarea" id="nftdescription" class="form-input w-50" placeholder="Description">
                     <input type="text" id="nfturl" class="form-input w-50" placeholder="Website URL">
                     <input type="text" id="nftanimationvideourl" class="form-input w-50" placeholder="Animation Video">
+                    
+                    <div>
+                        <input type="checkbox" id="nftburnable" class="form-input" placeholder="Burnable?">
+                        <label for="nftburnable">Burnable?</label>
+                        <input type="checkbox" id="nftmutable" class="form-input" placeholder="Mutable?">
+                        <label for="nftmutable">Mutable?</label>
+                    </div>
+
                     
                     <span class="line"></span>
                     <button class="about-btn-solid w-50 text-uppercase" type="submit" name="send" id="mint-button">Mint!</button>

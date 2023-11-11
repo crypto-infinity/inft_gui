@@ -12,7 +12,4 @@ $(function (e) {
             openModal('File not valid!',"Test");
         }
     });
-
-    
-
 });

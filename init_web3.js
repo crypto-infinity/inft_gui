@@ -5,8 +5,13 @@ const { ethers } = require("ethers");
 const contract_json = require("./abi/standardNFT_DB.json");
 
 try{
+    //Instanciate a provider, a server that receives and handles calls/txs to the blockchain
     const provider = new ethers.providers.JsonRpcProvider(CONNECTION_STRING_GOERLI_ALCHEMY_HTTPS);
+
+    //Instanciate a signer, a tuple key-provider
     const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+
+    //Contract istancing, takes the implementation address (can be a proxy), the contract ABI and the signer object
     const contract = new ethers.Contract(CONTRACT_ADDRESS, contract_json.abi, signer);
 
     module.exports = {
@@ -17,8 +22,6 @@ try{
 }catch(err){
     throw err;
 }
-
-
 
 /**
  * DEV REFERENCE
