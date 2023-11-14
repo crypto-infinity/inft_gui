@@ -47,64 +47,76 @@ io.on('connection', function(client){
     client.on('mint_nft', async function(data, callback){
         console.log("Blockchain event received from " + client.id + ". Beginning execution.");
 
-        //Uploading the NFT Metadata to Filecoin
-        console.log("Converting Image...");
-        const image_base64 = Buffer.from(data.nftImage).toString('base64');
-        const image_blob = b64toBlob(image_base64,data.type);
+        try{   
+            //Uploading the NFT Metadata to Filecoin
+            console.log("Converting Image...");
 
-        console.log(`File Name: ${data.name}, Type: ${data.type}, Size: ${data.size}, Content: ${image_blob}`);
+            const image_base64 = Buffer.from(data.nftImage).toString('base64');
+            const image_blob = b64toBlob(image_base64,data.nftImageType);
+            const image_file = new File([image_blob], data.nftName , { type: data.nftImageType });
 
-        const nft = {
-            image: image_blob, 
-            name: data.nftName,
-            description: data.nftDescription,
-            external_url: data.nftUrl,
-            animation_url: data.nftAnimationVideo
-        }
+            console.log("File: " + image_file + "Image type: " + data.nftImageType);
 
-        console.log("Uploading NFT Client info...");
-        var metadata = await nftClient.store(nft);
+            //Building and uploading NFT object for NFT.Storage API
+            console.log("Building and Uploading NFT Client info...");
+            const nft = {
+                image: image_file, 
+                name: data.nftName,
+                description: data.nftDescription,
+                external_url: data.nftUrl,
+                animation_url: data.nftAnimationVideo
+            }
+            var metadata = await nftClient.store(nft);
 
-        if(metadata){
-            console.log("Metadata: " + metadata);
-        }else{
-            console.log("Metadata Upload Error!");
+            //Upload result check
+            if(metadata){ console.log("Metadata: " + metadata.toString()); }
+            else{
+                console.log("Metadata Upload Error!");
+                var result = {
+                    id: data.id,
+                    error: "METADATA_UPLOAD_ERROR"
+                }
+                callback(result);
+            }
+
+            //Building and sending Transaction to Blockchain
+            console.log("Minting NFT...");
+            var tx = await contract.mintToken("0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0",data.id,data.nftAmount,metadata.url,data.nftBurnable,data.nftMutable);
+            var tx2 = tx.wait();
+
+            //Transaction health check
+            if(tx2){ console.log("Transaction: " + tx.toString()); }
+            else{
+                console.log("NFT Minting Error");
+                var result = {
+                    id: data.id,
+                    error: "NFT_MINT_ERROR"
+                }
+                callback(result);
+            }
+
+            //If everything else was okay, give green light to user! 
+            console.log("Blockchain event ID" + data.id + " finished!");
+
             var result = {
                 id: data.id,
-                error: "METADATA_UPLOAD_ERROR"
+                error: "none",
+                transaction: tx
+            }
+
+            callback(result);//Execute callback on client
+        }
+        catch(err){
+            //If any error showed up, notify the client
+            console.log("Blockchain event ID" + data.id + " failed! Notifying user");
+            var result = {
+                id: data.id,
+                error: "NFT_MINT_ERROR",
+                message: err
             }
             callback(result);
         }
-
-        console.log("Minting NFT...");
-        var tx = await contract.mintToken("0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0",data.id,1,metadata.url,true,true);
-        var tx2 = tx.wait();
-
-        if(tx2){
-            console.log("Transaction: " + tx);
-        }else{
-            console.log("NFT Minting Error");
-            var result = {
-                id: data.id,
-                error: "NFT_MINT_ERROR"
-            }
-            callback(result);
-        }
-
-
-        //give feedback to user 
-        console.log("Blockchain event ID" + data.id + " finished!");
-
-        var result = {
-            id: data.id,
-            error: "none",
-            transaction: tx
-        }
-
-        callback(result);
     });
-
-
 });
 
 /**
@@ -175,6 +187,17 @@ app.get('/profile', (req, res) => {
 
 //Mint Page route
 app.get('/mint', (req, res) => {
+    if(!req.session.isAuthenticated){
+        res.redirect('login');
+    }else{
+        res.send({
+            username: req.session.username
+        });
+    }
+});
+
+//My NFTs Page route
+app.get('/nfts', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
@@ -275,7 +298,7 @@ app.post('/register', (req, res) => {
                 request.input('pwdhash',sql.VarChar,hash);
                 request.input('salt',sql.VarChar,salt);
 
-                var query = "INSERT INTO [dbo].Login (username,pwd_hash,salt) values (@username,@pwdhash,@salt)";
+                var query = "INSERT INTO [dbo].Login (username,pwd_hash,salt,isExternal) values (@username,@pwdhash,@salt,0)";
                 request.query(query, function(err, recordset){
                     if (err){ //handling DB errors
                         console.log("Error: " + err)
@@ -327,7 +350,9 @@ app.get('/signin/microsoft', (req,res) => {
 
 app.post('/auth/redirect', (req,res) => {
     if(!req.session.isAuthenticated){
-        authProvider.handleRedirect(req,res);
+        authProvider.handleRedirect(req,res, () => {
+            res.render('error', {error: "Authentication failed, please try again!"});
+        });
     }else{
         res.redirect('app');
     }

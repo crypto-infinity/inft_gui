@@ -127,15 +127,18 @@ $(function (e) {
 
     //Mint Events
 
-    $('#main-frame').on('submit', '#mintform', async function (e) {
+    $('#main-frame').on('submit', '#mintform', async function (e) { //Websocket mint_nft
         $('#spin').show(0);
         e.preventDefault();
         
         //NFT Metadata Build info
         const image = document.getElementById("file-upload").files[0];
 
-        if(image.size < 5e6 && $('#main-frame').find('.card-icon').attr('src') != "../res/user.png"){ //check and troubleshoot
+        if( image.size < 5e6 
+            && $('#main-frame').find('.card-icon').attr('src') != "../res/user.png"
+            ){ //check and troubleshoot
             //upload Image and mint NFT
+            console.log(image.type);
             socket.emit('mint_nft', { 
 
                 id: NFT_ID_COUNT,
@@ -144,6 +147,7 @@ $(function (e) {
                 nftImageType: image.type,
                 nftImageSize: image.size,
                 nftName: $('#main-frame').find('#nftname').val(),
+                nftAmount: $('#main-frame').find('#nftamount').val(),
                 nftDescription: $('#main-frame').find('#nftdescription').val(),
                 nftUrl: $('#main-frame').find('#nfturl').val(),
                 nftAnimationVideo: $('#main-frame').find('#nftanimationvideourl').val(),
@@ -153,7 +157,7 @@ $(function (e) {
             }, function(data){ //Emit Callback
 
                 if(data.error != "none"){
-                    console.log("ERROR: " + data.error + " for ID " + data.id);
+                    console.log("ERROR: " + data.error + " for ID " + data.id + ", message: " + data.message.toString());
                     var status_link_obj = $('#operation-status-content').find('#' + data.id).find('i');
                     status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-triangle-exclamation');
                 }else{
@@ -224,7 +228,7 @@ $(function (e) {
     */
 
     $('#nfts').on('click', function (e) {
-        //TO DO
+        ajaxOpenPage("nfts");
     });
 
     /*
