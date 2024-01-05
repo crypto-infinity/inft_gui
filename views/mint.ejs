@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Mint your NFT!</title>
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="js/scrollIt.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script> //WOW effect initialization
+        wow = new WOW();
+        wow.init();
+    </script>
+
+    <!-- Custom Page Logic -->
+    <script type="module" src="../js/library.js"></script>
+    <script type="module" src="../js/ui/mint.js"></script>
+    <!-- End JS -->
+</head>
+
+<body>
+    <section class="main-banner-gradient">
+        <div class="col-md-4">
+            <div class="text-center">
+
+                <form class="centered prelative" id="mintform">
+                    <h3 class="centered">Your NFT</h3>
+                    <div><img class="card-icon" src="../res/user.png" alt="User"></div>
+
+                    <div class="normal-padding">
+                        <div><input type="text" id="nftname" class="form-input w-50" placeholder="Name*" required></div>
+                        <div><input type="number" id="nftamount" class="form-input w-50" name="amount" min="1" placeholder="Amount*" required/></div>
+                    </div>
+
+                    <h5 id="additional-items">Additional details</h5>
+                    <div id="additional-items-container">
+                        <input type="file" id="file-upload" multiple required> 
+                        <input type="textarea" id="nftdescription" class="form-input w-50" placeholder="Description">
+                        <input type="text" id="nfturl" class="form-input w-50" placeholder="Website URL">
+                        <input type="text" id="nftanimationvideourl" class="form-input w-50" placeholder="Animation Video">
+    
+                        <div> 
+                            <input type="checkbox" id="nftburnable" class="form-input" placeholder="Burnable?">
+                            <label for="nftburnable">Burnable?</label>
+                            <input type="checkbox" id="nftmutable" class="form-input" placeholder="Mutable?">
+                            <label for="nftmutable">Mutable?</label>
+                        </div>
+                    </div>       
+                    <span class="line"></span>
+                    <button class="about-btn-solid w-50 text-uppercase" type="submit" name="send" id="mint-button">Mint!</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
+
+                
+                <!--  
+                    Requested data for NFT minting:
+                        string image url
+                        string name
+
+                        (optional) string description
+                        (optional) string url for redirect
+                        (optional) string YT video
+                        (optional) obj attributes, eg:
+                        { 
+                            "trait_type": "Periodo Storico", 
+                            "value": "Vecchia Repubblica"
+                        },
+                -->

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Mainpage</title>
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="js/scrollIt.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script> //WOW effect initialization
+        wow = new WOW();
+        wow.init();
+    </script>
+
+    <!-- Custom Page Logic -->
+    <script type="module" src="../js/library.js"></script>
+    <script src="../js/ui/main.js"></script>
+    <!-- End JS -->
+</head>
+
+<body>
+    <section class="main-banner-gradient">
+        <div>
+            <h4 class="centered">Your user data:</h4>
+            <script>
+                var output = <%- userdata %>;
+            </script>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="tile">
+                        <img src="../res/sample/1.jpg" class="tile-icon centered">
+                        <a href="#" class="read-more-nft">Read More</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tile">
+                        <img src="../res/sample/2.png" class="tile-icon">
+                        <a href="#" class="read-more-nft">Read More</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tile">
+                        <img src="../res/sample/3.png" class="tile-icon">
+                        <a href="#" class="read-more-nft">Read More</a>
+                    </div>
+                </div>
+            </div>
+                        
+        </div>
+    </section>
+</body>
+
+</html>

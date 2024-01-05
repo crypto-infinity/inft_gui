@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Signup - INFT</title>
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="js/scrollIt.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script> //WOW effect initialization
+        wow = new WOW();
+        wow.init();
+    </script>
+
+    <!-- Custom Page Logic -->
+    <script type="module" src="../js/library.js"></script>
+    <script type="module" src="../js/ui/login.js"></script>
+    <!-- End JS -->
+
+</head>
+
+<body>
+    <!-- Hidden Spinning Wheel -->
+    <div class="spin-background" id="spin">
+        <img class="spin" src="../res/icon.png">
+    </div>
+    <!-- End Spinning Wheel -->
+
+    <!-- Dialog HTML definition -->
+    <dialog id="dialog">
+        <div id="dialog-content">
+            <h2 id="dialog-title"></h2>
+            <p id="dialog-text"></p>
+        </div>
+        <button id="dialog-close" aria-label="close" class="x">❌</button>
+    </dialog>
+    <!-- end Dialog HTML definition -->
+
+    <section class="main-banner-gradient">
+        <div class="text-center">
+            <a href="/"><img class="header-padding-image wow fadeInUp" src="../res/logo-highres.png"
+                    data-wow-delay="0.2s"></a>
+            <form class="centered prelative normal-padding" id="signin_form" method="post">
+                <input type="text" id="username" class="form-input w-75" name="username"
+                    placeholder="User Name or Email" required>
+                <input type="password" id="password" class="form-input w-75" name="password" placeholder="Password"
+                    required>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="login" id="login">Login</button>
+                <button class="about-btn w-50 text-uppercase" type="submit" name="register"
+                    id="register">Register</button>
+            </form>
+            <h4 class="normal-padding wow fadeInUp" data-wow-delay="0.4s" id="othersigninmethods">Or sign in
+                with..</h4>
+            <span class="line"></span>
+            <div class="" id="signinmethods">
+                <div class="container normal-padding prelative">
+                    <a id="ms" href="/signin/microsoft"><img src="../res/ms_login.png" class="wow fadeInUp prelative"
+                            data-wow-delay="0.6s" /></a>
+                </div>
+                <div class="container normal-padding prelative">
+                    <a id="mm" href="#"><img src="../res/metamask_login.png" class="wow fadeInUp prelative"
+                            data-wow-delay="0.8s" /></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

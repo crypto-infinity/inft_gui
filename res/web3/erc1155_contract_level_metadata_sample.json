@@ -1,0 +1,8 @@
+{
+  "name": "Star Wars - The Old Republic NFT Collection",
+  "description": "Star Wars: The Old Republic è un videogioco di tipo MMORPG sviluppato da parte di Bioware, prodotto da LucasArts e facente parte dell'Universo espanso di Guerre stellari.",
+  "image": "https://ipfs.io/ipfs/QmNi1T88vMXP2vihU3QeP2Ry2CAKXHV26PZdVhexn1XgXj?filename=SWTOR_Logo_2.jpg",
+  "external_link": "https://www.swtor.com/",
+  "seller_fee_basis_points": 100,
+  "fee_recipient": "0x66b499Ea0ef14590d2545A59a8fEE983F3d40994"
+}
