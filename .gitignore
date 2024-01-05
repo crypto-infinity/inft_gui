@@ -128,3 +128,13 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+#custom ignores
+templates
+.deployment
+settings.json
+template.zip
+.backup
+backup
+.hintrc
+.dev
