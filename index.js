@@ -67,6 +67,7 @@ io.on('connection', function(client){
                 animation_url: data.nftAnimationVideo
             }
             var metadata = await nftClient.store(nft);
+            //console.log(metadata);
 
             //Upload result check
             if(metadata){ console.log("Metadata: " + metadata.toString()); }
@@ -352,7 +353,7 @@ app.post('/auth/redirect', (req,res) => {
     if(!req.session.isAuthenticated){
         authProvider.handleRedirect(req,res, () => {
             res.render('error', {error: "Authentication failed, please try again!"});
-        });
+        }, sql);
     }else{
         res.redirect('app');
     }

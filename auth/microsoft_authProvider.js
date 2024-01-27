@@ -1,6 +1,19 @@
+const crypto = require('crypto'); //Cryptographic check of has/salts for legacy auth
 const msal = require('@azure/msal-node');
 const axios = require('axios');
 const { msalConfig, TENANT_SUBDOMAIN, REDIRECT_URI, POST_LOGOUT_REDIRECT_URI } = require('./microsoft_authConfig');
+
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
 
 class AuthProvider {
     config;
@@ -74,7 +87,9 @@ class AuthProvider {
         );
     }
 
-    async handleRedirect(req, res, next) {
+    
+
+    async handleRedirect(req, res, next, sql) {
         const authCodeRequest = {
             ...req.session.authCodeRequest,
             code: req.body.code, // authZ code
@@ -92,12 +107,61 @@ class AuthProvider {
             req.session.account = tokenResponse.account;
             req.session.username = tokenResponse.account.name;
 
-            //INFT Custom Express Values
-            req.session.isAuthenticated = true;
-            req.session.authMethod = "ms";
-
             const state = JSON.parse(this.cryptoProvider.base64Decode(req.body.state));
-            res.redirect(state.redirectTo);
+
+            //INFT first MS login check -> query to db
+            var request = new sql.Request();
+            var username = req.session.username;
+            var password = makeid(20);
+    
+            request.input('username',sql.VarChar, username); //ERROR
+            var query = "SELECT * FROM [dbo].Login WHERE (username=@username AND isExternal='1')";
+    
+            request.query(query, function (err, recordset) {
+                if (err){ //handling DB errors
+                    console.log("Error: " + err)
+                    req.session.destroy();
+                    res.render('error', {error: err});
+                }
+                if(recordset.recordset.length == 0){
+                    console.log(username + " never logged with Microsoft authentication. Inserting in DB now.");
+                    var salt = crypto.randomBytes(16).toString('base64');
+                    var hash = crypto.createHash("sha256").update(password+salt).digest('base64');
+
+                    request.input('pwdhash',sql.VarChar,hash);
+                    request.input('salt',sql.VarChar,salt);
+
+                    var query = "INSERT INTO [dbo].Login (username,pwd_hash,salt,isExternal) values (@username,@pwdhash,@salt,1)";
+                    request.query(query, function(err, recordset){
+                        if (err){ //handling DB errors
+                            console.log("Error: " + err)
+                            req.session.destroy();
+                            res.render('error', {error: err});
+                        }
+                        //user now exist, no hash to confront. let's directly authenticate it.
+                        console.log("User " + username + " is created using MS auth and authenticated!");
+
+                        //set Express Session variables
+                        req.session.isAuthenticated = true;
+                        req.session.authMethod = "ms";
+
+                        //redirect user to the main page
+                        res.redirect(state.redirectTo);
+                    });
+                }
+                else{
+                    //External User already exist.
+                    console.log("User " + username + " exists already. Authenticating.");
+
+                    //set Express Session variables
+                    req.session.isAuthenticated = true;
+                    req.session.authMethod = "ms";
+
+                    //redirect user to the main page
+                    res.redirect(state.redirectTo);
+                }
+                
+            });
         } catch (error) {
             next(error);
         }
