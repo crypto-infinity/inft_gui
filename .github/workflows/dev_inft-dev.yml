@@ -58,5 +58,5 @@ jobs:
         with:
           app-name: 'inft-dev'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6841BC29D11D494A9063B6BDCEFD37E6 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_56CC693C546043EDAD8222CDCE89E0BE }}
           package: .
