@@ -22,53 +22,25 @@
 
     <!-- Custom Page Logic -->
     <script type="module" src="../js/library.js"></script>
-    <script src="../js/ui/profile.js"></script>
+    <script type="module" src="../js/ui/nfts.js"></script>
     <!-- End JS -->
 </head>
+
+<script type="module">
+    import { loadNFTImages } from '../js/ui/nfts.js';
+    var output = '<%= usernfts %>';
+
+    var nfts = loadNFTImages(output);
+    console.log(nfts);
+    
+</script>
 
 <body>
     <section class="main-banner-gradient">
         <div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="tile">
-                        <img src="../res/sample/1.jpg" class="tile-icon centered">
-                        <a href="#" class="read-more-nft">Read More</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="tile">
-                        <img src="../res/sample/2.png" class="tile-icon">
-                        <a href="#" class="read-more-nft">Read More</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="tile">
-                        <img src="../res/sample/3.png" class="tile-icon">
-                        <a href="#" class="read-more-nft">Read More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="tile">
-                        <img src="../res/sample/1.jpg" class="tile-icon centered">
-                        <a href="#" class="read-more-nft">Read More</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="tile">
-                        <img src="../res/sample/2.png" class="tile-icon">
-                        <a href="#" class="read-more-nft">Read More</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="tile">
-                        <img src="../res/sample/3.png" class="tile-icon">
-                        <a href="#" class="read-more-nft">Read More</a>
-                    </div>
-                </div>
-            </div>             
+            <h3 class="text-center">My NFTs Collection</h3>
+            <span class="line"></span>  
+
         </div>
     </section>
 </body>

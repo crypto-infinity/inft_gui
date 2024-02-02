@@ -228,7 +228,10 @@ $(function (e) {
     */
 
     $('#nfts').on('click', function (e) {
+        $('#spin').show(0);
         ajaxOpenPage("nfts");
+        console.log("executed");
+        $('#spin').hide(0);
     });
 
     /*

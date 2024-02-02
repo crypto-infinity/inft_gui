@@ -18,7 +18,7 @@ var sql_config_azure = {
             tenantId: AZURE_TENANT_ID
         }
     },
-    trustServerCertificate: false, //self-signed cert error
+    trustServerCertificate: true, //self-signed cert error
     options: {
         connectTimeout: 40000
     }
@@ -41,9 +41,9 @@ var sql_config_dev = {
 };
 
 
-sql.connect(sql_config_dev, function (err) {
+sql.connect(sql_config_azure, function (err) {
     if(err) { console.log(err); }
-    else { console.log(`Connected to DB: ${sql_config_dev.server}`); }
+    else { console.log(`Connected to DB: ${sql_config_azure.server}`); }
 });
 
 module.exports = {
