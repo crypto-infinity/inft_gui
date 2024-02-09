@@ -19,6 +19,7 @@ const authProvider = require('./auth/microsoft_authProvider'); //MS Provider Ini
 
 const crypto = require('crypto'); //Cryptographic check of has/salts for legacy auth
 const { setTimeout } = require("timers/promises");
+var ethers_utils = require('ethers').utils;
 
 /**
  * End Utilities Init
@@ -67,6 +68,7 @@ io.on('connection', function(client){
                 animation_url: data.nftAnimationVideo
             }
             var metadata = await nftClient.store(nft);
+            //console.log(metadata);
 
             //Upload result check
             if(metadata){ console.log("Metadata: " + metadata.toString()); }
@@ -197,13 +199,29 @@ app.get('/mint', (req, res) => {
 });
 
 //My NFTs Page route
-app.get('/nfts', (req, res) => {
+app.get('/nfts', async (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
-        res.send({
-            username: req.session.username
-        });
+        try{
+            //Elaborate user NFTs and return them to the GET call
+            var call = await contract.getTokenMappings("0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0");
+
+            var token_uris = [];
+
+            for(var i = 0; i < call.length; i++){
+                token_uris[i] = await contract.uri(call[i].toNumber());
+            }
+
+            res.send({
+                usernfts: token_uris //array?
+            });
+        }
+        catch(err){
+            console.log("Error: " + err)
+            req.session.destroy();
+            res.render('error', {error: "Bad Query Results."})
+        }
     }
 });
 
@@ -352,7 +370,7 @@ app.post('/auth/redirect', (req,res) => {
     if(!req.session.isAuthenticated){
         authProvider.handleRedirect(req,res, () => {
             res.render('error', {error: "Authentication failed, please try again!"});
-        });
+        }, sql);
     }else{
         res.redirect('app');
     }

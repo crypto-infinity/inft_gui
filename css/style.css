@@ -75,6 +75,10 @@ label {
 	margin: 15px;
 }
 
+.row-no-margin {
+	margin-left: 0px;
+	margin-right: 0px;
+ } 
 
 /*
  	End Body General Classes

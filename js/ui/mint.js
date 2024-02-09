@@ -13,4 +13,5 @@ $(function (e) {
         }
     });
 
+    $('#spin').hide(0);
 });
