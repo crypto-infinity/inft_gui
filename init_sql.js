@@ -4,21 +4,20 @@
 const sql = require("mssql");
 
 require('dotenv').config(); //Import .env 
-const { SQL_DB_SERVER, SQL_DB_NAME, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID, TEMP_SQL_PASSWORD } = process.env;
+const { SQL_DB_SERVER, SQL_DB_NAME, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID, SQL_PASSWORD } = process.env;
 
 // sqlconfig
 var sql_config_azure = {
     server: SQL_DB_SERVER, 
     database: SQL_DB_NAME,
     authentication: {
-        type: 'azure-active-directory-service-principal-secret',
+        type: 'default',
         options: {
-            clientId: AZURE_CLIENT_ID,
-            clientSecret: AZURE_CLIENT_SECRET,
-            tenantId: AZURE_TENANT_ID
+            userName: "CloudSAfa79f0c1",
+            password: SQL_PASSWORD
         }
     },
-    trustServerCertificate: true, //self-signed cert error
+    trustServerCertificate: false, //self-signed cert error
     options: {
         connectTimeout: 40000
     }
@@ -31,7 +30,7 @@ var sql_config_dev = {
         type: 'default',
         options: {
             userName: "sa",
-            password: TEMP_SQL_PASSWORD
+            password: SQL_PASSWORD
         }
     },
     trustServerCertificate: true, //self-signed cert error
