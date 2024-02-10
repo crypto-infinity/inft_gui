@@ -21,7 +21,7 @@ export async function loadNFTImages(imageArray)
 
                         //Updating GUI
                         $("#tile").append(` 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="tile">
                                     <img src="${imageUrl}" class="tile-icon">
                                     <h5 class="tile-description">${responseData.name}</h5>
@@ -30,6 +30,7 @@ export async function loadNFTImages(imageArray)
                                 </div>
                             </div> 
                         `);
+                        $("#nft_loader").remove();
 
                         //Removing spin after loading
                         $('#spin').hide(0);
