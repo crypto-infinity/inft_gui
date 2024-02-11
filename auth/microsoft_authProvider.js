@@ -114,8 +114,8 @@ class AuthProvider {
             var username = req.session.username;
             var password = makeid(20);
     
-            request.input('username',sql.VarChar, username); //ERROR
-            var query = "SELECT * FROM [dbo].Login WHERE (username=@username AND isExternal='1')";
+            request.input('username',sql.VarChar, username);
+            var query = "SELECT [dbo].Login.id,username,pwd_hash,salt,isExternal,wallet FROM [dbo].Login LEFT JOIN [dbo].Web3 ON [dbo].Login.id=[dbo].Web3.external_id WHERE dbo.Login.username=@username AND isExternal=1";
     
             request.query(query, function (err, recordset) {
                 if (err){ //handling DB errors
@@ -123,7 +123,7 @@ class AuthProvider {
                     req.session.destroy();
                     res.render('error', {error: err});
                 }
-                if(recordset.recordset.length == 0){
+                if(recordset.recordset.length == 0){ //User never logged in, inserting into DB and setting session variables
                     console.log(username + " never logged with Microsoft authentication. Inserting in DB now.");
                     var salt = crypto.randomBytes(16).toString('base64');
                     var hash = crypto.createHash("sha256").update(password+salt).digest('base64');
@@ -143,19 +143,35 @@ class AuthProvider {
 
                         //set Express Session variables
                         req.session.isAuthenticated = true;
+                        req.session.userId = recordset.insertId;
+                        console.log("User id recordset insert:  " + recordset.insertId);
                         req.session.authMethod = "ms";
+                        req.session.doSetup = true;
 
                         //redirect user to the main page
                         res.redirect(state.redirectTo);
                     });
                 }
-                else{
-                    //External User already exist.
+                else{ //External User already exist, authenticating and setting session variables
+                    
                     console.log("User " + username + " exists already. Authenticating.");
 
                     //set Express Session variables
                     req.session.isAuthenticated = true;
+                    req.session.userId = recordset.recordset[0].id;
+                    req.session.wallet = recordset.recordset[0].wallet;
                     req.session.authMethod = "ms";
+
+                    //Check if user inserted his wallet
+                    if(recordset.recordset[0].wallet == "" || 
+                        recordset.recordset[0].wallet == "null" || 
+                        recordset.recordset[0].wallet == null){
+
+                        req.session.doSetup = true;
+                    }else{
+                        req.session.doSetup = false;
+                    }
+
 
                     //redirect user to the main page
                     res.redirect(state.redirectTo);
