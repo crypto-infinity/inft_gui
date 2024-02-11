@@ -30,7 +30,6 @@ export async function loadNFTImages(imageArray)
                                 </div>
                             </div> 
                         `);
-                        $("#nft_loader").remove();
 
                         //Removing spin after loading
                         $('#spin').hide(0);

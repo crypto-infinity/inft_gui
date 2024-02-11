@@ -40,6 +40,9 @@ socket.on('blockchain_task_finished', function (data) {
         
     }
 });
+socket.on('error_handler', function(data){
+    console.log(data);
+});
 
 /*
     End Websocket Methods

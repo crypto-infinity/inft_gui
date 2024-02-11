@@ -30,33 +30,24 @@ var ethers_utils = require('ethers').utils;
  */
 
 io.on('connection', function(client){
-    var count = 0;
+    const session = client.request.session; //Getting Express session values
+
     console.log("Connected to WebSocket Server! Client: " + client.id);
 
-    client.on('blockchain_task', async function(data){
-        
-        console.log("Data received: " + data.id);
-        await setTimeout(10000);
-
-        client.emit('blockchain_task_finished',data);
-        count++;
-        //event.enqueue
-        //wait for execution
-        //return feedback
-    });
-
     client.on('mint_nft', async function(data, callback){
+        if(!session.isAuthenticated){
+            client.emit('error_handler',"User not authenticated!");
+            return;
+        }
         console.log("Blockchain event received from " + client.id + ". Beginning execution.");
 
         try{   
             //Uploading the NFT Metadata to Filecoin
-            console.log("Converting Image...");
+            console.log("Converting NFT Image...");
 
             const image_base64 = Buffer.from(data.nftImage).toString('base64');
             const image_blob = b64toBlob(image_base64,data.nftImageType);
             const image_file = new File([image_blob], data.nftName , { type: data.nftImageType });
-
-            console.log("File: " + image_file + "Image type: " + data.nftImageType);
 
             //Building and uploading NFT object for NFT.Storage API
             console.log("Building and Uploading NFT Client info...");
@@ -82,13 +73,12 @@ io.on('connection', function(client){
             }
 
             //Building and sending Transaction to Blockchain
-            console.log("Minting NFT...");
-            var tx = await contract.mintToken(req.session.wallet,data.id,data.nftAmount,metadata.url,data.nftBurnable,data.nftMutable);
+            console.log("Minting NFT to Wallet " + session.wallet);
+            var tx = await contract.mintToken(session.wallet,data.id,data.nftAmount,metadata.url,data.nftBurnable,data.nftMutable);
             var tx2 = tx.wait();
 
             //Transaction health check
-            if(tx2){ console.log("Transaction: " + tx.toString()); }
-            else{
+            if(!tx2){
                 console.log("NFT Minting Error");
                 var result = {
                     id: data.id,

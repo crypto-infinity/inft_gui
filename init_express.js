@@ -32,12 +32,17 @@ try {
     app.set('views', path.join(__dirname, 'views'));
     app.use(express.static(__dirname));
     app.use(bodyParser.urlencoded({ extended: true }))
-    app.use(sessions({
+
+    const sessionMiddleware = sessions({
         secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
         saveUninitialized:true,
         cookie: { maxAge: oneDay },
         resave: false
-    }));
+    });
+
+    app.use(sessionMiddleware);
+    io.engine.use(sessionMiddleware);
+    
 } catch (err) {
     throw err;
 }
