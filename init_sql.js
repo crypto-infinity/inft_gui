@@ -23,21 +23,21 @@ var sql_config_azure = {
     }
 };
 
-var sql_config_dev = {
-    server: "localhost", 
-    database: SQL_DB_NAME,
-    authentication: {
-        type: 'default',
-        options: {
-            userName: "sa",
-            password: SQL_PASSWORD
-        }
-    },
-    trustServerCertificate: true, //self-signed cert error
-    options: {
-        connectTimeout: 40000
-    }
-};
+// var sql_config_dev = {
+//     server: "localhost", 
+//     database: SQL_DB_NAME,
+//     authentication: {
+//         type: 'default',
+//         options: {
+//             userName: "sa",
+//             password: SQL_PASSWORD
+//         }
+//     },
+//     trustServerCertificate: true, //self-signed cert error
+//     options: {
+//         connectTimeout: 40000
+//     }
+// };
 
 
 sql.connect(sql_config_azure, function (err) {

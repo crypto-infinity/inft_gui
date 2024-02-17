@@ -18,7 +18,6 @@
 * {
 	padding: 0;
 	margin: 0;
-	overflow: hidden; /*Completely disables scrollbars*/
 }
 
 body {
@@ -78,10 +77,24 @@ label {
 .row-no-margin {
 	margin-left: 0px;
 	margin-right: 0px;
- } 
+}
+
 
 /*
  	End Body General Classes
+*/
+
+/*
+ 	Main Div alignment
+*/
+
+#main {
+	overflow: auto;
+	transition: margin-left .5s;	
+}
+
+/*
+ 	End Main Div alignment
 */
 
 /*
@@ -264,11 +277,7 @@ dialog {
 	font-size: 36px;
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-	transition: margin-left .5s;
-	padding: 20px;
-}
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
@@ -397,6 +406,7 @@ dialog {
 	max-width: 300px;
 	/* align-items: center; */
 	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
+	display: inline-block;
 }
 
 .tile-margin-top-bottom {
@@ -416,7 +426,7 @@ dialog {
 }
 
 .tile-icon {
-	display: block;
+	display: inline-block;
 	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
 	text-align: center;
 	border-radius: 20px;
@@ -471,10 +481,6 @@ dialog {
 		-webkit-transform: scale(0.75) !important;
 		transform: scale(0.75) !important;
 	}
-
-	.tile > *:not(.read-more-nft):not(.tile-icon){
-		display: none;
-	}
 }
 
 /*
@@ -492,10 +498,7 @@ dialog {
 	border: 0;
 	width: 350px; /* https://docs.opensea.io/docs/metadata-standards */
 	height: 350px;
-	margin-bottom: 20px;
-	margin-left: 20px;
-	margin-right: 20px;
-	margin-top: 20px;
+	margin: 20px;
 	object-fit: fill;
 	cursor: pointer;
 }
@@ -509,7 +512,7 @@ dialog {
 	Slider CSS
 */
 
-* {box-sizing:border-box}
+* {box-sizing:border-box;}
 
 /* Slideshow container */
 .slideshow-container {
@@ -757,7 +760,7 @@ dialog {
 	background: var(--main-bg-color);
 	background: var(--main-bg-gradient-color);
 	position: relative;
-	height: 100vh;
+	height: auto;
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -779,7 +782,7 @@ dialog {
 .main-banner-gradient {
 	background: var(--main-bg-gradient-color);
 	position: absolute;
-	height: 100vh;
+	height: auto;
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -1359,8 +1362,8 @@ input {
 	}
 
 	.card-icon {
-		-webkit-transform: scale(0.75) !important;
-		transform: scale(0.75) !important;
+		-webkit-transform: scale(0.65) !important;
+		transform: scale(0.65) !important;
 	}
 
 	.header-padding {
@@ -1375,6 +1378,25 @@ input {
 	.icon-box {
 		-webkit-transform: scale(0.65) !important;
 		transform: scale(0.65) !important;
+	}
+
+	.row {
+		text-align: center;
+		width: auto;
+	}
+
+	.tile {
+		-webkit-transform: scale(0.75) !important;
+		transform: scale(0.75) !important;
+	}
+
+	.title {
+		margin-top: 40px;
+	}
+
+	#main-frame {
+		display: inline-block;
+		overflow-x: hidden;
 	}
 
 	h2 {

@@ -21,7 +21,13 @@
         wow = new WOW();
         wow.init();
         var doSetup = <%= doSetup %>;
-        console.log(doSetup);
+        if(<%- wallet %> != null || <%- wallet %> != undefined || <%- wallet %> != ""){
+            const wallet = '<%- wallet %>';
+        }else{
+            const wallet = "Wallet not set yet!";
+        }
+        $("#spin").hide(0);
+
     </script>
 
     <!-- Custom Page Logic -->
@@ -31,12 +37,12 @@
 </head>
 
 <body>
-    <section class="main-banner-gradient">
+    <section>
         <div>
-            <h3 class="text-center">Welcome to INFT!</h3>
+            <h3 class="text-center title">Welcome to INFT!</h3>
             <span class="line"></span>
-            <div class="col-md-12">
-                <div class="tile text-center" style="margin: 0 auto;" id="setup_status_text">
+            <div class="col-md-12" id="setup">
+                <div class="tile text-center" style="margin: 0 auto;">
 
                 </div>
             </div>                          

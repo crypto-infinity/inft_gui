@@ -139,15 +139,15 @@ app.get('/app', (req, res) => {
             if(req.session.authMethod == "ms"){
                 //console.log(req.session.account);
                 res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, 
-                    userdata: JSON.stringify(req.session.account), doSetup: req.session.doSetup, error: false });
+                    userdata: JSON.stringify(req.session.account), doSetup: req.session.doSetup, wallet: req.session.wallet, error: false });
 
             }else if(req.session.authMethod == "mm"){
                 res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, 
-                    userdata: "", doSetup: req.session.doSetup, error: false });
+                    userdata: "", doSetup: req.session.doSetup, wallet: req.session.wallet, error: false });
                     
             }else if(req.session.authMethod == "legacy"){
                 res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, 
-                    userdata: "", doSetup: req.session.doSetup, error: false });
+                    userdata: "", doSetup: req.session.doSetup, wallet: req.session.wallet, error: false });
             }
         }else{
             console.log("Error: " + err)
@@ -217,6 +217,11 @@ app.get('/mint', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
+        if(!req.session.wallet){
+            res.setHeader("INFT_ERROR_MESSAGE","ERR_WALLET_NOT_SET");
+            res.status(204).send();
+            return;
+        }
         res.send({
             username: req.session.username
         });

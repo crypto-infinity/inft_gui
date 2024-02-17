@@ -56,7 +56,7 @@ socket.on('error_handler', function(data){
 $(function (e) {
 
     //First time page loading
-    ajaxOpenPage("main", { doSetup });
+    ajaxOpenPage("main", { doSetup, wallet });
 
     /*
         Navbar
@@ -176,7 +176,6 @@ $(function (e) {
                 $('#sidenav').css('width', '0'); 
                 document.getElementById("main").style.marginLeft = "0px";
             }
-            $('#spin').show(0);
             ajaxOpenPage("mint");
         }else
         {
@@ -281,7 +280,6 @@ $(function (e) {
                 $('#sidenav').css('width', '0');
                 document.getElementById("main").style.marginLeft = "0px";
             }
-            $('#spin').show(0);
             ajaxOpenPage("profile");
         }
         else{
@@ -303,7 +301,6 @@ $(function (e) {
                 $('#sidenav').css('width', '0');
                 document.getElementById("main").style.marginLeft = "0px";
             }
-            $('#spin').show(0); //Terminating in nfts.ejs, row 37
             ajaxOpenPage("nfts");
         }
         else{
@@ -326,7 +323,6 @@ $(function (e) {
                 $('#sidenav').css('width', '0');
                 document.getElementById("main").style.marginLeft = "0px";
             }
-            $('#spin').show(0);
             ajaxOpenPage("marketplace");
         }
         else{

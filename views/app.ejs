@@ -24,11 +24,11 @@
 
     <script src="js/scrollIt.min.js"></script>
     <script src="js/wow.min.js"></script>
-    <script> //WOW effect initialization
+    <script> //Page initialization
         wow = new WOW();
         wow.init();
         var doSetup = <%= doSetup %>;
-        console.log(doSetup);
+        var wallet = '<%- wallet %>';
     </script>
     <script> //Global Variables Initialization
         var opened_tab = "none"; //set current open tab        
@@ -71,7 +71,9 @@
             <div id="sidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" id="nav-closer">&times;</a>
                 <a href="#" id="main-link"><img class="app-logo" src="../res/logo.png" data-wow-delay="0.2s"></a>
-                <a href="#"><h4>Hi, <%- username %>!</h4></a>
+                <a href="#" style="word-wrap: break-word;"><h4>Hi, <%- username %>!</h4></a>
+                <a href="#" style="word-wrap: break-word;"><h5>Your Wallet:</h5></a>
+                <a href="https://etherscan.io/address/<%- wallet %>" style="word-wrap: break-word;"><h6><%- wallet %></h6></a>
                 <a href="#" id="mint"><i class="fa-solid fa-wand-magic-sparkles"></i> Mint!</a>
                 <a href="#" id="nfts"><i class="fa-solid fa-list"></i> My NFTs</a>
                 <a href="#" id="marketplace"><i class="fa-solid fa-square-poll-vertical"></i> Marketplace</a>
