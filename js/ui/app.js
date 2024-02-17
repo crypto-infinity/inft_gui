@@ -66,7 +66,7 @@ $(function (e) {
             if ($('#sidenav').css('width') == '0px') {
                 $('#sidenav').css('width', '250');
                 document.getElementById("main").style.marginLeft = "250px";
-            } else if ($('#sidenav').css('width') == '250px') {
+            } else if ($('#sidenav').css('width') >= '250px') {
                 $('#sidenav').css('width', '0');
                 document.getElementById("main").style.marginLeft = "0px";
             }
@@ -172,7 +172,8 @@ $(function (e) {
 
     $('#mint').on('click', function (e) {
         if(doSetup != true){
-            if ($('#sidenav').css('width') == '250px') {
+            console.log($('#sidenav').css('width'));
+            if ($('#sidenav').css('width') >= '250px') {
                 $('#sidenav').css('width', '0'); 
                 document.getElementById("main").style.marginLeft = "0px";
             }
@@ -276,7 +277,7 @@ $(function (e) {
 
     $('#profile').on('click', function (e) {
         if(doSetup != true){
-            if ($('#sidenav').css('width') == '250px') {
+            if ($('#sidenav').css('width') >= '250px') {
                 $('#sidenav').css('width', '0');
                 document.getElementById("main").style.marginLeft = "0px";
             }
@@ -297,7 +298,7 @@ $(function (e) {
 
     $('#nfts').on('click', function (e) {
         if(doSetup != true){
-            if ($('#sidenav').css('width') == '250px') {
+            if ($('#sidenav').css('width') >= '250px') {
                 $('#sidenav').css('width', '0');
                 document.getElementById("main").style.marginLeft = "0px";
             }
@@ -319,7 +320,7 @@ $(function (e) {
 
     $('#marketplace').on('click', function (e) {
         if(doSetup != true){
-            if ($('#sidenav').css('width') == '250px') {
+            if ($('#sidenav').css('width') >= '250px') {
                 $('#sidenav').css('width', '0');
                 document.getElementById("main").style.marginLeft = "0px";
             }
