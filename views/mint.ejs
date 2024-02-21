@@ -34,31 +34,39 @@
             <div class="text-center">
 
                 <form class="text-center prelative" id="mintform">
-                    <h3 class="centered title">Your NFT</h3>
-                    <span class="line"></span>
-                    <img class="card-icon" src="../res/user.png" alt="User">
+                    <div>
+                        <h3 class="centered title">Your NFT</h3>
+                        <span class="line"></span>
+                        <img class="card-icon" src="../res/user.png" alt="User">
 
-                    <div class="normal-padding">
-                        <div><input type="text" id="nftname" class="form-input w-50" placeholder="Name*" required></div>
-                        <div><input type="number" id="nftamount" class="form-input w-50" name="amount" min="1" placeholder="Amount*" required/></div>
+                        <div class="normal-padding">
+                            <div><input type="text" id="nftname" class="form-input" placeholder="Name*" required></div>
+                            <div><input type="number" id="nftamount" class="form-input" name="amount" min="1" placeholder="Amount*" required/></div>
+                        </div>
+
+                        <h5 id="additional-items">Additional details</h5>
+                        <div id="additional-items-container">
+                            <div class="col-md-12">
+                                <input type="file" id="file-upload" multiple required> 
+                                <input type="textarea" id="nftdescription" class="form-input" placeholder="Description">
+                            </div>
+                            <div>
+                                <input type="text" id="nfturl" class="form-input" placeholder="Website URL">
+                            </div>
+                            <div>
+                                <input type="text" id="nftanimationvideourl" class="form-input" placeholder="Animation Video">
+                            </div>
+                            <div> 
+                                <input type="checkbox" id="nftburnable" class="form-input" placeholder="Burnable?">
+                                <label for="nftburnable">Burnable?</label>
+                                <input type="checkbox" id="nftmutable" class="form-input" placeholder="Mutable?">
+                                <label for="nftmutable">Mutable?</label>
+                            </div>
+                        </div>       
+                        <span class="line"></span>
+                        <button class="about-btn-solid w-50 text-uppercase" type="submit" name="send" id="mint-button">Mint!</button>
                     </div>
 
-                    <h5 id="additional-items">Additional details</h5>
-                    <div id="additional-items-container">
-                        <input type="file" id="file-upload" multiple required> 
-                        <input type="textarea" id="nftdescription" class="form-input w-50" placeholder="Description">
-                        <input type="text" id="nfturl" class="form-input w-50" placeholder="Website URL">
-                        <input type="text" id="nftanimationvideourl" class="form-input w-50" placeholder="Animation Video">
-    
-                        <div> 
-                            <input type="checkbox" id="nftburnable" class="form-input" placeholder="Burnable?">
-                            <label for="nftburnable">Burnable?</label>
-                            <input type="checkbox" id="nftmutable" class="form-input" placeholder="Mutable?">
-                            <label for="nftmutable">Mutable?</label>
-                        </div>
-                    </div>       
-                    <span class="line"></span>
-                    <button class="about-btn-solid w-50 text-uppercase" type="submit" name="send" id="mint-button">Mint!</button>
                 </form>
             </div>
         </div>
