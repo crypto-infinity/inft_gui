@@ -200,8 +200,8 @@ $(function (e) {
             console.log(image.type);
             socket.emit('mint_nft', { 
 
-                id: NFT_ID_COUNT,
-                address: "0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0",
+                // id: NFT_ID_COUNT,
+                // address: "0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0",
                 nftImage: image,
                 nftImageName: image.name,
                 nftImageType: image.type,

@@ -72,31 +72,43 @@ io.on('connection', function(client){
                 callback(result);
             }
 
-            //Building and sending Transaction to Blockchain
-            console.log("Minting NFT to Wallet " + session.wallet);
-            var tx = await contract.mintToken(session.wallet,data.id,data.nftAmount,metadata.url,data.nftBurnable,data.nftMutable);
-            var tx2 = tx.wait();
+            var request = new sql.Request();
+            var query = "SELECT current_value FROM sys.sequences WHERE name='nftCounter'";
 
-            //Transaction health check
-            if(!tx2){
-                console.log("NFT Minting Error");
-                var result = {
-                    id: data.id,
-                    error: "NFT_MINT_ERROR"
+            request.query(query, async function (err, recordset) {
+                //Get current nft counter
+                const counter = recordset.recordset[0].current_value;
+
+                //Building and sending Transaction to Blockchain
+                console.log("Minting NFT to Wallet " + session.wallet);
+                var tx = await contract.mintToken(session.wallet,counter,data.nftAmount,metadata.url,data.nftBurnable,data.nftMutable);
+                var tx2 = tx.wait();
+
+                //Transaction health check
+                if(!tx2){
+                    console.log("NFT Minting Error");
+                    var result = {
+                        id: data.id,
+                        error: "NFT_MINT_ERROR"
+                    }
+                    callback(result);
                 }
-                callback(result);
-            }
 
-            //If everything else was okay, give green light to user! 
-            console.log("Blockchain event ID" + data.id + " finished!");
+                var request_2 = new sql.Request();
+                var query_2 = "SELECT NEXT VALUE FOR dbo.nftCounter";
 
-            var result = {
-                id: data.id,
-                error: "none",
-                transaction: tx
-            }
+                request_2.query(query_2, async function (err, recordset) {
+                    //If everything else was okay, give green light to user! 
+                    console.log("Blockchain event ID" + data.id + " finished!");
 
-            callback(result);//Execute callback on client
+                    var result = {
+                        id: data.id,
+                        error: "none",
+                        transaction: tx
+                    }
+                    callback(result);//Execute callback on client
+                });
+            });
         }
         catch(err){
             //If any error showed up, notify the client
