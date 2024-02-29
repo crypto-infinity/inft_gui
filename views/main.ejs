@@ -21,11 +21,12 @@
         wow = new WOW();
         wow.init();
         var doSetup = <%= doSetup %>;
-        if(<%- wallet %> != null || <%- wallet %> != undefined || <%- wallet %> != ""){
-            const wallet = '<%- wallet %>';
-        }else{
-            const wallet = "Wallet not set yet!";
+        var wallet = '<%- wallet %>';
+
+        if(wallet == null || wallet == undefined || wallet == ""){
+            wallet = "Wallet not set yet!";
         }
+        
         $("#spin").hide(0);
 
     </script>

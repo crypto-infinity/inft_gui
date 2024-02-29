@@ -321,6 +321,7 @@ app.post('/signin/legacy', (req, res) => {
                     console.log("Username : " + username + " is authenticated!");
                     req.session.isAuthenticated = true; //create session here
                     req.session.userId = recordset.recordset[0].id;
+                    
                     req.session.username = username;
                     req.session.authMethod = "legacy";
 
@@ -332,9 +333,10 @@ app.post('/signin/legacy', (req, res) => {
                         req.session.doSetup = true;
                     }else{
                         req.session.doSetup = false;
+                        req.session.wallet = recordset.recordset[0].wallet;
                     }
 
-                    res.redirect('app');
+                    res.redirect('/app');
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
