@@ -398,6 +398,7 @@ dialog {
 */
 
 .tile {
+	text-align: center;
 	position: relative;
 	background: white;
 	overflow: auto;
@@ -1220,7 +1221,8 @@ dialog {
 }
 
 .faq {
-	background: #fafafa;
+	background: var(--main-bg-color);
+	background: var(--main-bg-gradient-color);
 	border-bottom: 1px solid #e4e4e4;
 }
 

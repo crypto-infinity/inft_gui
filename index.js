@@ -137,7 +137,7 @@ app.get('/', (req, res) => {
         res.render('index', { isAuthenticated: false });
     }
     else{
-        res.redirect('app');
+        res.render('index', { isAuthenticated: true });
     }
 });
 

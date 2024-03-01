@@ -27,8 +27,8 @@ const msalConfig = {
     }
 }
 
-const REDIRECT_URI = "http://localhost:443/auth/redirect";
-const POST_LOGOUT_REDIRECT_URI = "http://localhost:443";
+const REDIRECT_URI = "https://inft.scorpaniti.it/auth/redirect";
+const POST_LOGOUT_REDIRECT_URI = "https://inft.scorpaniti.it";
 const GRAPH_ME_ENDPOINT = "https://graph.microsoft.com/v1.0/me";
 
 module.exports = {
