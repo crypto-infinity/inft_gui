@@ -15,9 +15,13 @@
 
     <script src="js/scrollIt.min.js"></script>
     <script src="js/wow.min.js"></script>
-    <script> //WOW effect initialization
+    <script> //Page initialization
         wow = new WOW();
         wow.init();
+
+        $('#spin').hide();
+        var output = '<%- username %>';
+
     </script>
 
     <!-- Custom Page Logic -->
@@ -29,15 +33,18 @@
 <body>
     <section>
         <div>
-            <h4 class="centered title">Your user data:</h4>
-            <script>
-                var output = <%- userdata %>;
-                $('#content').append(output);
-                $('#spin').hide(0);
-            </script>
-            <div id="content">
+            <h3 class="centered title" style="margin-top: 5%; margin-bottom: 5%;">Your user data:</h3>
+
+            <div class="col">
+                <img class="card-icon" style="
+                -webkit-transform: scale(0.80) !important;
+                transform: scale(0.80) !important;" 
+                src="../res/user.png" alt="User">
+                <div id="content">
+                    <h4><%- username %></h4>
+                </div>
                 
-            </div>               
+            </div>        
         </div>
     </section>
 </body>
