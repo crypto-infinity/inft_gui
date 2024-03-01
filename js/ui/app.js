@@ -199,7 +199,7 @@ $(function (e) {
             //upload Image and mint NFT
             console.log(image.type);
             socket.emit('mint_nft', { 
-                
+
                 nftImage: image,
                 nftImageName: image.name,
                 nftImageType: image.type,
@@ -222,8 +222,8 @@ $(function (e) {
                     //Task Finished, let's update status bar
                     console.log("Blockchain Task " + NFT_ID_SESSION_COUNT + " finished! Socket ID: " + socket.id);
                     console.log("Transaction details: " + JSON.stringify(data.transaction));
-                    var status_link_obj = $('#operation-status-content').find('#' + NFT_ID_SESSION_COUNT).find('i');
-                    status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-check');
+                    var status_link_obj = $('#operation-status-content').find('#' + NFT_ID_SESSION_COUNT);
+                    status_link_obj.find('i').removeClass('fa-spinner fa-spin').addClass('fa-check');
                 }
 
                 //Current Job Counter Decreasing
@@ -234,8 +234,8 @@ $(function (e) {
                 }
 
                 //attach handler for tile removal
-                status_link_obj.on('click', function () {
-                    status_link_obj.parent().attr('id').remove();
+                status_link_obj.on('click', 'i', function () {
+                    status_link_obj.remove();
                     if ($('#operation-status-content').children().length == 1) {
                         $('#operation-status-nocontent').show();
                     }
@@ -253,9 +253,8 @@ $(function (e) {
                 </div>
             `);
 
-            //increment counters and set view
+            //increment jobs counters and set view
             CURRENT_JOBS++;
-            
             $('#notification-count').text(CURRENT_JOBS);
         }
         else{
