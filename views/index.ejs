@@ -192,7 +192,7 @@
                   </div>
                   <input type="text" id="subject" class="form-input w-100" name="subject" placeholder="Subject">
                   <textarea class="form-input w-100" id="message" placeholder="Message" name="message"></textarea>
-                  <button class="about-btn-solid w-100 centered" type="submit" name="button">Submit</button>
+                  <button class="about-btn-solid w-100" type="submit" name="button">Submit</button>
                 </form>
               </div>
             </div>
@@ -227,37 +227,6 @@
     wow = new WOW();
     wow.init();
     $(document).ready(function (e) {
-
-      $('#browse-docs').on('click', function(e){
-        $('#dialog-title').text('Dialog Title');
-        $('#dialog-text').text('Dialog Text');
-        disableScroll();
-        window.dialog.showModal();
-      });
-
-      $('#dialog-close').on('click', function(e){
-        $('#dialog-title').text('');
-        $('#dialog-text').text('');
-        enableScroll();
-        window.dialog.close();
-      });
-
-      $('#video-icon').on('click', function (e) {
-        e.preventDefault();
-        $('.video-popup').css('display', 'flex');
-        $('.iframe-src').slideDown();
-      });
-      $('.video-popup').on('click', function (e) {
-        var $target = e.target.nodeName;
-        var video_src = $(this).find('iframe').attr('src');
-        if ($target != 'IFRAME') {
-          $('.video-popup').fadeOut();
-          $('.iframe-src').slideUp();
-          $('.video-popup iframe').attr('src', " ");
-          $('.video-popup iframe').attr('src', video_src);
-        }
-      });
-
       $('.slider').bxSlider({
         pager: false
       });
