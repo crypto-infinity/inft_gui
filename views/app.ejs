@@ -27,6 +27,7 @@
     <script> //Page initialization
         wow = new WOW();
         wow.init();
+        const socket = io();
         var doSetup = <%= doSetup %>;
         var wallet = '<%- wallet %>';
     </script>

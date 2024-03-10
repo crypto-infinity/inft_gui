@@ -34,6 +34,8 @@ io.on('connection', function(client){
 
     console.log("Connected to WebSocket Server! Client: " + client.id);
 
+    /** NFT Mint Socket Listeners */
+
     client.on('mint_nft', async function(data, callback){
         if(!session.isAuthenticated){
             client.emit('error_handler',"User not authenticated!");
@@ -119,6 +121,71 @@ io.on('connection', function(client){
                 message: err
             }
             callback(result);
+        }
+    });
+
+    /** Profile Socket Listeners */
+
+    client.on('profile_setup', async function(data, callback){
+        if(!session.isAuthenticated){
+            client.emit('error_handler',"User not authenticated!");
+            return;
+        }
+        try{
+            var request = new sql.Request();
+            var profile_image = data.image;
+            var description = data.description;
+
+            request.input('profile_image',sql.Image, profile_image);
+            request.input('description',sql.VarChar, description);
+            request.input('userId',sql.Int,session.userId);//userId
+
+
+            var query = "UPDATE [dbo].Login SET profile_image=@profile_image, description=@description WHERE id=@userId";
+
+            request.query(query, function (err, recordset) {
+                //Send callback to client with DONE status
+                callback("STATUS_PROFILE_SETUP_DONE");
+            });
+        }
+        catch(err){
+            console.log("Error: " + err)
+            session.destroy();
+            callback("STATUS_PROFILE_SETUP_ERROR");
+        }
+    })
+
+    client.on('profile_update', async function(data, callback){
+        if(!session.isAuthenticated){
+            client.emit('error_handler',"User not authenticated!");
+            return;
+        }
+        try{
+            var request = new sql.Request();
+
+            request.input('userId',sql.Int,session.userId); //userId
+            
+            var query = "SELECT profile_image FROM [dbo].Login WHERE id=@userId";
+    
+            request.query(query, function (err, recordset) {
+                
+                var profilepicbuffer = recordset.recordset[0].profile_image;
+
+                if(profilepicbuffer == undefined || profilepicbuffer == "" || profilepicbuffer == null){
+                    callback("STATUS_PROFILE_PICTURE_NULL");
+                    return;
+                }
+
+                const image_blob = new Blob([profilepicbuffer]); //ERROR
+
+                callback(image_blob);
+                return;
+            });
+        }
+        catch(err){
+            console.log("Error: " + err)
+            session.destroy();
+            res.render('error', {error: err});
         }
     });
 });

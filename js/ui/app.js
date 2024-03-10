@@ -4,8 +4,6 @@ Global Variables Definition
 
 import { ajaxOpenPage, openModal } from "../library.js";
 
-
-
 /*
     End Global Variables Definition
 */
@@ -14,7 +12,6 @@ import { ajaxOpenPage, openModal } from "../library.js";
 /*
     Websocket Methods
 */
-const socket = io();
 
 socket.on('connect', function () {
     console.log("WS Connection connected!");
@@ -284,6 +281,47 @@ $(function (e) {
         else{
             openModal("Error!","You must first complete your setup!");
         }
+    });
+
+    $('#main-frame').on('load', '#userprofilepic', async function (e) { //Update user photo at every page load
+        openModal("test","test");
+        console.log("test");
+    }); 
+
+    $('#main-frame').on('submit', '#profileform', async function (e) { //Change user profile settings
+        $('#spin').show(0);
+        e.preventDefault();
+        
+        const image = document.getElementById("file-upload").files[0];
+
+        if( image.size < 5e6 
+            && $('#main-frame').find('.card-icon').attr('src') != "../res/user.png"
+            )
+        {   //check and troubleshoot
+            //upload Image profile
+
+            //TO DO
+            socket.emit('profile_setup', {
+                image: document.getElementById("file-upload").files[0],
+                description: document.getElementById('profiledescription').value
+            }, function(result){
+                if (result == "STATUS_PROFILE_SETUP_DONE") { //Profile setup is complete!
+                    $('#spin').hide(0);
+                    openModal("Profile Setup Done!", "Profile setup has been done!");
+
+                    return; //let's block the form submit
+                }else{
+                    $('#spin').hide(0);
+                    openModal("Error!", "Some general error has occured, please refresh the page!");
+                }
+                $('#spin').hide(0);
+            });
+        }
+        else{
+            openModal("Error!","Image file larger than 5MB!");
+        }
+
+        $('#spin').hide(0);
     });
 
     /*

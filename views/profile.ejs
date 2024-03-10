@@ -26,7 +26,7 @@
 
     <!-- Custom Page Logic -->
     <script type="module" src="../js/library.js"></script>
-    <script src="../js/ui/profile.js"></script>
+    <script type="module" src="../js/ui/profile.js"></script>
     <!-- End JS -->
 </head>
 
@@ -34,17 +34,24 @@
     <section>
         <div>
             <h3 class="centered title" style="margin-top: 5%; margin-bottom: 5%;">Your user data:</h3>
-
-            <div class="col">
-                <img class="card-icon" style="
-                -webkit-transform: scale(0.80) !important;
-                transform: scale(0.80) !important;" 
-                src="../res/user.png" alt="User">
-                <div id="content">
-                    <h4><%- username %></h4>
-                </div>
-                
-            </div>        
+            <form class="text-center prelative" id="profileform">
+                <div>
+                    <div id="content">
+                        <h4><%- username %></h4>
+                    </div>
+                    <img class="card-icon" style="
+                    -webkit-transform: scale(0.80) !important;
+                    transform: scale(0.80) !important;" 
+                    src="../res/user.png" alt="User" id="userprofilepic">
+                    <div>
+                        <input type="file" id="file-upload" multiple required>
+                        <input type="textarea" id="profiledescription" class="form-input" placeholder="Description">
+                    </div>
+                    <span class="line"></span>
+                    <button class="about-btn-solid w-50 text-uppercase" type="submit" name="send" id="mint-button">Update Settings</button>
+                </div>          
+            </form>
+                 
         </div>
     </section>
 </body>
