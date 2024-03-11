@@ -190,6 +190,8 @@ $(function (e) {
         //NFT Metadata Build info
         const image = document.getElementById("file-upload").files[0];
 
+        //Apply regex for nftname id on HTML to verify symbols in name
+
         if( image.size < 5e6 
             && $('#main-frame').find('.card-icon').attr('src') != "../res/user.png"
             ){ //check and troubleshoot

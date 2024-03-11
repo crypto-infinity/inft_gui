@@ -1,13 +1,6 @@
 import { openModal, disableScroll, enableScroll, validFileType } from '../library.js';
 
 $(function (e) {
-    console.log();
-
-    socket.emit('profile_update', {}, function(data){
-        var image_blob = data;
-        $('#userprofilepic').attr('src',image_blob);
-    });
-
     $('#spin').hide(0);
 });
 

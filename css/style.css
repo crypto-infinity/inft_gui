@@ -2,7 +2,7 @@
 :root {
 	--main-bg-color: #b30659;
 	/* --main-bg-gradient-color: linear-gradient(to right, #fff, #a0c9eba0); */
-	--main-bg-gradient-color: linear-gradient(to right, #dde9ebd0, #ccddf7c5);
+	--main-bg-gradient-color: linear-gradient(45deg, rgba(131,58,180,0.25) 0%, rgba(253,29,29,0.25) 50%, rgba(252,176,69,0.25) 100%);
 	--secondary-bg-color: #7d0161;
 	--secondary-bg-gradient-color: linear-gradient(to bottom right, #7d0160, #f00b51);
 	--header-text-color: black;
@@ -500,9 +500,9 @@ dialog {
 	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
 	border-radius: 20px;
 	border: 0;
-	width: 350px;
+	width: 250px;
 	/* https://docs.opensea.io/docs/metadata-standards */
-	height: 350px;
+	height: 250px;
 	margin: 20px;
 	object-fit: fill;
 	cursor: pointer;
@@ -933,20 +933,12 @@ dialog {
 .line {
 	height: 2px;
 	width: 50px;
-	background: var(--secondary-bg-color);
+	background: var(--main-bg-color);
 	display: block;
 	z-index: 2;
+	border-bottom: 2px dashed var(--secondary-bg-color);
+	width: 25%;
 	margin: 30px auto 20px;
-}
-
-.line::after {
-	content: "";
-	position: absolute;
-	left: 50%;
-	width: 150px;
-	height: 2px;
-	border-bottom: 2px dashed #bf250a;
-	margin-left: -75px;
 }
 
 .sectioner-header p {

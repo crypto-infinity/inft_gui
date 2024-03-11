@@ -176,9 +176,7 @@ io.on('connection', function(client){
                     return;
                 }
 
-                const image_blob = new Blob([profilepicbuffer]); //ERROR
-
-                callback(image_blob);
+                callback(profilepicbuffer);
                 return;
             });
         }

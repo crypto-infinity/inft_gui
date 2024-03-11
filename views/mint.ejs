@@ -35,7 +35,7 @@
 
                 <form class="text-center prelative" id="mintform">
                     <div>
-                        <h3 class="centered" style="margin-top: 5%;">Your NFT</h3>
+                        <h3 class="centered" style="margin-top: 15%;">Your NFT</h3>
                         <span class="line"></span>
                         <img class="card-icon" style="
                         	-webkit-transform: scale(0.90) !important;
@@ -43,7 +43,8 @@
                             src="../res/user.png" alt="User">
 
                         <div class="normal-padding">
-                            <div><input type="text" id="nftname" class="form-input" placeholder="Name*" required></div>
+                            <!-- Only ASCII chars allowed for nftname -->
+                            <div><input type="text" id="nftname" class="form-input" placeholder="Name*" required></div> 
                             <div><input type="number" id="nftamount" class="form-input" name="amount" min="1" placeholder="Amount*" required/></div>
                         </div>
                         <input type="file" id="file-upload" multiple required> 
