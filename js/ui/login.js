@@ -39,7 +39,8 @@ $(function (e) {
                             $('#spin').hide(0);
                         },
                         error: function () {
-
+                            $('#spin').hide(0);
+                            openModal("Error!", "Some general error has occured, please refresh the page!");
                         }
                     });
                     $('#spin').hide(0);

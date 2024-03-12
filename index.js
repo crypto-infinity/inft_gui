@@ -434,7 +434,7 @@ app.post('/signin/legacy', (req, res) => {
         });
     }
     else{ //user is already authenticated, just render the app page with session data
-        res.redirect('app');
+        res.redirect('/app');
     }
 });
 
