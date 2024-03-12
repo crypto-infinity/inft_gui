@@ -259,8 +259,6 @@ app.post('/walletSetup', (req, res) => {
             request.input('wallet',sql.VarChar, req.body.wallet);
             request.input('id',sql.Int, req.session.userId);
 
-
-            //var query = "INSERT INTO [dbo].Web3 (external_id,wallet) values (@id,@wallet)";
             var query = `
             IF EXISTS (SELECT external_id FROM [dbo].Web3 WHERE external_id = @id)
                 BEGIN
