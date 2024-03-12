@@ -262,16 +262,16 @@ app.post('/walletSetup', (req, res) => {
 
             //var query = "INSERT INTO [dbo].Web3 (external_id,wallet) values (@id,@wallet)";
             var query = `
-            IF EXISTS (SELECT external_id FROM [dbo].Web3 WHERE external_id = '6')
+            IF EXISTS (SELECT external_id FROM [dbo].Web3 WHERE external_id = @id)
                 BEGIN
                     UPDATE [dbo].Web3
-                    SET wallet = '0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0'
-                    WHERE external_id = '6'
+                    SET wallet = @wallet
+                    WHERE external_id = @id
                 END
                 ELSE
                 BEGIN
                     INSERT INTO [dbo].Web3 (external_id,wallet)
-                    VALUES ('6','0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0')
+                    VALUES (@id,@wallet)
                 END
             `;
 
