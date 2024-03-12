@@ -159,6 +159,52 @@ $(function (e) {
         });
     });
 
+    //change_wallet_setup
+    $('#main-frame').on('click', '#change_wallet_setup', async function (e) {
+        //Launch AJAX POST CALL to ../walletSetup for wallet upload
+        $('#spin').show(0);
+
+        var regularExpression = /^0x[a-fA-F0-9]{40}$/gm; //ETH address regex check: /^0x[a-fA-F0-9]{40}$/gm
+
+        if(!regularExpression.test(document.getElementById('input_wallet').value)){
+            $('#spin').hide(0);
+            openModal("Error!", "ERC20 Wallet form not correct!");
+            return; //let's block the form submit
+        }
+        console.log("Wallet address correct!");
+
+        $.ajax({
+            url: "/walletSetup",//API to check Users
+            type: "POST",
+            data: {
+                wallet: document.getElementById('input_wallet').value
+            },
+            success: function (data, textStatus, xhr) {
+                if (xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_WALLET_SETUP_DONE") { //wallet setup is complete! setting doSetup = false server-side
+                    $('#spin').hide(0);
+                    openModal("Wallet Setup Done!", "Wallet setup has been done!");
+
+                    //Updating GUI to reflect the setup status!
+                    $("#setup_status_text").empty();
+
+                    $("#setup_status_text").append(`
+                        <h5>Setup has been done! Happy Web3 browsing!</h5>
+                    `);
+                    location.reload();
+                    return; //let's block the form submit
+                }else{
+                    $('#spin').hide(0);
+                    openModal("Error!", "Some general error has occured, please refresh the page!");
+                }
+                $('#spin').hide(0);
+            },
+            error: function () {
+                $('#spin').hide(0);
+                openModal("Error!", "Some general error has occured, please refresh the page!");
+            }
+        });
+    });
+
     /*
         End Main Tab 
     */

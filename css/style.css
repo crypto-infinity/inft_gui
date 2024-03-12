@@ -913,8 +913,9 @@ dialog {
 
 .header-padding-image {
 	position: relative;
-	padding: 40px 0px;
+	/* padding: 15% 0px; */
 	width: 40vh;
+	margin-bottom: 5%;
 }
 
 .column {

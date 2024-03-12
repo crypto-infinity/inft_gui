@@ -18,8 +18,7 @@
     <script> //Page initialization
         wow = new WOW();
         wow.init();
-
-        $('#spin').hide();
+        
         var output = '<%- username %>';
 
         socket.emit('profile_update', {}, function(data){
@@ -30,6 +29,8 @@
             else{ //if user never set his picture show the default one
                 $('#userprofilepic').attr('src',"../res/user.png");
             }
+            $
+            $('#spin').hide();
         });
     </script>
 

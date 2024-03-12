@@ -1,7 +1,7 @@
 import { openModal, disableScroll, enableScroll, validFileType } from '../library.js';
 
 $(function (e) {
-    $('#spin').hide(0);
+    
 });
 
 $('.card-icon').on('click', function(e){
