@@ -144,7 +144,7 @@ $(function (e) {
                     $("#setup_status_text").append(`
                         <h5>Setup has been done! Happy Web3 browsing!</h5>
                     `);
-
+                    location.reload();
                     return; //let's block the form submit
                 }else{
                     $('#spin').hide(0);
