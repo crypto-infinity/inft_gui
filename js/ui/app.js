@@ -215,7 +215,6 @@ $(function (e) {
 
     $('#mint').on('click', function (e) {
         if(doSetup != true){
-            console.log($('#sidenav').css('width'));
             if ($('#sidenav').css('width') >= '250px') {
                 $('#sidenav').css('width', '0'); 
                 document.getElementById("main").style.marginLeft = "0px";
@@ -331,18 +330,13 @@ $(function (e) {
         }
     });
 
-    $('#main-frame').on('load', '#userprofilepic', async function (e) { //Update user photo at every page load
-        openModal("test","test");
-        console.log("test");
-    }); 
-
     $('#main-frame').on('submit', '#profileform', async function (e) { //Change user profile settings
         $('#spin').show(0);
         e.preventDefault();
         
         const image = document.getElementById("file-upload").files[0];
 
-        if( image.size < 5e6 
+        if( image.size < 5e8 
             && $('#main-frame').find('.card-icon').attr('src') != "../res/user.png"
             )
         {   //check and troubleshoot

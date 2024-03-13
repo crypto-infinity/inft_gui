@@ -22,9 +22,12 @@
         var output = '<%- username %>';
 
         socket.emit('profile_update', {}, function(data){
-            if(data != "STATUS_PROFILE_PICTURE_NULL"){ //if picture was already set by the user
-                const blob = new Blob([data]);
+            if(data != "STATUS_PROFILE_PICTURE_NULL"){ 
+                //if picture was already set by the user
+                const blob = new Blob([data.profilepicbuffer]);
+
                 $('#userprofilepic').attr('src',URL.createObjectURL(blob));
+                $('#profiledescription').val(data.description);
             }
             else{ //if user never set his picture show the default one
                 $('#userprofilepic').attr('src',"../res/user.png");
@@ -58,7 +61,7 @@
                         <input type="textarea" id="profiledescription" class="form-input" placeholder="Description">
                     </div>
                     <span class="line"></span>
-                    <button class="about-btn-solid w-50 text-uppercase" type="submit" name="send" id="mint-button">Update</button>
+                    <button class="about-btn-solid w-50 text-uppercase" type="submit" name="send" id="update_profile_button">Update</button>
                 </div>          
             </form>
                  

@@ -165,18 +165,23 @@ io.on('connection', function(client){
 
             request.input('userId',sql.Int,session.userId); //userId
             
-            var query = "SELECT profile_image FROM [dbo].Login WHERE id=@userId";
+            var query = "SELECT profile_image,description FROM [dbo].Login WHERE id=@userId";
     
             request.query(query, function (err, recordset) {
                 
                 var profilepicbuffer = recordset.recordset[0].profile_image;
+                var description = recordset.recordset[0].description;
 
                 if(profilepicbuffer == undefined || profilepicbuffer == "" || profilepicbuffer == null){
                     callback("STATUS_PROFILE_PICTURE_NULL");
                     return;
                 }
 
-                callback(profilepicbuffer);
+                callback({ //Launch callback to client
+                    profilepicbuffer: profilepicbuffer,
+                    description: description
+                });
+
                 return;
             });
         }
