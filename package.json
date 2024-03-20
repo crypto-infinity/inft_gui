@@ -24,6 +24,7 @@
   "homepage": "https://github.com/crypto-infinity/inft_gui#readme",
   "dependencies": {
     "@azure/msal-node": "^2.6.4",
+    "@metamask/sdk": "^0.17.2",
     "axios": "^1.5.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",

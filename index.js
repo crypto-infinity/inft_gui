@@ -47,21 +47,23 @@ io.on('connection', function(client){
             //Uploading the NFT Metadata to Filecoin
             console.log("Converting NFT Image...");
 
-            const image_base64 = Buffer.from(data.nftImage).toString('base64');
-            const image_blob = b64toBlob(image_base64,data.nftImageType);
-            const image_file = new File([image_blob], data.nftName , { type: data.nftImageType });
+            // const image_base64 = Buffer.from(data.nftImage).toString('base64');
+            // const image_blob = b64toBlob(image_base64,data.nftImageType);
 
-            //Building and uploading NFT object for NFT.Storage API
+            const image_blob = new Blob([data.nftImage]); //Instance BLOB from Socket.io Buffer
+            //Convert BLOB to FILE with MIME type attached
+            const image_file = new File([image_blob], data.nftName , { type: data.nftImageType }); 
+
+            //Building and uploading NFT object for NFT.Storage API .replace(/\s+/g, ' ').trim()
             console.log("Building and Uploading NFT Client info...");
-            const nft = {
-                image: image_file, 
+
+            const metadata = await nftClient.store({
                 name: data.nftName,
                 description: data.nftDescription,
-                external_url: data.nftUrl,
-                animation_url: data.nftAnimationVideo
-            }
-            var metadata = await nftClient.store(nft);
-            //console.log(metadata);
+                image: image_file, 
+            });
+
+            //const metadata_url = "https://nftstorage.link/ipfs/" + metadata.ipnft;
 
             //Upload result check
             if(metadata){ console.log("Metadata: " + metadata.toString()); }

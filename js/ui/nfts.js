@@ -5,6 +5,10 @@ export async function loadNFTImages(imageArray)
     //HTTPS Gateway: https://nftstorage.link/ipfs/bafyreihf55gmi2opdeyjx3ulayaas77up3d5q2wwspogsbfhxbmri4wusy/metadata.json
     //IPFS Link: ipfs://bafyreihf55gmi2opdeyjx3ulayaas77up3d5q2wwspogsbfhxbmri4wusy/metadata.json
 
+    if(imageArray.length == 0){
+        $('#spin').hide(0);
+    }
+
     for(var i = 0; i < imageArray.length; i++){ //how to pass i to callbacks?
         var cid = imageArray[i].replaceAll("ipfs://","https://nftstorage.link/ipfs/"); //string normalization
         fetch(cid).then((response) => { //fetching JSON from Dweb.link IPFS Gateway
