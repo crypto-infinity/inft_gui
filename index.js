@@ -60,7 +60,9 @@ io.on('connection', function(client){
             const metadata = await nftClient.store({
                 name: data.nftName,
                 description: data.nftDescription,
-                image: image_file, 
+                image: image_file,
+                animation_url: data.nftAnimationVideo,
+                external_url: data.nftUrl
             });
 
             //const metadata_url = "https://nftstorage.link/ipfs/" + metadata.ipnft;
