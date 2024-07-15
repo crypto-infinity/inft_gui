@@ -65,16 +65,26 @@ export function validFileType(file) {
  */
 
 /**
- * AJAX Page Load
+ * AJAX Page Load with Arguments
  */
 
-export function ajaxOpenPage(page) {
+export function ajaxOpenPage(page,options) {
     if (opened_tab != page) {
+        $('#spin').show(0); //Terminating in page ejs file
         $.get(`views/${page}.ejs`, function (template) {
             // Compile the EJS template.
-            var base_template = ejs.compile(template);
-            $.get(`/${page}`, function (data) {
+            if(options != null || options != undefined){
+                var base_template = ejs.compile(template, { doSetup: options.doSetup, wallet: options.wallet});
+            }else{
+                var base_template = ejs.compile(template);
+            }
+            
+            $.get(`/${page}`, function (data,textStatus,request) {
                 // Generate the html from the given data.
+                if(request.getResponseHeader("INFT_ERROR_MESSAGE") == "ERR_WALLET_NOT_SET"){
+                    openModal("Error!","You must first complete your setup!");
+                    return;
+                }
                 var html = base_template(data);
                 opened_tab = page;
                 $('#main-frame').animate({ 'opacity': 0 }, 300, function () {
@@ -83,10 +93,12 @@ export function ajaxOpenPage(page) {
             }).fail(function (e) {
                 console.log("Ajax Query failed");
                 openModal("Error!", "Request has not been fullfilled!");
+                $('#spin').hide(0);
             });
         }).fail(function () {
             console.log("Ajax Query failed");
             openModal("Error!", "Please reload the page");
+            $('#spin').hide(0);
         });
     }
 }

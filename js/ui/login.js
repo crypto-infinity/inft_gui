@@ -1,12 +1,16 @@
 import { openModal } from "../library.js";
 
 $(function (e) {
+
     $('form#signin_form').on('submit', function (e) { //Form submit custom handler
         $('#spin').show(0);
         var form = this;
         e.preventDefault();
 
-        if (document.activeElement.id == "login") {
+        if (document.activeElement.id == "login" || 
+            document.activeElement.id == "username" || 
+            document.activeElement.id == "password") {
+            
             $.ajax({
                 url: "/checkUser",//API to check Users
                 type: "POST",
@@ -35,7 +39,8 @@ $(function (e) {
                             $('#spin').hide(0);
                         },
                         error: function () {
-
+                            $('#spin').hide(0);
+                            openModal("Error!", "Some general error has occured, please refresh the page!");
                         }
                     });
                     $('#spin').hide(0);

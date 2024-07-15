@@ -2,14 +2,12 @@
 :root {
 	--main-bg-color: #b30659;
 	/* --main-bg-gradient-color: linear-gradient(to right, #fff, #a0c9eba0); */
-	--main-bg-gradient-color: linear-gradient(to right, #cdf7ffd0, #b3cef7d0);
+	--main-bg-gradient-color: linear-gradient(45deg, rgba(131,58,180,0.25) 0%, rgba(253,29,29,0.25) 50%, rgba(252,176,69,0.25) 100%);
 	--secondary-bg-color: #7d0161;
 	--secondary-bg-gradient-color: linear-gradient(to bottom right, #7d0160, #f00b51);
 	--header-text-color: black;
 	--body-text-color: #4d4949;
 }
-
-
 
 /*
  	Body General Classes
@@ -18,7 +16,6 @@
 * {
 	padding: 0;
 	margin: 0;
-	overflow: hidden; /*Completely disables scrollbars*/
 }
 
 body {
@@ -67,21 +64,39 @@ input[type="checkbox"] {
 }
 
 input[type="file"] {
-    display: none;
+	display: none;
 }
 
 label {
-    vertical-align: middle;
+	vertical-align: middle;
 	margin: 15px;
+}
+
+button:focus {
+	outline: none;
 }
 
 .row-no-margin {
 	margin-left: 0px;
 	margin-right: 0px;
- } 
+}
+
 
 /*
  	End Body General Classes
+*/
+
+/*
+ 	Main Div alignment
+*/
+
+#main {
+	overflow: auto;
+	transition: margin-left .5s;
+}
+
+/*
+ 	End Main Div alignment
 */
 
 /*
@@ -264,11 +279,7 @@ dialog {
 	font-size: 36px;
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-	transition: margin-left .5s;
-	padding: 20px;
-}
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
@@ -283,7 +294,7 @@ dialog {
 
 .navbar-toggler-visible {
 	position: absolute;
-	padding-top: 20px;
+	padding-top: 30px;
 	margin-left: 20px;
 	top: 0px;
 	left: 0px;
@@ -306,12 +317,14 @@ dialog {
 
 .operation-status-icon {
 	position: absolute;
-	padding-top: 20px;
+	padding-top: 30px;
 	margin-right: 20px;
 	top: 0px;
 	right: 0px;
 	z-index: 2;
 	cursor: pointer;
+	border: none;
+	background: none;
 }
 
 .operation-status-icon span {
@@ -345,7 +358,7 @@ dialog {
 
 .blur:hover {
 	color: transparent;
-   	text-shadow: 0 0 2px rgba(0,0,0,0.7);
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
 }
 
 .psticky {
@@ -355,15 +368,16 @@ dialog {
 .button__badge {
 	border-radius: 2px;
 	color: white;
-   
+
 	padding: 1px 3px;
 	font-size: 10px;
-	
-	position: absolute; /* Position the badge within the relatively positioned button */
+
+	position: absolute;
+	/* Position the badge within the relatively positioned button */
 	top: 0;
 	right: 0;
 	margin-top: 10px;
-  }
+}
 
 @media screen and (max-width: 768px) {
 
@@ -384,6 +398,7 @@ dialog {
 */
 
 .tile {
+	text-align: center;
 	position: relative;
 	background: white;
 	overflow: auto;
@@ -392,11 +407,12 @@ dialog {
 	border: 0;
 	padding: 20px;
 	word-wrap: break-word;
-	width: 100%;
+	/* width: 100%; */
 	/* height: 100%; */
 	max-width: 300px;
 	/* align-items: center; */
 	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
+	display: inline-block;
 }
 
 .tile-margin-top-bottom {
@@ -416,21 +432,19 @@ dialog {
 }
 
 .tile-icon {
-	display: block;
+	display: inline-block;
 	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
-	text-align: center;
 	border-radius: 20px;
 	border: 0;
 	width: 150px;
 	height: 150px;
 	margin-bottom: 20px;
-	margin-left: auto;
-	margin-right: auto;
 	object-fit: cover;
 }
 
 .tile-description {
 	text-align: center;
+	word-wrap: break-word;
 }
 
 .read-more-nft {
@@ -467,13 +481,9 @@ dialog {
 		margin: 5px;
 	}
 
-	.tile > * {
+	.tile>* {
 		-webkit-transform: scale(0.75) !important;
 		transform: scale(0.75) !important;
-	}
-
-	.tile > *:not(.read-more-nft):not(.tile-icon){
-		display: none;
 	}
 }
 
@@ -490,12 +500,10 @@ dialog {
 	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
 	border-radius: 20px;
 	border: 0;
-	width: 350px; /* https://docs.opensea.io/docs/metadata-standards */
-	height: 350px;
-	margin-bottom: 20px;
-	margin-left: 20px;
-	margin-right: 20px;
-	margin-top: 20px;
+	width: 250px;
+	/* https://docs.opensea.io/docs/metadata-standards */
+	height: 250px;
+	margin: 20px;
 	object-fit: fill;
 	cursor: pointer;
 }
@@ -509,91 +517,101 @@ dialog {
 	Slider CSS
 */
 
-* {box-sizing:border-box}
+* {
+	box-sizing: border-box;
+}
 
 /* Slideshow container */
 .slideshow-container {
-  max-width: 1000px;
-  position: relative;
-  margin: auto;
+	max-width: 1000px;
+	position: relative;
+	margin: auto;
 }
 
 /* Hide the images by default */
 .mySlides {
-  display: none;
+	display: none;
 }
 
 /* Next & previous buttons */
-.prev, .next {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  width: auto;
-  margin-top: -22px;
-  padding: 16px;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
+.prev,
+.next {
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	width: auto;
+	margin-top: -22px;
+	padding: 16px;
+	color: white;
+	font-weight: bold;
+	font-size: 18px;
+	transition: 0.6s ease;
+	border-radius: 0 3px 3px 0;
 }
 
 /* Position the "next button" to the right */
 .next {
-  right: 0;
-  border-radius: 3px 0 0 3px;
+	right: 0;
+	border-radius: 3px 0 0 3px;
 }
 
 /* On hover, add a black background color with a little bit see-through */
-.prev:hover, .next:hover {
-  background-color: rgba(0,0,0,0.8);
+.prev:hover,
+.next:hover {
+	background-color: rgba(0, 0, 0, 0.8);
 }
 
 /* Caption text */
 .text {
-  color: #f2f2f2;
-  font-size: 15px;
-  padding: 8px 12px;
-  position: absolute;
-  bottom: 8px;
-  width: 100%;
-  text-align: center;
+	color: #f2f2f2;
+	font-size: 15px;
+	padding: 8px 12px;
+	position: absolute;
+	bottom: 8px;
+	width: 100%;
+	text-align: center;
 }
 
 /* Number text (1/3 etc) */
 .numbertext {
-  color: #f2f2f2;
-  font-size: 12px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
+	color: #f2f2f2;
+	font-size: 12px;
+	padding: 8px 12px;
+	position: absolute;
+	top: 0;
 }
 
 /* The dots/bullets/indicators */
 .dot {
-  cursor: pointer;
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
+	cursor: pointer;
+	height: 15px;
+	width: 15px;
+	margin: 0 2px;
+	background-color: #bbb;
+	border-radius: 50%;
+	display: inline-block;
+	transition: background-color 0.6s ease;
 }
 
-.active, .dot:hover {
-  background-color: #717171;
+.active,
+.dot:hover {
+	background-color: #dfeaf3;
 }
 
 /* Fading animation */
 .fade {
-  animation-name: fade;
-  animation-duration: 1.5s;
+	animation-name: fade;
+	animation-duration: 1.5s;
 }
 
 @keyframes fade {
-  from {opacity: .4}
-  to {opacity: 1}
+	from {
+		opacity: .4
+	}
+
+	to {
+		opacity: 1
+	}
 }
 
 /*
@@ -619,6 +637,39 @@ dialog {
 	End App CSS
 */
 
+/*
+	Tooltip CSS
+*/
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 120px;
+	background-color: rgb(76, 49, 49);
+	color: #8e4343;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+
+	/* Position the tooltip */
+	position: absolute;
+	z-index: 2;
+	top: -5px;
+	left: 105%;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+}
+
+/*
+	End Tooltip CSS
+*/
 
 
 .hidden {
@@ -642,7 +693,7 @@ dialog {
 }
 
 .main-color {
-	color: var(--main-bg-color) !important; 
+	color: var(--main-bg-color) !important;
 }
 
 .navbar {
@@ -757,7 +808,7 @@ dialog {
 	background: var(--main-bg-color);
 	background: var(--main-bg-gradient-color);
 	position: relative;
-	height: 100vh;
+	height: auto;
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -779,7 +830,7 @@ dialog {
 .main-banner-gradient {
 	background: var(--main-bg-gradient-color);
 	position: absolute;
-	height: 100vh;
+	height: auto;
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -862,14 +913,9 @@ dialog {
 
 .header-padding-image {
 	position: relative;
-	padding: 30px 0px;
+	/* padding: 15% 0px; */
 	width: 40vh;
-}
-
-.header-relative-padding-image {
-	position: relative;
-	padding: 40px 0px;
-	width: 30vh;
+	margin-bottom: 5%;
 }
 
 .column {
@@ -888,19 +934,12 @@ dialog {
 .line {
 	height: 2px;
 	width: 50px;
-	background: var(--secondary-bg-color);
+	background: var(--main-bg-color);
 	display: block;
+	z-index: 2;
+	border-bottom: 2px dashed var(--secondary-bg-color);
+	width: 25%;
 	margin: 30px auto 20px;
-}
-
-.line::after {
-	content: "";
-	position: absolute;
-	left: 50%;
-	width: 150px;
-	height: 2px;
-	border-bottom: 2px dashed #bf250a;
-	margin-left: -75px;
 }
 
 .sectioner-header p {
@@ -965,7 +1004,7 @@ dialog {
 	padding: 10px 40px;
 	border: 2px solid var(--main-bg-color);
 	border-radius: 7px;
-	margin-top:10px;
+	margin-top: 10px;
 	margin-bottom: 20px;
 	display: inline-block;
 	max-width: 300px;
@@ -1175,7 +1214,8 @@ dialog {
 }
 
 .faq {
-	background: #fafafa;
+	background: var(--main-bg-color);
+	background: var(--main-bg-gradient-color);
 	border-bottom: 1px solid #e4e4e4;
 }
 
@@ -1199,6 +1239,7 @@ dialog {
 	border: 1px solid #e4e4e4;
 	text-align: center;
 	margin: 5px;
+	width: auto;
 }
 
 input {
@@ -1219,7 +1260,6 @@ input {
 	padding: 1rem;
 	height: 150px;
 	background: #fff;
-	border: 0;
 	border-radius: 30px;
 	margin-bottom: 1rem;
 	-webkit-transition: all 0.3s ease-in-out;
@@ -1356,15 +1396,27 @@ input {
 	.form-input {
 		-webkit-transform: scale(0.75) !important;
 		transform: scale(0.75) !important;
+		width: auto;
 	}
 
 	.card-icon {
-		-webkit-transform: scale(0.75) !important;
-		transform: scale(0.75) !important;
+		-webkit-transform: scale(0.65) !important;
+		transform: scale(0.65) !important;
+		width: 80%;
+		margin: 10px;
+		height: auto;
 	}
 
 	.header-padding {
 		padding: 0;
+	}
+
+	.header-padding-image {
+		padding: 10px 0px;
+	}
+
+	.normal-padding {
+		padding: 8px;
 	}
 
 	.banner-text {
@@ -1375,6 +1427,25 @@ input {
 	.icon-box {
 		-webkit-transform: scale(0.65) !important;
 		transform: scale(0.65) !important;
+	}
+
+	.row {
+		text-align: center;
+		width: auto;
+	}
+
+	.tile {
+		-webkit-transform: scale(0.75) !important;
+		transform: scale(0.75) !important;
+	}
+
+	.title-top {
+		margin-top: 15%;
+	}
+
+	#main-frame {
+		display: inline-block;
+		overflow-x: hidden;
 	}
 
 	h2 {
@@ -1412,7 +1483,7 @@ input {
 
 	.about-btn {
 		padding: 5px 30px;
-		margin-top: 0px;
+		margin-top: 10px;
 		font-size: 16px;
 	}
 

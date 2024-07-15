@@ -1,12 +1,12 @@
 require('dotenv').config(); //Import .env 
-const { PRIVATE_KEY, CONTRACT_ADDRESS, CONNECTION_STRING_SEPOLIA_ALCHEMY_HTTPS } = process.env;
+const { PRIVATE_KEY, CONTRACT_ADDRESS, CONNECTION_STRING_MUMBAI_ALCHEMY_HTTPS } = process.env;
 
 const { ethers } = require("ethers");
 const contract_json = require("./abi/standardNFT_DB.json");
 
 try{
     //Instanciate a provider, a server that receives and handles calls/txs to the blockchain
-    const provider = new ethers.providers.JsonRpcProvider(CONNECTION_STRING_SEPOLIA_ALCHEMY_HTTPS);
+    const provider = new ethers.providers.JsonRpcProvider(CONNECTION_STRING_MUMBAI_ALCHEMY_HTTPS);
 
     //Instanciate a signer, a tuple key-provider
     const signer = new ethers.Wallet(PRIVATE_KEY, provider);

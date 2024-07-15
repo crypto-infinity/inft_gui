@@ -24,13 +24,16 @@
 
     <script src="js/scrollIt.min.js"></script>
     <script src="js/wow.min.js"></script>
-    <script> //WOW effect initialization
+    <script> //Page initialization
         wow = new WOW();
         wow.init();
+        const socket = io();
+        var doSetup = <%= doSetup %>;
+        var wallet = '<%- wallet %>';
     </script>
     <script> //Global Variables Initialization
         var opened_tab = "none"; //set current open tab        
-        var NFT_ID_COUNT = 0;
+        var NFT_ID_SESSION_COUNT = 0;
         var CURRENT_JOBS = 0;
         var file_properties;
         var file_contents;
@@ -70,10 +73,12 @@
                 <a href="javascript:void(0)" class="closebtn" id="nav-closer">&times;</a>
                 <a href="#" id="main-link"><img class="app-logo" src="../res/logo.png" data-wow-delay="0.2s"></a>
                 <a href="#"><h4>Hi, <%- username %>!</h4></a>
+                
                 <a href="#" id="mint"><i class="fa-solid fa-wand-magic-sparkles"></i> Mint!</a>
                 <a href="#" id="nfts"><i class="fa-solid fa-list"></i> My NFTs</a>
                 <a href="#" id="marketplace"><i class="fa-solid fa-square-poll-vertical"></i> Marketplace</a>
                 <a href="#" id="profile"><i class="fa fa-user"></i> My Profile</a>
+                <a href="https://etherscan.io/address/<%- wallet %>"><i class="fa-solid fa-wallet"></i> Your Wallet</a>
                 <a href="/signout" class="about-btn-solid navbar-centered">Logout</a>
             </div>
             <!-- End Navbar Definition -->
@@ -95,12 +100,13 @@
                     </div>
                 </div>
             </div>
-            <!-- End Operation Status Popup -->
+            <!-- End Operation Status Popup --> 
 
             <div class="container centered-section" id="main-frame">
                 <!-- Dynamic JQuery content is rendered here -->
             </div>
         </div>
+
     </section>
 </body>
 

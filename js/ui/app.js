@@ -4,8 +4,6 @@ Global Variables Definition
 
 import { ajaxOpenPage, openModal } from "../library.js";
 
-
-
 /*
     End Global Variables Definition
 */
@@ -14,7 +12,6 @@ import { ajaxOpenPage, openModal } from "../library.js";
 /*
     Websocket Methods
 */
-const socket = io();
 
 socket.on('connect', function () {
     console.log("WS Connection connected!");
@@ -35,10 +32,13 @@ socket.on("disconnect", (reason) => { //handle specific disconnection cases
 
 socket.on('blockchain_task_finished', function (data) {
     if (socket.recovered) {
-        console.log("Blockchain Task " + data.id + " finished - socket recovered! Socket ID: " + socket.id);
+        console.log("Blockchain Task " + NFT_ID_SESSION_COUNT + " finished - socket recovered! Socket ID: " + socket.id);
     } else {
         
     }
+});
+socket.on('error_handler', function(data){
+    console.log(data);
 });
 
 /*
@@ -53,7 +53,7 @@ socket.on('blockchain_task_finished', function (data) {
 $(function (e) {
 
     //First time page loading
-    ajaxOpenPage("main");
+    ajaxOpenPage("main", { doSetup, wallet });
 
     /*
         Navbar
@@ -63,7 +63,7 @@ $(function (e) {
             if ($('#sidenav').css('width') == '0px') {
                 $('#sidenav').css('width', '250');
                 document.getElementById("main").style.marginLeft = "250px";
-            } else if ($('#sidenav').css('width') == '250px') {
+            } else if ($('#sidenav').css('width') >= '250px') {
                 $('#sidenav').css('width', '0');
                 document.getElementById("main").style.marginLeft = "0px";
             }
@@ -94,7 +94,7 @@ $(function (e) {
         if ($('#operation-status-popup').css('display') == "none") {
             $('#operation-status-expander').children().addClass('fa-regular').removeClass('fa-solid');
             $('#operation-status-popup').css('display', 'block');
-            //$('#notification-NFT_ID_COUNT').html("10"); //SETS NOTIFICATION COUNT
+            //$('#notification-NFT_ID_SESSION_COUNT').html("10"); //SETS NOTIFICATION COUNT
         } else if ($('#operation-status-popup').css('display') == "block") {
             $('#operation-status-popup').css('display', 'none');
             $('#operation-status-expander').children().addClass('fa-solid').removeClass('fa-regular');
@@ -113,6 +113,98 @@ $(function (e) {
         ajaxOpenPage("main");
     });
 
+    $('#main-frame').on('click', '#complete_setup', async function (e) {
+        //Launch AJAX POST CALL to ../walletSetup
+        $('#spin').show(0);
+
+        var regularExpression = /^0x[a-fA-F0-9]{40}$/gm; //ETH address regex check: /^0x[a-fA-F0-9]{40}$/gm
+
+
+        if(!regularExpression.test(document.getElementById('input_wallet').value)){
+            $('#spin').hide(0);
+            openModal("Error!", "ERC20 Wallet form not correct!");
+            return; //let's block the form submit
+        }
+        console.log("Wallet address correct!");
+
+        $.ajax({
+            url: "/walletSetup",//API to check Users
+            type: "POST",
+            data: {
+                wallet: document.getElementById('input_wallet').value
+            },
+            success: function (data, textStatus, xhr) {
+                if (xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_WALLET_SETUP_DONE") { //wallet setup is complete! setting doSetup = false server-side
+                    $('#spin').hide(0);
+                    openModal("Wallet Setup Done!", "Wallet setup has been done!");
+
+                    //Updating GUI to reflect the setup status!
+                    $("#setup_status_text").empty();
+
+                    $("#setup_status_text").append(`
+                        <h5>Setup has been done! Happy Web3 browsing!</h5>
+                    `);
+                    location.reload();
+                    return; //let's block the form submit
+                }else{
+                    $('#spin').hide(0);
+                    openModal("Error!", "Some general error has occured, please refresh the page!");
+                }
+                $('#spin').hide(0);
+            },
+            error: function () {
+                $('#spin').hide(0);
+                openModal("Error!", "Some general error has occured, please refresh the page!");
+            }
+        });
+    });
+
+    //change_wallet_setup
+    $('#main-frame').on('click', '#change_wallet_setup', async function (e) {
+        //Launch AJAX POST CALL to ../walletSetup for wallet upload
+        $('#spin').show(0);
+
+        var regularExpression = /^0x[a-fA-F0-9]{40}$/gm; //ETH address regex check: /^0x[a-fA-F0-9]{40}$/gm
+
+        if(!regularExpression.test(document.getElementById('input_wallet').value)){
+            $('#spin').hide(0);
+            openModal("Error!", "ERC20 Wallet form not correct!");
+            return; //let's block the form submit
+        }
+        console.log("Wallet address correct!");
+
+        $.ajax({
+            url: "/walletSetup",//API to check Users
+            type: "POST",
+            data: {
+                wallet: document.getElementById('input_wallet').value
+            },
+            success: function (data, textStatus, xhr) {
+                if (xhr.getResponseHeader("INFT_STATUS_MESSAGE") == "STATUS_WALLET_SETUP_DONE") { //wallet setup is complete! setting doSetup = false server-side
+                    $('#spin').hide(0);
+                    openModal("Wallet Setup Done!", "Wallet setup has been done!");
+
+                    //Updating GUI to reflect the setup status!
+                    $("#setup_status_text").empty();
+
+                    $("#setup_status_text").append(`
+                        <h5>Setup has been done! Happy Web3 browsing!</h5>
+                    `);
+                    location.reload();
+                    return; //let's block the form submit
+                }else{
+                    $('#spin').hide(0);
+                    openModal("Error!", "Some general error has occured, please refresh the page!");
+                }
+                $('#spin').hide(0);
+            },
+            error: function () {
+                $('#spin').hide(0);
+                openModal("Error!", "Some general error has occured, please refresh the page!");
+            }
+        });
+    });
+
     /*
         End Main Tab 
     */
@@ -122,12 +214,16 @@ $(function (e) {
     */
 
     $('#mint').on('click', function (e) {
-        if ($('#sidenav').css('width') == '250px') {
-            $('#sidenav').css('width', '0');
-            document.getElementById("main").style.marginLeft = "0px";
+        if(doSetup != true){
+            if ($('#sidenav').css('width') >= '250px') {
+                $('#sidenav').css('width', '0'); 
+                document.getElementById("main").style.marginLeft = "0px";
+            }
+            ajaxOpenPage("mint");
+        }else
+        {
+            openModal("Error!","You must first complete your setup!");
         }
-        $('#spin').show(0);
-        ajaxOpenPage("mint");
     });
 
     //Mint Events
@@ -139,6 +235,8 @@ $(function (e) {
         //NFT Metadata Build info
         const image = document.getElementById("file-upload").files[0];
 
+        //Apply regex for nftname id on HTML to verify symbols in name
+
         if( image.size < 5e6 
             && $('#main-frame').find('.card-icon').attr('src') != "../res/user.png"
             ){ //check and troubleshoot
@@ -146,7 +244,6 @@ $(function (e) {
             console.log(image.type);
             socket.emit('mint_nft', { 
 
-                id: NFT_ID_COUNT,
                 nftImage: image,
                 nftImageName: image.name,
                 nftImageType: image.type,
@@ -162,15 +259,15 @@ $(function (e) {
             }, function(data){ //Emit Callback
 
                 if(data.error != "none"){
-                    console.log("ERROR: " + data.error + " for ID " + data.id + ", message: " + data.message.toString());
-                    var status_link_obj = $('#operation-status-content').find('#' + data.id).find('i');
+                    console.log("ERROR: " + data.error + " for ID " + NFT_ID_SESSION_COUNT + ", message: " + data.message.toString());
+                    var status_link_obj = $('#operation-status-content').find('#' + NFT_ID_SESSION_COUNT).find('i');
                     status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-triangle-exclamation');
                 }else{
                     //Task Finished, let's update status bar
-                    console.log("Blockchain Task " + data.id + " finished! Socket ID: " + socket.id);
+                    console.log("Blockchain Task " + NFT_ID_SESSION_COUNT + " finished! Socket ID: " + socket.id);
                     console.log("Transaction details: " + JSON.stringify(data.transaction));
-                    var status_link_obj = $('#operation-status-content').find('#' + data.id).find('i');
-                    status_link_obj.removeClass('fa-spinner fa-spin').addClass('fa-check');
+                    var status_link_obj = $('#operation-status-content').find('#' + NFT_ID_SESSION_COUNT);
+                    status_link_obj.find('i').removeClass('fa-spinner fa-spin').addClass('fa-check');
                 }
 
                 //Current Job Counter Decreasing
@@ -181,34 +278,34 @@ $(function (e) {
                 }
 
                 //attach handler for tile removal
-                status_link_obj.on('click', function () {
-                    $('#operation-status-content').find('#' + data.id).remove();
+                status_link_obj.on('click', 'i', function () {
+                    status_link_obj.remove();
                     if ($('#operation-status-content').children().length == 1) {
                         $('#operation-status-nocontent').show();
                     }
-                });
-
-
+                });   
+                
+                //Increment session counter
+                NFT_ID_SESSION_COUNT++;
             });
 
             //adjust operation status GUI view
             $('#operation-status-nocontent').hide();
             $('#operation-status-nocontent').after(`
-                <div class="tile-margin-top-bottom" id="${NFT_ID_COUNT}">                    
-                    <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT - ID: #${NFT_ID_COUNT}                    
+                <div class="tile-margin-top-bottom" id="${NFT_ID_SESSION_COUNT}">                    
+                    <a href="#"><i class="fa-solid fa-spinner fa-spin"></i></a> Minting NFT ${$('#main-frame').find('#nftname').val()}                    
                 </div>
             `);
 
-            //increment counters and set view
+            //increment jobs counters and set view
             CURRENT_JOBS++;
-            NFT_ID_COUNT++;
             $('#notification-count').text(CURRENT_JOBS);
         }
         else{
             openModal("Error!","Image file larger than 5MB!");
         }
 
-        openModal(`NFT ID ${NFT_ID_COUNT} minting in progress!`, "Please check the status bar for more information.");
+        openModal(`NFT minting in progress!`, "Check the status bar for info!");
         $('#spin').hide(0);
     });
 
@@ -221,12 +318,52 @@ $(function (e) {
     */
 
     $('#profile').on('click', function (e) {
-        if ($('#sidenav').css('width') == '250px') {
-            $('#sidenav').css('width', '0');
-            document.getElementById("main").style.marginLeft = "0px";
+        if(doSetup != true){
+            if ($('#sidenav').css('width') >= '250px') {
+                $('#sidenav').css('width', '0');
+                document.getElementById("main").style.marginLeft = "0px";
+            }
+            ajaxOpenPage("profile");
         }
+        else{
+            openModal("Error!","You must first complete your setup!");
+        }
+    });
+
+    $('#main-frame').on('submit', '#profileform', async function (e) { //Change user profile settings
         $('#spin').show(0);
-        ajaxOpenPage("profile");
+        e.preventDefault();
+        
+        const image = document.getElementById("file-upload").files[0];
+
+        if( image.size < 5e8 
+            && $('#main-frame').find('.card-icon').attr('src') != "../res/user.png"
+            )
+        {   //check and troubleshoot
+            //upload Image profile
+
+            //TO DO
+            socket.emit('profile_setup', {
+                image: document.getElementById("file-upload").files[0],
+                description: document.getElementById('profiledescription').value
+            }, function(result){
+                if (result == "STATUS_PROFILE_SETUP_DONE") { //Profile setup is complete!
+                    $('#spin').hide(0);
+                    openModal("Profile Setup Done!", "Profile setup has been done!");
+
+                    return; //let's block the form submit
+                }else{
+                    $('#spin').hide(0);
+                    openModal("Error!", "Some general error has occured, please refresh the page!");
+                }
+                $('#spin').hide(0);
+            });
+        }
+        else{
+            openModal("Error!","Image file larger than 5MB!");
+        }
+
+        $('#spin').hide(0);
     });
 
     /*
@@ -238,12 +375,17 @@ $(function (e) {
     */
 
     $('#nfts').on('click', function (e) {
-        if ($('#sidenav').css('width') == '250px') {
-            $('#sidenav').css('width', '0');
-            document.getElementById("main").style.marginLeft = "0px";
+        if(doSetup != true){
+            if ($('#sidenav').css('width') >= '250px') {
+                $('#sidenav').css('width', '0');
+                document.getElementById("main").style.marginLeft = "0px";
+            }
+            ajaxOpenPage("nfts");
         }
-        $('#spin').show(0); //Terminating in nfts.ejs, row 37
-        ajaxOpenPage("nfts");
+        else{
+            openModal("Error!","You must first complete your setup!");
+        }
+
     });
 
     /*
@@ -255,12 +397,17 @@ $(function (e) {
     */
 
     $('#marketplace').on('click', function (e) {
-        if ($('#sidenav').css('width') == '250px') {
-            $('#sidenav').css('width', '0');
-            document.getElementById("main").style.marginLeft = "0px";
+        if(doSetup != true){
+            if ($('#sidenav').css('width') >= '250px') {
+                $('#sidenav').css('width', '0');
+                document.getElementById("main").style.marginLeft = "0px";
+            }
+            ajaxOpenPage("marketplace");
         }
-        $('#spin').show(0);
-        ajaxOpenPage("marketplace");
+        else{
+            openModal("Error!","You must first complete your setup!");
+        }
+
     });
 
     /*

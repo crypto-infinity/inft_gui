@@ -32,14 +32,14 @@
     var output = '<%= usernfts %>';
     var nfts_urls = output.split(",");
 
-    var nfts = loadNFTImages(nfts_urls);
+    loadNFTImages(nfts_urls);
+    
 </script>
 
 <body>
-    <section class="main-banner-gradient">
+    <section>
         <div>
-            <h3 class="text-center">My NFTs Collection</h3>
-            <span class="line"></span>  
+            <h3 class="text-center" style="margin-top: 15%; margin-bottom: 5%;">My NFTs Collection</h3>
             <div id="tile" class="row row-no-margin">
                 
             </div>

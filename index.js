@@ -30,45 +30,42 @@ var ethers_utils = require('ethers').utils;
  */
 
 io.on('connection', function(client){
-    var count = 0;
+    const session = client.request.session; //Getting Express session values
+
     console.log("Connected to WebSocket Server! Client: " + client.id);
 
-    client.on('blockchain_task', async function(data){
-        
-        console.log("Data received: " + data.id);
-        await setTimeout(10000);
-
-        client.emit('blockchain_task_finished',data);
-        count++;
-        //event.enqueue
-        //wait for execution
-        //return feedback
-    });
+    /** NFT Mint Socket Listeners */
 
     client.on('mint_nft', async function(data, callback){
+        if(!session.isAuthenticated){
+            client.emit('error_handler',"User not authenticated!");
+            return;
+        }
         console.log("Blockchain event received from " + client.id + ". Beginning execution.");
 
         try{   
             //Uploading the NFT Metadata to Filecoin
-            console.log("Converting Image...");
+            console.log("Converting NFT Image...");
 
-            const image_base64 = Buffer.from(data.nftImage).toString('base64');
-            const image_blob = b64toBlob(image_base64,data.nftImageType);
-            const image_file = new File([image_blob], data.nftName , { type: data.nftImageType });
+            // const image_base64 = Buffer.from(data.nftImage).toString('base64');
+            // const image_blob = b64toBlob(image_base64,data.nftImageType);
 
-            console.log("File: " + image_file + "Image type: " + data.nftImageType);
+            const image_blob = new Blob([data.nftImage]); //Instance BLOB from Socket.io Buffer
+            //Convert BLOB to FILE with MIME type attached
+            const image_file = new File([image_blob], data.nftName , { type: data.nftImageType }); 
 
-            //Building and uploading NFT object for NFT.Storage API
+            //Building and uploading NFT object for NFT.Storage API .replace(/\s+/g, ' ').trim()
             console.log("Building and Uploading NFT Client info...");
-            const nft = {
-                image: image_file, 
+
+            const metadata = await nftClient.store({
                 name: data.nftName,
                 description: data.nftDescription,
-                external_url: data.nftUrl,
-                animation_url: data.nftAnimationVideo
-            }
-            var metadata = await nftClient.store(nft);
-            //console.log(metadata);
+                image: image_file,
+                animation_url: data.nftAnimationVideo,
+                external_url: data.nftUrl
+            });
+
+            //const metadata_url = "https://nftstorage.link/ipfs/" + metadata.ipnft;
 
             //Upload result check
             if(metadata){ console.log("Metadata: " + metadata.toString()); }
@@ -81,32 +78,43 @@ io.on('connection', function(client){
                 callback(result);
             }
 
-            //Building and sending Transaction to Blockchain
-            console.log("Minting NFT...");
-            var tx = await contract.mintToken("0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0",data.id,data.nftAmount,metadata.url,data.nftBurnable,data.nftMutable);
-            var tx2 = tx.wait();
+            var request = new sql.Request();
+            var query = "SELECT current_value FROM sys.sequences WHERE name='nftCounter'";
 
-            //Transaction health check
-            if(tx2){ console.log("Transaction: " + tx.toString()); }
-            else{
-                console.log("NFT Minting Error");
-                var result = {
-                    id: data.id,
-                    error: "NFT_MINT_ERROR"
+            request.query(query, async function (err, recordset) {
+                //Get current nft counter
+                const counter = recordset.recordset[0].current_value;
+
+                //Building and sending Transaction to Blockchain
+                console.log("Minting NFT to Wallet " + session.wallet);
+                var tx = await contract.mintToken(session.wallet,counter,data.nftAmount,metadata.url,data.nftBurnable,data.nftMutable);
+                var tx2 = tx.wait();
+
+                //Transaction health check
+                if(!tx2){
+                    console.log("NFT Minting Error");
+                    var result = {
+                        id: data.id,
+                        error: "NFT_MINT_ERROR"
+                    }
+                    callback(result);
                 }
-                callback(result);
-            }
 
-            //If everything else was okay, give green light to user! 
-            console.log("Blockchain event ID" + data.id + " finished!");
+                var request_2 = new sql.Request();
+                var query_2 = "SELECT NEXT VALUE FOR dbo.nftCounter";
 
-            var result = {
-                id: data.id,
-                error: "none",
-                transaction: tx
-            }
+                request_2.query(query_2, async function (err, recordset) {
+                    //If everything else was okay, give green light to user! 
+                    console.log("Blockchain event ID" + data.id + " finished!");
 
-            callback(result);//Execute callback on client
+                    var result = {
+                        id: data.id,
+                        error: "none",
+                        transaction: tx
+                    }
+                    callback(result);//Execute callback on client
+                });
+            });
         }
         catch(err){
             //If any error showed up, notify the client
@@ -117,6 +125,74 @@ io.on('connection', function(client){
                 message: err
             }
             callback(result);
+        }
+    });
+
+    /** Profile Socket Listeners */
+
+    client.on('profile_setup', async function(data, callback){
+        if(!session.isAuthenticated){
+            client.emit('error_handler',"User not authenticated!");
+            return;
+        }
+        try{
+            var request = new sql.Request();
+            var profile_image = data.image;
+            var description = data.description;
+
+            request.input('profile_image',sql.Image, profile_image);
+            request.input('description',sql.VarChar, description);
+            request.input('userId',sql.Int,session.userId);//userId
+
+
+            var query = "UPDATE [dbo].Login SET profile_image=@profile_image, description=@description WHERE id=@userId";
+
+            request.query(query, function (err, recordset) {
+                //Send callback to client with DONE status
+                callback("STATUS_PROFILE_SETUP_DONE");
+            });
+        }
+        catch(err){
+            console.log("Error: " + err)
+            session.destroy();
+            callback("STATUS_PROFILE_SETUP_ERROR");
+        }
+    })
+
+    client.on('profile_update', async function(data, callback){
+        if(!session.isAuthenticated){
+            client.emit('error_handler',"User not authenticated!");
+            return;
+        }
+        try{
+            var request = new sql.Request();
+
+            request.input('userId',sql.Int,session.userId); //userId
+            
+            var query = "SELECT profile_image,description FROM [dbo].Login WHERE id=@userId";
+    
+            request.query(query, function (err, recordset) {
+                
+                var profilepicbuffer = recordset.recordset[0].profile_image;
+                var description = recordset.recordset[0].description;
+
+                if(profilepicbuffer == undefined || profilepicbuffer == "" || profilepicbuffer == null){
+                    callback("STATUS_PROFILE_PICTURE_NULL");
+                    return;
+                }
+
+                callback({ //Launch callback to client
+                    profilepicbuffer: profilepicbuffer,
+                    description: description
+                });
+
+                return;
+            });
+        }
+        catch(err){
+            console.log("Error: " + err)
+            session.destroy();
+            res.render('error', {error: err});
         }
     });
 });
@@ -135,7 +211,7 @@ app.get('/', (req, res) => {
         res.render('index', { isAuthenticated: false });
     }
     else{
-        res.redirect('app');
+        res.render('index', { isAuthenticated: true });
     }
 });
 
@@ -148,11 +224,16 @@ app.get('/app', (req, res) => {
         if(req.session.authMethod != undefined){
             if(req.session.authMethod == "ms"){
                 //console.log(req.session.account);
-                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: JSON.stringify(req.session.account), error: false });
+                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, 
+                    userdata: JSON.stringify(req.session.account), doSetup: req.session.doSetup, wallet: req.session.wallet, error: false });
+
             }else if(req.session.authMethod == "mm"){
-                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: "", error: false });
+                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, 
+                    userdata: "", doSetup: req.session.doSetup, wallet: req.session.wallet, error: false });
+                    
             }else if(req.session.authMethod == "legacy"){
-                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, userdata: "", error: false });
+                res.render('app', { isAuthenticated: req.session.isAuthenticated, username: req.session.username, 
+                    userdata: "", doSetup: req.session.doSetup, wallet: req.session.wallet, error: false });
             }
         }else{
             console.log("Error: " + err)
@@ -161,6 +242,7 @@ app.get('/app', (req, res) => {
         }
     }
 });
+
 
 //Mainpage route, defaults to main.ejs
 app.get('/main', (req, res) => {
@@ -173,6 +255,53 @@ app.get('/main', (req, res) => {
             userdata: JSON.stringify(req.session.account), 
             error: false 
         });
+    }
+});
+
+//Mainpage Wallet Setup route
+app.post('/walletSetup', (req, res) => {
+    if(!req.session.isAuthenticated){
+        res.redirect('login');
+    }else{
+        try{
+            var request = new sql.Request();
+            request.input('wallet',sql.VarChar, req.body.wallet);
+            request.input('id',sql.Int, req.session.userId);
+
+            var query = `
+            IF EXISTS (SELECT external_id FROM [dbo].Web3 WHERE external_id = @id)
+                BEGIN
+                    UPDATE [dbo].Web3
+                    SET wallet = @wallet
+                    WHERE external_id = @id
+                END
+                ELSE
+                BEGIN
+                    INSERT INTO [dbo].Web3 (external_id,wallet)
+                    VALUES (@id,@wallet)
+                END
+            `;
+
+            request.query(query, (err,recordset) => {
+                if (err){ //handling DB errors
+                    console.log("Error: " + err)
+                    req.session.destroy();
+                    res.render('error', {error: err});
+                    return;
+                }
+                console.log("User ID " + req.session.userId + " has is Web3 Wallet Set!");
+                req.session.doSetup = false;
+                req.session.wallet = req.body.wallet;
+                res.setHeader("INFT_STATUS_MESSAGE","STATUS_WALLET_SETUP_DONE");
+                res.status(204).send();
+            })
+        }
+        catch(error){
+            console.log("Error: " + err)
+            res.setHeader("INFT_STATUS_MESSAGE","ERR_WALLET_SETUP_FAILED");
+            req.session.destroy();
+            res.status(204).send();
+        }
     }
 });
 
@@ -192,6 +321,11 @@ app.get('/mint', (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
+        if(!req.session.wallet){
+            res.setHeader("INFT_ERROR_MESSAGE","ERR_WALLET_NOT_SET");
+            res.status(204).send();
+            return;
+        }
         res.send({
             username: req.session.username
         });
@@ -203,9 +337,14 @@ app.get('/nfts', async (req, res) => {
     if(!req.session.isAuthenticated){
         res.redirect('login');
     }else{
+        if(!req.session.wallet){
+            res.setHeader("INFT_ERROR_MESSAGE","ERR_WALLET_NOT_SET");
+            res.status(204).send();
+            return;
+        }
         try{
             //Elaborate user NFTs and return them to the GET call
-            var call = await contract.getTokenMappings("0xB312Dcf3Bd0BFEDf9c932C0f35fa1B3c3859e4a0");
+            var call = await contract.getTokenMappings(req.session.wallet);
 
             var token_uris = [];
 
@@ -256,7 +395,8 @@ app.post('/signin/legacy', (req, res) => {
         var password = req.body.password;
 
         request.input('username',sql.VarChar, username);
-        var query = "SELECT * FROM [dbo].Login WHERE username=@username";
+        //var query = "SELECT * FROM [dbo].Login WHERE username=@username";
+        var query = "SELECT [dbo].Login.id,username,pwd_hash,salt,isExternal,wallet FROM [dbo].Login LEFT JOIN [dbo].Web3 ON [dbo].Login.id=[dbo].Web3.external_id WHERE dbo.Login.username=@username AND isExternal=0";
 
         request.query(query, function (err, recordset) {
             if (err){ //handling DB errors
@@ -272,9 +412,23 @@ app.post('/signin/legacy', (req, res) => {
                 if(local_hash == recordset.recordset[0].pwd_hash ){ //are hashes correct?
                     console.log("Username : " + username + " is authenticated!");
                     req.session.isAuthenticated = true; //create session here
+                    req.session.userId = recordset.recordset[0].id;
+                    
                     req.session.username = username;
                     req.session.authMethod = "legacy";
-                    res.redirect('app');
+
+                    //Check if user inserted his wallet
+                    if(recordset.recordset[0].wallet == "" || 
+                    recordset.recordset[0].wallet == "null" || 
+                    recordset.recordset[0].wallet == null){
+                        
+                        req.session.doSetup = true;
+                    }else{
+                        req.session.doSetup = false;
+                        req.session.wallet = recordset.recordset[0].wallet;
+                    }
+
+                    res.redirect('/app');
                 }else{
                     console.log("Login failed for : " + username + ". Logging out for security.");
                     req.session.destroy();
@@ -289,7 +443,7 @@ app.post('/signin/legacy', (req, res) => {
         });
     }
     else{ //user is already authenticated, just render the app page with session data
-        res.redirect('app');
+        res.redirect('/app');
     }
 });
 
@@ -300,7 +454,7 @@ app.post('/register', (req, res) => {
         var password = req.body.password;
 
         request.input('username',sql.VarChar, username);
-        var query = "SELECT * FROM [dbo].Login WHERE username=@username";
+        var query = "SELECT [dbo].Login.id,username,pwd_hash,salt,isExternal,wallet FROM [dbo].Login LEFT JOIN [dbo].Web3  ON [dbo].Login.id=[dbo].Web3.external_id WHERE dbo.Login.username=@username AND isExternal=0";
 
         request.query(query, function (err, recordset) {
             if (err){ //handling DB errors
@@ -326,8 +480,12 @@ app.post('/register', (req, res) => {
                     //user now exist, no hash to confront. let's directly authenticate it.
                     console.log("User " + username + " is created and authenticated!");
                     req.session.isAuthenticated = true; //create session here
+                    req.session.userId = recordset.insertId;
+                    console.log("User id recordset insert:  " + recordset.insertId);
                     req.session.authMethod = "legacy";
                     req.session.username = username;
+                    req.session.doSetup = true;
+
                     res.redirect('app');
                 });
             }else{

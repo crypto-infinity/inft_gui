@@ -8,6 +8,10 @@ const { Server } = require("socket.io");
 const { createServer } = require("http");
 const path = require('path'); 
 
+//Express Session secret load
+require('dotenv').config();
+const { EXPRESS_SESSION_SECRET } = process.env;
+
 //Express initialization
 const app = express();              
 const port = 443; //WebServer Port
@@ -32,12 +36,17 @@ try {
     app.set('views', path.join(__dirname, 'views'));
     app.use(express.static(__dirname));
     app.use(bodyParser.urlencoded({ extended: true }))
-    app.use(sessions({
-        secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+
+    const sessionMiddleware = sessions({
+        secret: EXPRESS_SESSION_SECRET,
         saveUninitialized:true,
         cookie: { maxAge: oneDay },
         resave: false
-    }));
+    });
+
+    app.use(sessionMiddleware);
+    io.engine.use(sessionMiddleware);
+    
 } catch (err) {
     throw err;
 }
