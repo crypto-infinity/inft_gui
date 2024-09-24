@@ -1,0 +1,7 @@
+FROM node:18.20.4-alpine
+WORKDIR /usr/src/app
+ADD ./inft_gui ./
+RUN npm install
+EXPOSE 443
+ENV PATH="/usr/src/app:${PATH}" 
+ENTRYPOINT ["/usr/local/bin/node", "index.js"]
