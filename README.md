@@ -1,6 +1,8 @@
 # INFT-GUI
 
-Fronted remote repository for the INFT Project: a decentralized, multi-chain, extensible and flexible digital asset manager.
+## Be advised: this repository is deprecated and will not be maintained.
+
+DEPRECATED - Fronted remote repository for the INFT Project: a decentralized, multi-chain, extensible and flexible digital asset manager.
 
 ## Installation
 
